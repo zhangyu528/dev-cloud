@@ -1,12 +1,56 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
-from backend.app import db
+from backend.extensions import db
 from backend.db.models import User
 from . import api_bp
 
 @api_bp.route('/register', methods=['POST'])
 def register():
+    """
+    用户注册接口
+    ---
+    tags:
+      - 用户管理
+    summary: 用户注册
+    description: 创建新用户账号
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            username:
+              type: string
+              description: 用户名
+              example: "johndoe"
+            email:
+              type: string
+              description: 电子邮箱
+              example: "johndoe@example.com"
+            password:
+              type: string
+              description: 密码
+              example: "securepassword123"
+    responses:
+      201:
+        description: 用户注册成功
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "User registered successfully"
+      400:
+        description: 注册失败（用户名或邮箱已存在）
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Username already exists"
+    """
     data = request.get_json()
     username = data.get('username')
     email = data.get('email')
