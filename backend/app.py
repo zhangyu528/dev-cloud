@@ -1,24 +1,24 @@
 from flask import Flask
 from flask_cors import CORS  # 用于解决跨域问题，如果前端和后端分开部署
-from backend.api import api_bp  # 导入 api 模块
-from backend.config import Config
+from flask import Blueprint
+from flask_jwt_extended import JWTManager  # 添加 JWT 管理器
+
+from backend.extensions import db
+from backend.api import api_bp  # 从 api 包导入蓝图
+from backend.config import DevelopmentConfig
 
 # 创建 Flask 应用
 app = Flask(__name__)
+# 初始化 SQLAlchemy
+db.init_app(app)  
+app.config.from_object(DevelopmentConfig)  # 加载配置
 
+# 所有 API 路由都会以 /api 为前缀
+app.register_blueprint(api_bp, url_prefix='/api')  
+# 初始化 JWT
+jwt = JWTManager(app)  # 添加这行
 
-# 加载配置（如数据库、Docker 配置等）
-app.config.from_object(Config)
-
-# 允许跨域请求（适用于前后端分离的项目）
-CORS(app)
-
-# 注册蓝图 (Blueprint)，这里的 'api_bp' 包含了所有的路由和容器管理业务
-app.register_blueprint(api_bp, url_prefix='/api')  # 所有 API 路由都会以 /api 为前缀
-
-
-
-
+CORS(app)   # 添加跨域支持
 
 if __name__ == '__main__':
     # 启动 Flask 应用

@@ -19,6 +19,7 @@ PyMySQL==1.0.2              # MySQL 数据库驱动
 # 安全与认证
 Werkzeug==2.1.2             # 密码哈希、安全工具
 PyJWT==2.3.0                # JWT 令牌生成与验证
+flask-jwt-extended==4.4.4   # Flask JWT 扩展
 
 # 跨域与网络
 Flask-Cors==3.0.10          # 处理跨域资源共享

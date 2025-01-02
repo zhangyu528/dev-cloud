@@ -2,7 +2,7 @@
 import pytest
 from flask import json
 from backend.api.user import register, login, logout
-from backend.db.models import User, db
+from backend.db.models import User
 
 def test_user_registration(client):
     """测试用户注册"""

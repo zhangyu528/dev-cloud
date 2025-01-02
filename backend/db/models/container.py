@@ -1,5 +1,6 @@
-from backend.db import db  # 导入 db 实例
 from datetime import datetime  # 导入 datetime 模块
+
+from backend.extensions import db
 
 class Container(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # 容器的唯一标识符

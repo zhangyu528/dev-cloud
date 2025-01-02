@@ -32,6 +32,7 @@ docker-compose.override.yml  # 覆盖文件（如有）
 
 # 忽略数据库文件（如 SQLite）
 *.db                # 数据库文件
+/**/*.db             # 数据库文件
 *.sqlite            # SQLite 文件
 
 # 忽略系统自动生成的文件
@@ -53,3 +54,5 @@ build/              # 构建输出文件夹
 docker-data/        # 容器的挂载数据
 volumes/            # Docker volumes 文件夹
 *.tar               # 导出的容器镜像
+backend/db/dev_database.db
+backend/test/test_database.db
