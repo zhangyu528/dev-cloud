@@ -8,6 +8,9 @@ from backend.extensions import db
 from backend.api import api_bp  # 从 api 包导入蓝图
 from backend.config import DevelopmentConfig
 
+# 重要：导入所有模型
+from backend.db.models import User, Container
+
 # 创建 Flask 应用
 app = Flask(__name__)
 # 初始化 SQLAlchemy
@@ -31,5 +34,9 @@ if swagger_template and swagger_config:
 CORS(app)   # 添加跨域支持
 
 if __name__ == '__main__':
-    # 启动 Flask 应用
+     # 使用应用上下文
+    with app.app_context():
+        # 创建所有数据库模型对应的表
+        db.create_all()  
+        # 启动 Flask 应用
     app.run(host='0.0.0.0', port=5000)

@@ -24,9 +24,9 @@ class DevelopmentConfig:
                 "url": "https://www.devcloud.com/support"
             }
         },
-        "host": "api.devcloud.com",  # 生产域名
-        "basePath": "/api/v1",  # API 版本路径
-        "schemes": ["https"],  # 仅使用 HTTPS
+        "host": "localhost:5000",  # 生产域名
+        "basePath": "/api",  # API 版本路径
+        "schemes": ["http"],  # 仅使用 HTTPS
         
         # 额外的生产环境安全定义
         "securityDefinitions": {

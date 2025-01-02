@@ -56,3 +56,20 @@ volumes/            # Docker volumes 文件夹
 *.tar               # 导出的容器镜像
 backend/db/dev_database.db
 backend/test/test_database.db
+backend/config/__pycache__/__init__.cpython-39.pyc
+backend/config/__pycache__/dev_config.cpython-39.pyc
+backend/config/__pycache__/prod_config.cpython-39.pyc
+backend/config/__pycache__/swagger_config.cpython-39.pyc
+backend/config/__pycache__/test_config.cpython-39.pyc
+backend/db/__pycache__/__init__.cpython-39.pyc
+backend/__pycache__/__init__.cpython-39.pyc
+backend/__pycache__/app.cpython-39.pyc
+backend/__pycache__/extensions.cpython-39.pyc
+backend/api/__pycache__/__init__.cpython-39.pyc
+backend/api/__pycache__/container_mng.cpython-39.pyc
+backend/api/__pycache__/templates.cpython-39.pyc
+backend/api/__pycache__/user.cpython-39.pyc
+backend/db/models/__pycache__/__init__.cpython-39.pyc
+backend/db/models/__pycache__/container.cpython-39.pyc
+backend/db/models/__pycache__/user.cpython-39.pyc
+backend/dev_database.db
