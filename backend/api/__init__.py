@@ -7,5 +7,6 @@ from flask import Blueprint
 api_bp = Blueprint('api', __name__)
 
 # 导入路由模块，确保路由被注册
-from . import user
-from . import container_mng
+from . import user_api
+# from . import container_api
+from . import templates_api

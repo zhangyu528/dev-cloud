@@ -73,3 +73,6 @@ backend/db/models/__pycache__/__init__.cpython-39.pyc
 backend/db/models/__pycache__/container.cpython-39.pyc
 backend/db/models/__pycache__/user.cpython-39.pyc
 backend/dev_database.db
+backend/api/__pycache__/container_api.cpython-39.pyc
+backend/api/__pycache__/templates_api.cpython-39.pyc
+backend/api/__pycache__/user_api.cpython-39.pyc

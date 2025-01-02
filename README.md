@@ -40,22 +40,9 @@ DevCloud 是一个现代化的开发者工作流管理平台，提供容器、�
 
 ### 依赖安装
 
-    # 创建虚拟环境
-    python -m venv venv
-    
-    # 激活虚拟环境
-    # Windows
-    venv\Scripts\activate
-    # Unix/MacOS
-    source venv/bin/activate
-    
-    # 安装依赖
-    pip install -r requirements.txt
-
-### 数据库初始化
-
-    # 创建数据库表
-    python backend/db/create_tables.py
+    # 执行以下脚本安装依赖
+    setup_python_env.sh
+    start_app.sh
 
 * * *
 
