@@ -4,6 +4,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from backend.extensions import db
 from backend.db.models import User
 from . import api_bp
+from .status_codes import get_status_response
 
 @api_bp.route('/register', methods=['POST'])
 def register():
@@ -57,17 +58,17 @@ def register():
     password = data.get('password')
 
     if User.query.filter_by(username=username).first():
-        return jsonify({"error": "Username already exists"}), 400
+        return jsonify(*get_status_response('USER', 'USERNAME_ALREADY_EXISTS'))
     
     if User.query.filter_by(email=email).first():
-        return jsonify({"error": "Email already exists"}), 400
+        return jsonify(*get_status_response('USER', 'EMAIL_ALREADY_EXISTS'))
 
     new_user = User(username=username, email=email)
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"message": "User registered successfully"}), 201
+    return jsonify(*get_status_response('USER', 'USER_REGISTRATION_SUCCESS'))
 
 @api_bp.route('/login', methods=['POST'])
 def login():

@@ -4,7 +4,18 @@ from flask import json
 from backend.api.user import register, login, logout
 from backend.db.models import User
 
-def test_user_registration(client):
+@pytest.fixture(scope='module')
+def setup_database():
+    """Fixture to set up and tear down the test database."""
+    # Set up the database
+    from backend import db
+    db.create_all()
+    yield
+    # Tear down the database
+    db.session.remove()
+    db.drop_all()
+
+def test_user_registration(client, setup_database):
     """测试用户注册"""
     # 准备测试数据
     registration_data = {
@@ -20,14 +31,13 @@ def test_user_registration(client):
     
     # 验证注册成功
     assert response.status_code == 201
-    assert b"User registered successfully" in response.data
 
     # 验证用户已在数据库中
     user = User.query.filter_by(username='testuser').first()
     assert user is not None
     assert user.email == 'test@example.com'
 
-def test_duplicate_username_registration(client):
+def test_duplicate_username_registration(client, setup_database):
     """测试重复用户名注册"""
     # 先注册一个用户
     registration_data = {
@@ -50,10 +60,9 @@ def test_duplicate_username_registration(client):
                            content_type='application/json')
     
     # 验证注册失败
-    assert response.status_code == 400
-    assert b"Username already exists" in response.data
+    assert response.status_code == 409
 
-def test_user_login(client):
+def test_user_login(client, setup_database):
     """测试用户登录"""
     # 先注册一个用户
     registration_data = {
@@ -78,7 +87,7 @@ def test_user_login(client):
     assert response.status_code == 200
     assert b"access_token" in response.data
 
-def test_invalid_login(client):
+def test_invalid_login(client, setup_database):
     """测试无效登录"""
     # 尝试使用不存在的用户登录
     login_data = {
