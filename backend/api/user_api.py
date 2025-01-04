@@ -58,17 +58,20 @@ def register():
     password = data.get('password')
 
     if User.query.filter_by(username=username).first():
-        return jsonify(*get_status_response('USER', 'USERNAME_ALREADY_EXISTS'))
+        response, status_code = get_status_response('USER', 'USERNAME_ALREADY_EXISTS')
+        return jsonify(response), status_code
     
     if User.query.filter_by(email=email).first():
-        return jsonify(*get_status_response('USER', 'EMAIL_ALREADY_EXISTS'))
+        response, status_code = get_status_response('USER', 'EMAIL_ALREADY_EXISTS')
+        return jsonify(response), status_code
 
     new_user = User(username=username, email=email)
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify(*get_status_response('USER', 'USER_REGISTRATION_SUCCESS'))
+    response, status_code = get_status_response('USER', 'USER_REGISTRATION_SUCCESS')
+    return jsonify(response), status_code
 
 @api_bp.route('/login', methods=['POST'])
 def login():
@@ -79,9 +82,11 @@ def login():
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
         access_token = create_access_token(identity=user.id)
-        return jsonify({"access_token": access_token}), 200
-    
-    return jsonify({"error": "Invalid credentials"}), 401
+        response, status_code = get_status_response('USER', 'USER_LOGIN_SUCCESS')
+        response['access_token'] = access_token
+        return jsonify(response), status_code
+    response, status_code = get_status_response('USER', 'INVALID_CREDENTIALS')
+    return jsonify(response), status_code
 
 @api_bp.route('/logout', methods=['POST'])
 @jwt_required()

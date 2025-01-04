@@ -36,9 +36,13 @@ fi
 
 # 运行特定的测试文件
 echo "Running user API tests..."
-python -m pytest backend/test/test_user.py -v
+python -m pytest backend/test/user_test.py -v
 
 # 可选：生成测试覆盖率报告
 echo "Generating test coverage report..."
-python -m coverage run -m pytest backend/test/test_user.py
+python -m coverage run -m pytest backend/test/user_test.py
 python -m coverage report -m
+
+# 生成 HTML 报告并在默认浏览器中打开
+python -m coverage html
+start htmlcov/index.html

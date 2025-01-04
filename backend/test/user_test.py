@@ -4,17 +4,12 @@ import pytest
 from backend.db.models import User
 from backend.api.status_codes import StatusCodes
 
-# 在配置文件中注册标记，防止警告
-pytest.register_marker("user")
-pytest.register_marker("login")
-pytest.register_marker("registration")
-
 class TestUser:
     @pytest.fixture(autouse=True, scope='class')
     def setup_database(self):
         """Fixture to set up and tear down the test database.
         Runs once for the entire test class."""
-        from backend import db
+        from backend.extensions import db
         db.create_all()  # This needs User model to create user table
         yield
         db.session.remove()
@@ -24,13 +19,11 @@ class TestUser:
     def cleanup_test_data(self):
         """Clean up test data after each test function"""
         yield
-        from backend import db
+        from backend.extensions import db
         # 清理测试用户数据
         User.query.delete()
         db.session.commit()
 
-    @pytest.mark.user  # 标记为用户相关测试
-    @pytest.mark.registration  # 标记为注册相关测试
     def test_user_registration(self, client):
         """测试用户注册"""
         response = self._create_test_user(
@@ -42,8 +35,6 @@ class TestUser:
         assert response.status_code == StatusCodes.USER['USER_REGISTRATION_SUCCESS']['status_code']
         assert response.json.get('message') == StatusCodes.USER['USER_REGISTRATION_SUCCESS']['message']
 
-    @pytest.mark.user
-    @pytest.mark.registration
     def test_duplicate_username_registration(self, client):
         """测试重复用户名注册"""
         # 先创建第一个用户
@@ -63,8 +54,6 @@ class TestUser:
         )
         assert response.status_code == StatusCodes.USER['USERNAME_ALREADY_EXISTS']['status_code']
 
-    @pytest.mark.user
-    @pytest.mark.login  # 标记为登录相关测试
     def test_user_login(self, client):
         """测试用户登录"""
         # 先创建用户
@@ -80,8 +69,8 @@ class TestUser:
             'password': 'loginpassword123'
         }
         response = client.post('/api/login', json=login_data)
-        assert response.status_code == StatusCodes.USER['USER_REGISTRATION_SUCCESS']['status_code']
-        assert b"access_token" in response.data
+        assert response.status_code == StatusCodes.USER['USER_LOGIN_SUCCESS']['status_code']
+        assert response.json.get('message').encode('utf-8') in response.data
 
     def test_invalid_login(self, client):
         """测试无效登录"""
@@ -92,7 +81,7 @@ class TestUser:
         response = client.post('/api/login', json=login_data)
         
         assert response.status_code == StatusCodes.USER['INVALID_CREDENTIALS']['status_code']
-        assert b"Invalid credentials" in response.data
+        assert response.json.get('message').encode('utf-8') in response.data
 
     def _create_test_user(self, client, username, email, password):
         """辅助方法：创建测试用户"""

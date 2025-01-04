@@ -26,6 +26,11 @@ class StatusCodes:
             'code': 'USER_004',
             'message': 'Invalid username or password',
             'status_code': 401
+        },
+        'USER_LOGIN_SUCCESS': {
+            'code': 'USER_005',
+            'message': 'User logged in successfully',
+            'status_code': 200
         }
     }
 

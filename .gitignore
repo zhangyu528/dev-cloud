@@ -58,5 +58,11 @@ volumes/            # Docker volumes 文件夹
 *.tar               # 导出的容器镜像
 
 # 忽略数据库文件（如 SQLite）
+**/*.db               # 数据库文件（如 SQLite）
 *.db                # 数据库文件（如 SQLite）
+**/*.db.*            # 多模式数据库文件
+*.db.*               # 多模式数据库文件
+**/*.sqlite          # SQLite 文件
 *.sqlite             # SQLite 文件
+
+backend/test/test_database.db
