@@ -17,23 +17,28 @@ export PYTHONPATH="$PROJECT_ROOT;$PYTHONPATH"
 echo "PYTHONPATH: $PYTHONPATH"
 
 # 检测虚拟环境 Python 解释器
-if [ -f "venv/bin/python" ]; then
-    # Unix/Linux 路径
-    PYTHON_PATH="venv/bin/python"
-elif [ -f "venv/Scripts/python.exe" ]; then
-    # Windows 路径
-    PYTHON_PATH="venv/Scripts/python.exe"
-else
-    # 回退到系统 Python
-    PYTHON_PATH="python"
+if [ ! -d "venv" ]; then
+    echo "Virtual environment not found. Creating..."
+    python -m venv venv
 fi
-echo "PYTHON_PATH: $PYTHON_PATH"
+
+# 激活虚拟环境
+if [ -f "venv/bin/activate" ]; then
+    # Unix/Linux 路径
+    source venv/bin/activate
+elif [ -f "venv/Scripts/activate" ]; then
+    # Windows 路径
+    source venv/Scripts/activate
+else
+    echo "Failed to activate virtual environment."
+    exit 1
+fi
 
 # 运行特定的测试文件
 echo "Running user API tests..."
-"$PYTHON_PATH" -m pytest backend/test/test_user.py -v
+python -m pytest backend/test/test_user.py -v
 
 # 可选：生成测试覆盖率报告
 echo "Generating test coverage report..."
-"$PYTHON_PATH" -m coverage run -m pytest backend/test/test_user.py
-"$PYTHON_PATH" -m coverage report -m
+python -m coverage run -m pytest backend/test/test_user.py
+python -m coverage report -m
