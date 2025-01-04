@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+import os
 
 from backend.extensions import db
 from backend.db.models import User
@@ -92,4 +93,5 @@ def login():
 @jwt_required()
 def logout():
     # In JWT, logout is typically handled client-side by removing the token
-    return jsonify({"message": "Logged out successfully"}), 200
+    response, status_code = get_status_response('USER', 'USER_LOGOUT_SUCCESS')
+    return jsonify(response), status_code

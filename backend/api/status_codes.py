@@ -31,6 +31,11 @@ class StatusCodes:
             'code': 'USER_005',
             'message': 'User logged in successfully',
             'status_code': 200
+        },
+        'USER_LOGOUT_SUCCESS': {
+            'code': 'USER_006',
+            'message': 'User logged out successfully',
+            'status_code': 200
         }
     }
 

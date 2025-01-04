@@ -83,6 +83,31 @@ class TestUser:
         assert response.status_code == StatusCodes.USER['INVALID_CREDENTIALS']['status_code']
         assert response.json.get('message').encode('utf-8') in response.data
 
+    def test_user_logout(self, client):
+        """测试用户登出"""
+        # 先创建并登录用户
+        self._create_test_user(
+            client,
+            username='logoutuser',
+            email='logout@example.com',
+            password='logoutpassword123'
+        )
+
+        login_data = {
+            'username': 'logoutuser',
+            'password': 'logoutpassword123'
+        }
+        login_response = client.post('/api/login', json=login_data)
+        access_token = login_response.json.get('access_token')
+
+        # 使用登录令牌进行登出
+        headers = {
+            'Authorization': f'Bearer {access_token}'
+        }
+        logout_response = client.post('/api/logout', headers=headers)
+        assert logout_response.status_code == StatusCodes.USER['USER_LOGOUT_SUCCESS']['status_code']
+        assert logout_response.json.get('message') == StatusCodes.USER['USER_LOGOUT_SUCCESS']['message']
+
     def _create_test_user(self, client, username, email, password):
         """辅助方法：创建测试用户"""
         registration_data = {
