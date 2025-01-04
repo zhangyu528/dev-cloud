@@ -2,6 +2,7 @@
 import pytest
 # User model is required for database schema creation
 from backend.db.models import User
+from backend.api.status_codes import StatusCodes
 
 # 在配置文件中注册标记，防止警告
 pytest.register_marker("user")
@@ -38,8 +39,8 @@ class TestUser:
             email='test@example.com',
             password='strongpassword123'
         )
-        assert response.status_code == 201
-        assert response.json.get('message') == 'User registered successfully'
+        assert response.status_code == StatusCodes.USER['USER_REGISTRATION_SUCCESS']['status_code']
+        assert response.json.get('message') == StatusCodes.USER['USER_REGISTRATION_SUCCESS']['message']
 
     @pytest.mark.user
     @pytest.mark.registration
@@ -60,7 +61,7 @@ class TestUser:
             email='second@example.com',
             password='anotherpassword456'
         )
-        assert response.status_code == 409
+        assert response.status_code == StatusCodes.USER['USERNAME_ALREADY_EXISTS']['status_code']
 
     @pytest.mark.user
     @pytest.mark.login  # 标记为登录相关测试
@@ -79,7 +80,7 @@ class TestUser:
             'password': 'loginpassword123'
         }
         response = client.post('/api/login', json=login_data)
-        assert response.status_code == 200
+        assert response.status_code == StatusCodes.USER['USER_REGISTRATION_SUCCESS']['status_code']
         assert b"access_token" in response.data
 
     def test_invalid_login(self, client):
@@ -90,7 +91,7 @@ class TestUser:
         }
         response = client.post('/api/login', json=login_data)
         
-        assert response.status_code == 401
+        assert response.status_code == StatusCodes.USER['INVALID_CREDENTIALS']['status_code']
         assert b"Invalid credentials" in response.data
 
     def _create_test_user(self, client, username, email, password):
