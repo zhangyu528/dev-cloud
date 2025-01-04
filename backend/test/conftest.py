@@ -31,8 +31,4 @@ def client():
     with app.test_client() as client:
         # 创建应用上下文
         with app.app_context():
-            # 创建所有数据库表
-            db.create_all()
             yield client
-            # 测试结束后删除所有表
-            db.drop_all()

@@ -1,9 +1,11 @@
+
+
 # 忽略环境配置文件
 .env                # 环境变量文件
 
 # 忽略 Python 项目生成的文件
-__pycache__/         # 编译后的 Python 缓存文件夹
-**/__pycache__/      # 编译后的 Python 缓存文件
+__pycache__/       # Python 编译缓存文件夹
+/**/__pycache__/         # 编译后的 Python 缓存文件夹
 
 *.pyc               # Python 编译文件
 *.pyo               # 优化编译文件
@@ -28,12 +30,8 @@ docker-compose.override.yml  # 覆盖文件（如有）
 # 忽略虚拟环境文件夹
 /venv/
 **/venv/             # Python 虚拟环境
-.virtualenv/        # 其他虚拟环境命名方式
 
-# 忽略数据库文件（如 SQLite）
-*.db                # 数据库文件
-/**/*.db             # 数据库文件
-*.sqlite            # SQLite 文件
+
 
 # 忽略系统自动生成的文件
 .DS_Store           # macOS 系统文件
@@ -54,25 +52,8 @@ build/              # 构建输出文件夹
 docker-data/        # 容器的挂载数据
 volumes/            # Docker volumes 文件夹
 *.tar               # 导出的容器镜像
-backend/db/dev_database.db
-backend/test/test_database.db
-backend/config/__pycache__/__init__.cpython-39.pyc
-backend/config/__pycache__/dev_config.cpython-39.pyc
-backend/config/__pycache__/prod_config.cpython-39.pyc
-backend/config/__pycache__/swagger_config.cpython-39.pyc
-backend/config/__pycache__/test_config.cpython-39.pyc
-backend/db/__pycache__/__init__.cpython-39.pyc
-backend/__pycache__/__init__.cpython-39.pyc
-backend/__pycache__/app.cpython-39.pyc
-backend/__pycache__/extensions.cpython-39.pyc
-backend/api/__pycache__/__init__.cpython-39.pyc
-backend/api/__pycache__/container_mng.cpython-39.pyc
-backend/api/__pycache__/templates.cpython-39.pyc
-backend/api/__pycache__/user.cpython-39.pyc
-backend/db/models/__pycache__/__init__.cpython-39.pyc
-backend/db/models/__pycache__/container.cpython-39.pyc
-backend/db/models/__pycache__/user.cpython-39.pyc
-backend/dev_database.db
-backend/api/__pycache__/container_api.cpython-39.pyc
-backend/api/__pycache__/templates_api.cpython-39.pyc
-backend/api/__pycache__/user_api.cpython-39.pyc
+
+
+# 忽略数据库文件（如 SQLite）
+*.db                # 数据库文件（如 SQLite）
+*.sqlite             # SQLite 文件
