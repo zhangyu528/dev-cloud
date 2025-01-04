@@ -3,19 +3,6 @@
 # 脚本出错时立即退出
 set -e
 
-# 获取脚本的绝对路径（Windows 兼容版本）
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -W )"
-
-# 切换到项目根目录
-cd "$SCRIPT_DIR/../.."
-
-# 获取完整的绝对路径（使用 Windows 风格路径）
-PROJECT_ROOT="$(pwd -W)"
-
-# 设置 PYTHONPATH 到项目根目录
-export PYTHONPATH="$PROJECT_ROOT;$PYTHONPATH"
-echo "PYTHONPATH: $PYTHONPATH"
-
 # 检测虚拟环境 Python 解释器
 if [ ! -d "venv" ]; then
     echo "Virtual environment not found. Creating..."
@@ -40,9 +27,10 @@ python -m pytest backend/test/user_test.py -v
 
 # 可选：生成测试覆盖率报告
 echo "Generating test coverage report..."
+export COVERAGE_FILE=backend/test/.coverage
 python -m coverage run -m pytest backend/test/user_test.py
 python -m coverage report -m
 
 # 生成 HTML 报告并在默认浏览器中打开
-python -m coverage html
-start htmlcov/index.html
+python -m coverage html -d backend/test/htmlcov
+start backend/test/htmlcov/index.html
