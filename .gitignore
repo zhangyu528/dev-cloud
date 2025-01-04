@@ -1,15 +1,14 @@
-
-
 # 忽略环境配置文件
 .env                # 环境变量文件
 
 # 忽略 Python 项目生成的文件
-__pycache__/       # Python 编译缓存文件夹
-/**/__pycache__/         # 编译后的 Python 缓存文件夹
-
-*.pyc               # Python 编译文件
-*.pyo               # 优化编译文件
-*.pyd               # Windows 上的 Python 编译模块
+# Python cache files
+__pycache__
+__pycache__/
+**/__pycache__
+**/__pycache__/
+**/__pycache__/**
+*.py[cod]
 
 # 忽略 Node.js 项目生成的文件
 node_modules/       # Node.js 的依赖文件夹
@@ -31,14 +30,19 @@ docker-compose.override.yml  # 覆盖文件（如有）
 /venv/
 **/venv/             # Python 虚拟环境
 
+# IDE and Editor files
+.vscode
+.vscode/
+**/.vscode/
+**/.vscode/**
 
+# IDE settings
+.idea/              # JetBrains IDE 配置
 
 # 忽略系统自动生成的文件
 .DS_Store           # macOS 系统文件
 Thumbs.db           # Windows 缩略图缓存
 desktop.ini         # Windows 文件夹配置
-.idea/              # JetBrains IDE 配置
-.vscode/            # VS Code 配置
 
 # 忽略构建文件
 dist/               # 打包输出文件夹
@@ -52,7 +56,6 @@ build/              # 构建输出文件夹
 docker-data/        # 容器的挂载数据
 volumes/            # Docker volumes 文件夹
 *.tar               # 导出的容器镜像
-
 
 # 忽略数据库文件（如 SQLite）
 *.db                # 数据库文件（如 SQLite）
