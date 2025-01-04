@@ -1,15 +1,19 @@
+import os
 from .swagger_config import swagger_template, swagger_config
 
 class DevelopmentConfig:
     # 基础配置
     DEBUG = False
     TESTING = False
-    SECRET_KEY = 'your-secret-key'  # 建议使用随机生成的安全密钥
+    SECRET_KEY = os.getenv('SECRET_KEY', 'your-default-secret-key')  # 使用环境变量管理密钥
     
     # 数据库配置（如果需要）
     SQLALCHEMY_DATABASE_URI = 'sqlite:///dev_database.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # JWT 配置
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'your-default-jwt-secret-key')
+    JWT_ACCESS_TOKEN_EXPIRES = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 3600))  # 过期时间（秒）
 
      # Swagger 开发环境特定配置
     SWAGGER_TEMPLATE = {

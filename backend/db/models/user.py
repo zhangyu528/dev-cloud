@@ -16,10 +16,3 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
-    def generate_token(self):
-        payload = {
-            'user_id': self.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)
-        }
-        return jwt.encode(payload, 'your_secret_key', algorithm='HS256')
