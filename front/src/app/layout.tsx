@@ -1,7 +1,6 @@
 'use client';
 
 import { ThemeProvider } from 'next-themes';
-import { ThemeToggle } from '../components/ThemeToggle';
 import '../app/globals.css';
 
 export default function RootLayout({ 
@@ -17,9 +16,6 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
         >
-          <div className="fixed top-4 right-4">
-            <ThemeToggle />
-          </div>
           {children}
         </ThemeProvider>
       </body>
