@@ -23,14 +23,16 @@ export default function Navbar() {
           </div>
           <div className="flex space-x-4">
             <Link
-              href={pathname === '/login' ? '/signup' : '/login'}
+              href={pathname?.startsWith('/login') ? '/signup' : '/login'}
               className="text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 px-3 py-2 rounded-md"
             >
-              {pathname === '/login' ? 'Sign Up' : 'Log In'}
+              {pathname?.startsWith('/login') ? 'Sign Up' : 'Log In'}
             </Link>
             <Link
               href="/contact"
-              className="text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 px-3 py-2 rounded-md"
+              className="px-4 py-2 rounded-lg bg-gray-900 text-white hover:bg-gray-800 
+                     dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 
+                     transition-colors"
             >
               Contact
             </Link>
