@@ -80,6 +80,14 @@ export function VerificationInput({ value, onChange, length = 6 }: VerificationI
     const pastedData = e.clipboardData.getData('text').slice(0, length)
     if (!/^\d*$/.test(pastedData)) return
     onChange(pastedData)
+    
+    // 如果粘贴的数据填满了所有输入框，聚焦到最后一个
+    if (pastedData.length === length) {
+      inputRefs.current[length - 1]?.focus()
+    } else if (pastedData.length < length) {
+      // 否则聚焦到下一个空位置
+      inputRefs.current[pastedData.length]?.focus()
+    }
   }
 
   return (
@@ -87,7 +95,9 @@ export function VerificationInput({ value, onChange, length = 6 }: VerificationI
       {Array.from({ length }, (_, i) => (
         <input
           key={i}
-          ref={el => inputRefs.current[i] = el}
+          ref={(el: HTMLInputElement | null): void => {
+            inputRefs.current[i] = el
+          }}
           type="text"
           inputMode="numeric"
           maxLength={1}
