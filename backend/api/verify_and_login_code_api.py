@@ -112,6 +112,7 @@ def send_verification_code():
         db.session.add(code_obj)
         db.session.commit()
         
+        # 发送验证码邮件
         if send_verification_email(email, verification_code):
             response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_SENT')
             return jsonify(response), status_code

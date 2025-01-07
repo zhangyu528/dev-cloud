@@ -3,8 +3,10 @@ import Link from 'next/link'
 import { EmailIcon } from '@/components/icons/EmailIcon'
 import { useEffect, useRef, useState } from 'react'
 import { VerificationInput } from '@/components/VerificationInput'
+import { useRouter } from 'next/navigation'
 
 export default function EmailLoginPage() {
+  const router = useRouter()
   const [isVerification, setIsVerification] = useState(false)
   const [email, setEmail] = useState('')
   const [verificationCode, setVerificationCode] = useState('')
@@ -19,13 +21,13 @@ export default function EmailLoginPage() {
     }
   }, [isVerification])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!isVerification) {
       setIsVerification(true)
     } else {
-      // 处理验证码提交
-      console.log('Submitting verification code:', verificationCode)
+      const username = email.split('@')[0]
+      router.push(`/projects/${username}`)
     }
   }
 
