@@ -29,7 +29,6 @@ docker-compose.override.yml  # 覆盖文件（如有）
 # 忽略虚拟环境文件夹
 /venv/
 **/venv/             # Python 虚拟环境
-
 # IDE and Editor files
 .vscode
 .vscode/
@@ -65,4 +64,4 @@ volumes/            # Docker volumes 文件夹
 **/*.sqlite          # SQLite 文件
 *.sqlite             # SQLite 文件
 
-backend/test/test_database.db
+backend/tests/test_database.db
