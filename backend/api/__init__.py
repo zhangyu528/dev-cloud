@@ -8,6 +8,4 @@ api_bp = Blueprint('api', __name__)
 
 # 导入路由模块，确保路由被注册
 from . import user_api
-from . import verification_code_api
-# from . import container_api
-from . import templates_api
+from . import verify_and_login_code_api

@@ -9,7 +9,6 @@ class VerificationCode(db.Model):
     code = db.Column(db.String(6), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     expires_at = db.Column(db.DateTime, nullable=False)
-    is_used = db.Column(db.Boolean, default=False)
 
     def __init__(self, email, code, expires_in_minutes=10):
         self.email = email
@@ -18,9 +17,22 @@ class VerificationCode(db.Model):
         self.expires_at = datetime.now(timezone.utc) + timedelta(minutes=expires_in_minutes)
 
     @classmethod
-    def get_valid_code(cls, email, code):
-        return cls.query.filter_by(
+    def verify_and_invalidate(cls, email, code):
+        """
+        验证码校验并使其失效
+        Args:
+            email: 邮箱
+            code: 验证码
+        Returns:
+            验证通过返回验证码对象，否则返回None
+        """
+        valid_code = cls.query.filter_by(
             email=email,
-            code=code,
-            is_used=False
+            code=code
         ).filter(cls.expires_at > datetime.now(timezone.utc)).first()
+        
+        if valid_code:
+            valid_code.expires_at = datetime.now(timezone.utc)
+            db.session.commit()
+            
+        return valid_code

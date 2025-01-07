@@ -5,8 +5,10 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta, timezone
+from flask_jwt_extended import create_access_token
 
-from backend.db.models.verification_code import VerificationCode
+from backend.db.models import VerificationCode
+from backend.db.models import User
 from backend.extensions import db
 
 from . import api_bp
@@ -66,6 +68,10 @@ def send_verification_code():
               type: string
               description: 邮箱地址
               example: "user@example.com"
+            username:
+              type: string
+              description: 用户名(可选)
+              example: "johndoe"
     responses:
       200:
         description: 验证码发送成功
@@ -74,27 +80,43 @@ def send_verification_code():
     """
     data = request.get_json()
     email = data.get('email')
+    username = data.get('username')
     
     if not email:
         response, status_code = get_status_response('EMAIL', 'INVALID_EMAIL')
         return jsonify(response), status_code
-    
+
+    # 如果没有提供username，使用邮箱前缀
+    if not username:
+        username = email.split('@')[0]
+
     verification_code = generate_verification_code()
     
     try:
-        # First save to database
-        code_obj = VerificationCode(email=email, code=verification_code)
+        # 查找或创建用户
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            user = User(
+                username=username,
+                email=email,
+                login_type='email',
+                is_active=False
+            )
+            db.session.add(user)
+        
+        # 保存验证码
+        code_obj = VerificationCode(
+            email=email,
+            code=verification_code,
+        )
         db.session.add(code_obj)
         db.session.commit()
         
-        # Only send email if save succeeds
         if send_verification_email(email, verification_code):
             response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_SENT')
             return jsonify(response), status_code
         
-        # If email fails, delete saved code
-        db.session.delete(code_obj)
-        db.session.commit()
+        db.session.rollback()
         response, status_code = get_status_response('EMAIL', 'EMAIL_SENDING_FAILED')
         return jsonify(response), status_code
         
@@ -103,14 +125,14 @@ def send_verification_code():
         response, status_code = get_status_response('EMAIL', 'EMAIL_SENDING_FAILED')
         return jsonify(response), status_code
 
-@api_bp.route('/verify-code', methods=['POST'])
-def verify_code():
+@api_bp.route('/verify-and-login', methods=['POST'])  # 更新路由路径
+def verify_and_login_code():
     """
-    验证邮箱验证码
+    验证邮箱验证码并登录
     ---
     tags:
       - 验证码
-    summary: 验证邮箱验证码
+    summary: 验证邮箱验证码并登录
     parameters:
       - in: body
         name: body
@@ -128,7 +150,18 @@ def verify_code():
               example: "123456"
     responses:
       200:
-        description: 验证码验证成功
+        description: 验证成功并登录
+        schema:
+          type: object
+          properties:
+            error_code:
+              type: string
+            message:
+              type: string
+            access_token:
+              type: string
+            username:
+              type: string
       400:
         description: 验证码无效或已过期
       404:
@@ -142,33 +175,37 @@ def verify_code():
         response, status_code = get_status_response('EMAIL', 'INVALID_EMAIL')
         return jsonify(response), status_code
     
-    # 查找最新的验证码记录
-    verification = VerificationCode.query.filter_by(
-        email=email
-    ).order_by(
-        VerificationCode.created_at.desc()
-    ).first()
+    # 使用重命名后的方法
+    verification = VerificationCode.verify_and_invalidate(email, code)
     
     if not verification:
         response, status_code = get_status_response('EMAIL', 'INVALID_VERIFICATION_CODE')
         return jsonify(response), status_code
     
-    # 检查是否过期 (10分钟)
-    if datetime.now(timezone.utc) - verification.created_at > timedelta(minutes=10):
-        # 删除过期的验证码
-        db.session.delete(verification)
-        db.session.commit()
-        response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_EXPIRED')
+    try:
+        # 验证成功后激活用户并登录
+        user = User.query.filter_by(email=verification.email).first()
+        if user:
+            user.is_active = True
+            db.session.delete(verification)
+            db.session.commit()
+            
+            # 创建访问令牌
+            access_token = create_access_token(identity=user.id)
+            
+            response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_SUCCESS')
+            response_data = {
+                'error_code': response['error_code'],
+                'message': response['message'],
+                'access_token': access_token,
+                'username': user.username
+            }
+            return jsonify(response_data), status_code
+            
+    except Exception as e:
+        db.session.rollback()
+        response, status_code = get_status_response('EMAIL', 'EMAIL_SENDING_FAILED')
         return jsonify(response), status_code
-    
-    # 验证码匹配检查
-    if verification.code != code:
-        response, status_code = get_status_response('EMAIL', 'INVALID_VERIFICATION_CODE')
-        return jsonify(response), status_code
-    
-    # 验证成功，删除已使用的验证码
-    db.session.delete(verification)
-    db.session.commit()
-    
+
     response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_SUCCESS')
     return jsonify(response), status_code
