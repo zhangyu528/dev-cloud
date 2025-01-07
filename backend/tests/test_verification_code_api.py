@@ -1,12 +1,14 @@
 import pytest
 from unittest.mock import patch
-from backend.db.models import User
+from datetime import datetime, timedelta, timezone
+
+from backend.extensions import db
 from backend.api.status_codes import StatusCodes
+from backend.db.models.verification_code import VerificationCode
 
 class TestVerificationCode:
     @pytest.fixture(autouse=True, scope='class')
     def setup_database(self):
-        from backend.extensions import db
         db.create_all()
         yield
         db.session.remove()
@@ -15,8 +17,7 @@ class TestVerificationCode:
     @pytest.fixture(autouse=True, scope='function')
     def cleanup_test_data(self):
         yield
-        from backend.extensions import db
-        User.query.delete()
+        VerificationCode.query.delete()
         db.session.commit()
     
     # 使用 mock 对象替换 send_verification_email 函数
@@ -76,10 +77,58 @@ class TestVerificationCode:
 
     def test_verify_code_success(self, client):
         """Test successful code verification"""
-        response = client.post('/api/verify-code', 
-                             json={'email': 'test@example.com', 'code': '123456'})
+        # 创建测试验证码
+        test_code = "123456"
+        test_email = "test@example.com"
+        verification = VerificationCode(
+            email=test_email,
+            code=test_code,
+            created_at=datetime.now(timezone.utc)
+        )
+        db.session.add(verification)
+        db.session.commit()
         
-        assert response.status_code == 200
+        response = client.post('/api/verify-code', 
+                             json={'email': test_email, 'code': test_code})
+        
+        assert response.status_code == StatusCodes.EMAIL['VERIFICATION_CODE_SUCCESS']['status_code']
+        
+        # 验证验证码已被删除
+        assert VerificationCode.query.filter_by(email=test_email).first() is None
+
+    def test_verify_code_expired(self, client):
+        """Test expired verification code"""
+        test_code = "123456"
+        test_email = "test@example.com"
+        verification = VerificationCode(
+            email=test_email,
+            code=test_code,
+            created_at=datetime.now(timezone.utc) - timedelta(minutes=11)  # 11分钟前创建
+        )
+        db.session.add(verification)
+        db.session.commit()
+        
+        response = client.post('/api/verify-code', 
+                             json={'email': test_email, 'code': test_code})
+        
+        assert response.status_code == StatusCodes.EMAIL['VERIFICATION_CODE_EXPIRED']['status_code']
+
+    def test_verify_code_invalid(self, client):
+        """Test invalid verification code"""
+        test_code = "123456"
+        test_email = "test@example.com"
+        verification = VerificationCode(
+            email=test_email,
+            code=test_code,
+            created_at=datetime.now(timezone.utc)
+        )
+        db.session.add(verification)
+        db.session.commit()
+        
+        response = client.post('/api/verify-code', 
+                             json={'email': test_email, 'code': "wrong_code"})
+        
+        assert response.status_code == StatusCodes.EMAIL['INVALID_VERIFICATION_CODE']['status_code']
 
     def test_verify_code_missing_email(self, client):
         """Test verification with missing email"""

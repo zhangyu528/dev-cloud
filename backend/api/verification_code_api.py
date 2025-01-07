@@ -4,6 +4,10 @@ import random
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from datetime import datetime, timedelta, timezone
+
+from backend.db.models.verification_code import VerificationCode
+from backend.extensions import db
 
 from . import api_bp
 from .status_codes import get_status_response
@@ -77,13 +81,25 @@ def send_verification_code():
     
     verification_code = generate_verification_code()
     
-    # Store verification code in cache/database with expiration time
-    # TODO: Implement proper storage of verification code
-    
-    if send_verification_email(email, verification_code):
-        response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_SENT')
+    try:
+        # First save to database
+        code_obj = VerificationCode(email=email, code=verification_code)
+        db.session.add(code_obj)
+        db.session.commit()
+        
+        # Only send email if save succeeds
+        if send_verification_email(email, verification_code):
+            response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_SENT')
+            return jsonify(response), status_code
+        
+        # If email fails, delete saved code
+        db.session.delete(code_obj)
+        db.session.commit()
+        response, status_code = get_status_response('EMAIL', 'EMAIL_SENDING_FAILED')
         return jsonify(response), status_code
-    else:
+        
+    except Exception as e:
+        db.session.rollback()
         response, status_code = get_status_response('EMAIL', 'EMAIL_SENDING_FAILED')
         return jsonify(response), status_code
 
@@ -126,10 +142,33 @@ def verify_code():
         response, status_code = get_status_response('EMAIL', 'INVALID_EMAIL')
         return jsonify(response), status_code
     
-    # TODO: Implement verification code validation logic
-    # This should check the stored verification code against the provided one
-    # and verify that it hasn't expired
+    # 查找最新的验证码记录
+    verification = VerificationCode.query.filter_by(
+        email=email
+    ).order_by(
+        VerificationCode.created_at.desc()
+    ).first()
     
-    # Mock successful verification
+    if not verification:
+        response, status_code = get_status_response('EMAIL', 'INVALID_VERIFICATION_CODE')
+        return jsonify(response), status_code
+    
+    # 检查是否过期 (10分钟)
+    if datetime.now(timezone.utc) - verification.created_at > timedelta(minutes=10):
+        # 删除过期的验证码
+        db.session.delete(verification)
+        db.session.commit()
+        response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_EXPIRED')
+        return jsonify(response), status_code
+    
+    # 验证码匹配检查
+    if verification.code != code:
+        response, status_code = get_status_response('EMAIL', 'INVALID_VERIFICATION_CODE')
+        return jsonify(response), status_code
+    
+    # 验证成功，删除已使用的验证码
+    db.session.delete(verification)
+    db.session.commit()
+    
     response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_SUCCESS')
     return jsonify(response), status_code
