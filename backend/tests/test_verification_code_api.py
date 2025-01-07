@@ -73,3 +73,38 @@ class TestVerificationCode:
         
         assert response.status_code == StatusCodes.EMAIL['VERIFICATION_CODE_SENT']['status_code']
         assert mock_send_email.called
+
+    def test_verify_code_success(self, client):
+        """Test successful code verification"""
+        response = client.post('/api/verify-code', 
+                             json={'email': 'test@example.com', 'code': '123456'})
+        
+        assert response.status_code == 200
+
+    def test_verify_code_missing_email(self, client):
+        """Test verification with missing email"""
+        response = client.post('/api/verify-code', 
+                             json={'code': '123456'})
+        
+        assert response.status_code == 400
+
+    def test_verify_code_missing_code(self, client):
+        """Test verification with missing code"""
+        response = client.post('/api/verify-code', 
+                             json={'email': 'test@example.com'})
+        
+        assert response.status_code == 400
+
+    def test_verify_code_missing_both(self, client):
+        """Test verification with missing both email and code"""
+        response = client.post('/api/verify-code', 
+                             json={})
+        
+        assert response.status_code == 400
+
+    def test_verify_code_empty_values(self, client):
+        """Test verification with empty email and code"""
+        response = client.post('/api/verify-code', 
+                             json={'email': '', 'code': ''})
+        
+        assert response.status_code == 400

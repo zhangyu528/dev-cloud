@@ -86,3 +86,50 @@ def send_verification_code():
     else:
         response, status_code = get_status_response('EMAIL', 'EMAIL_SENDING_FAILED')
         return jsonify(response), status_code
+
+@api_bp.route('/verify-code', methods=['POST'])
+def verify_code():
+    """
+    验证邮箱验证码
+    ---
+    tags:
+      - 验证码
+    summary: 验证邮箱验证码
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              description: 邮箱地址
+              example: "user@example.com"
+            code:
+              type: string
+              description: 验证码
+              example: "123456"
+    responses:
+      200:
+        description: 验证码验证成功
+      400:
+        description: 验证码无效或已过期
+      404:
+        description: 未找到验证码记录
+    """
+    data = request.get_json()
+    email = data.get('email')
+    code = data.get('code')
+    
+    if not email or not code:
+        response, status_code = get_status_response('EMAIL', 'INVALID_EMAIL')
+        return jsonify(response), status_code
+    
+    # TODO: Implement verification code validation logic
+    # This should check the stored verification code against the provided one
+    # and verify that it hasn't expired
+    
+    # Mock successful verification
+    response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_SUCCESS')
+    return jsonify(response), status_code

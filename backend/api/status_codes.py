@@ -63,6 +63,11 @@ class StatusCodes:
             'code': 'EMAIL_005',
             'message': 'Invalid verification code',
             'status_code': 400
+        },
+        'VERIFICATION_CODE_SUCCESS': {
+            'code': 'EMAIL_006',
+            'message': 'Verification code validated successfully',
+            'status_code': 200
         }
     }
 
