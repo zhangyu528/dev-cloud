@@ -5,11 +5,9 @@ import { EmailIcon } from '@/components/icons/EmailIcon'
 import { useEffect, useRef, useState } from 'react'
 import { VerificationInput } from '@/components/VerificationInput'
 import { useRouter } from 'next/navigation'
-import { api } from '@/config/api'
+import { authApi } from '@/api/auth'
 
-interface VerifyResponse {
-  username: string
-}
+
 
 export default function EmailLoginPage() {
   const router = useRouter()
@@ -30,7 +28,7 @@ export default function EmailLoginPage() {
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await api.post('/send_verification_code', { email })
+      await authApi.sendVerificationCode(email)
       setIsVerification(true)
     } catch (error) {
       console.error('Error sending verification code:', error)
@@ -41,10 +39,7 @@ export default function EmailLoginPage() {
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const { username } = await api.post<VerifyResponse>('/verify_and_login', {
-        email,
-        code: verificationCode
-      })
+      const { username } = await authApi.verifyAndLogin(email, verificationCode)
       router.push(`/projects/${username}`)
     } catch (error) {
       console.error('Verification error:', error)
