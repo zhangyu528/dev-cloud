@@ -5,7 +5,11 @@ import { EmailIcon } from '@/components/icons/EmailIcon'
 import { useEffect, useRef, useState } from 'react'
 import { VerificationInput } from '@/components/VerificationInput'
 import { useRouter } from 'next/navigation'
-import { API_BASE_URL } from '@/config/api'
+import { api } from '@/config/api'
+
+interface VerifyResponse {
+  username: string
+}
 
 export default function EmailLoginPage() {
   const router = useRouter()
@@ -26,18 +30,7 @@ export default function EmailLoginPage() {
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response = await fetch(`${API_BASE_URL}/send_verification_code`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      })
-      
-      if (!response.ok) {
-        throw new Error('Failed to send verification code')
-      }
-      
+      await api.post('/send_verification_code', { email })
       setIsVerification(true)
     } catch (error) {
       console.error('Error sending verification code:', error)
@@ -48,22 +41,10 @@ export default function EmailLoginPage() {
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response = await fetch(`${API_BASE_URL}/verify_and_login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          email,
-          code: verificationCode 
-        }),
+      const { username } = await api.post<VerifyResponse>('/verify_and_login', {
+        email,
+        code: verificationCode
       })
-      
-      if (!response.ok) {
-        throw new Error('Verification failed')
-      }
-
-      const { username } = await response.json()
       router.push(`/projects/${username}`)
     } catch (error) {
       console.error('Verification error:', error)
