@@ -52,30 +52,29 @@ class TestVerificationCodeApi:
     #     assert response.json['code'] == StatusCodes.EMAIL['SEND_FAILED']['code']
 
     # # 测试验证码验证和登录相关用例
-    # def test_verify_and_login_success(self, client):
-    #     """测试验证码验证登录成功"""
-    #     email = 'test@example.com'
-    #     code = '123456'
+    def test_verify_and_login_success(self, client):
+        """测试验证码验证登录成功"""
+        email = 'test@example.com'
+        code = '123456'
         
-    #     # 创建验证码记录
-    #     verification = VerificationCode(email=email, code=code)
-    #     db.session.add(verification)
+        # 创建验证码记录
+        verification = VerificationCode(email=email, code=code)
+        db.session.add(verification)
         
-    #     # 创建未激活用户
-    #     user = User(email=email, username=email.split('@')[0])
-    #     db.session.add(user)
-    #     db.session.commit()
+        # 创建未激活用户
+        user = User(email=email, username=email.split('@')[0])
+        db.session.add(user)
+        db.session.commit()
 
-    #     response = client.post('/api/verify-and-login', 
-    #                          json={'email': email, 'code': code})
+        response = client.post('/api/verify_and_login', 
+                             json={'email': email, 'code': code})
         
-    #     assert response.status_code == 200
-    #     assert 'access_token' in response.json
-    #     assert response.json['code'] == StatusCodes.EMAIL['VERIFY_SUCCESS']['code']
+        assert response.status_code == 200
+        assert 'access_token' in response.json
 
-    #     # 验证用户已激活
-    #     updated_user = User.query.filter_by(email=email).first()
-    #     assert updated_user.is_active is True
+        # 验证用户已激活
+        updated_user = User.query.filter_by(email=email).first()
+        assert updated_user.is_active is True
 
     # def test_verify_and_login_invalid_code(self, client):
     #     """测试无效验证码"""

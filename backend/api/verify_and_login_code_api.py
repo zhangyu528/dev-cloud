@@ -143,8 +143,8 @@ def send_verification_code():
         response, status_code = get_status_response('EMAIL', 'EMAIL_SENDING_FAILED')
         return jsonify(response), status_code
 
-@api_bp.route('/verify-and-login', methods=['POST'])  # 更新路由路径
-def verify_and_login_code():
+@api_bp.route('/verify_and_login', methods=['POST'])  # 更新路由路径
+def verify_and_login():
     """
     验证邮箱验证码并登录
     ---
@@ -188,7 +188,7 @@ def verify_and_login_code():
     data = request.get_json()
     email = data.get('email')
     code = data.get('code')
-    
+    print(email, code)
     if not email or not code:
         response, status_code = get_status_response('EMAIL', 'INVALID_EMAIL')
         return jsonify(response), status_code
