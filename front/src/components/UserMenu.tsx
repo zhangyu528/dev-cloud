@@ -31,7 +31,7 @@ export default function UserMenu() {
       </button>
 
       {isMenuOpen && (
-        <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
+        <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 z-50">
           {/* User Info Section */}
           <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-600">
             <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{email}</p>
