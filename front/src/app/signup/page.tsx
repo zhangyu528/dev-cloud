@@ -11,6 +11,10 @@ export default function SignupPage() {
   const [isTrialExpanded, setIsTrialExpanded] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const handleContinue = () => {
+    window.location.href = '/login/email'
+  }
+
   useEffect(() => {
     if (selectedPlan && inputRef.current) {
       inputRef.current.focus()
@@ -123,6 +127,7 @@ export default function SignupPage() {
             )}
             <button
               disabled={!selectedPlan || !name.trim()}
+              onClick={handleContinue}
               className={`w-full py-2 px-4 rounded-md transition-colors
                 ${(!selectedPlan || !name.trim())
                   ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed'

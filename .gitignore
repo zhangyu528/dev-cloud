@@ -65,3 +65,4 @@ volumes/            # Docker volumes 文件夹
 *.sqlite             # SQLite 文件
 
 backend/tests/test_database.db
+backend/dev_database.db

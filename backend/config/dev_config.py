@@ -7,9 +7,10 @@ class DevelopmentConfig:
     TESTING = False
     SECRET_KEY = os.getenv('SECRET_KEY', 'your-default-secret-key')  # 使用环境变量管理密钥
     
-    # 数据库配置（如果需要）
+    # 数据库配置
     SQLALCHEMY_DATABASE_URI = 'sqlite:///dev_database.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ECHO = True  # Enable SQL query logging
 
     # JWT 配置
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'your-default-jwt-secret-key')

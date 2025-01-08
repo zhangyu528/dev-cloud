@@ -43,6 +43,11 @@ class StatusCodes:
             'code': 'EMAIL_006',
             'message': 'Verification code validated successfully',
             'status_code': 200
+        },
+        'SMTP_CONFIG_MISSING': {
+            'code': 'EMAIL_007',
+            'message': 'SMTP configuration is missing',
+            'status_code': 500
         }
     }
 

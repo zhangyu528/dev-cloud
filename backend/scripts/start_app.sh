@@ -15,7 +15,7 @@ export FLASK_ENV=development  # 或者设置为 'production'
 
 # 安装依赖，如果没有安装过依赖的话
 echo "Installing dependencies..."
-pip install -r backend/requirements.txt
+pip install -r ./requirements.txt
 
 # 获取脚本的绝对路径（Windows 兼容版本）
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -W )"

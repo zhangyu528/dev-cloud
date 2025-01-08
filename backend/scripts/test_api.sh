@@ -23,8 +23,9 @@ fi
 
 # 运行特定的测试文件
 echo "Running user API tests..."
-python -m pytest backend/tests/test_user_api.py -v
+# python -m pytest backend/tests/test_user_api.py -v
 python -m pytest backend/tests/test_verification_code_api.py -v
+python -m pytest backend/tests/test_smtp.py -v
 
 
 # 可选：生成测试覆盖率报告

@@ -9,7 +9,8 @@ from backend.api import api_bp  # 从 api 包导入蓝图
 from backend.config import DevelopmentConfig
 
 # 重要：导入所有模型
-from backend.db.models import User, Container
+from backend.db.models.user import User
+from backend.db.models.verification_code import VerificationCode
 
 # 创建 Flask 应用
 app = Flask(__name__)
@@ -31,7 +32,15 @@ if swagger_template and swagger_config:
             template=swagger_template,
             config=swagger_config)
 
-CORS(app)   # 添加跨域支持
+CORS(app,
+    resources={
+        r"/api/*": {
+            "origins": ["http://localhost:3000"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True
+        }
+    })   # 添加跨域支持
 
 if __name__ == '__main__':
      # 使用应用上下文

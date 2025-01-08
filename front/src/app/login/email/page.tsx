@@ -4,6 +4,7 @@ import { EmailIcon } from '@/components/icons/EmailIcon'
 import { useEffect, useRef, useState } from 'react'
 import { VerificationInput } from '@/components/VerificationInput'
 import { useRouter } from 'next/navigation'
+import { API_BASE_URL } from '@/config/api'
 
 export default function EmailLoginPage() {
   const router = useRouter()
@@ -24,7 +25,25 @@ export default function EmailLoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!isVerification) {
-      setIsVerification(true)
+      try {
+        const response = await fetch(`${API_BASE_URL}/send_verification_code`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        })
+        
+        if (!response.ok) {
+          throw new Error('Failed to send verification code')
+        }
+        
+        // Only show verification input after successful API call
+        setIsVerification(true)
+      } catch (error) {
+        console.error('Error sending verification code:', error)
+        // TODO: Add error handling UI
+      }
     } else {
       const username = email.split('@')[0]
       router.push(`/projects/${username}`)

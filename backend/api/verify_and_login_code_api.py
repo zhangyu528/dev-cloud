@@ -14,10 +14,10 @@ from backend.extensions import db
 from . import api_bp
 from .status_codes import get_status_response
 
-SMTP_SERVER = "smtp.gmail.com"  # Change this according to your email provider
+SMTP_SERVER = "smtp.ethereal.email"
 SMTP_PORT = 587
-SMTP_USERNAME = os.getenv('SMTP_USERNAME')
-SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
+SMTP_USERNAME = "jennyfer9@ethereal.email"
+SMTP_PASSWORD = "aqpGF4YMHKa54u5mtc"
 
 def generate_verification_code():
     """Generate a 6-digit verification code"""
@@ -25,8 +25,12 @@ def generate_verification_code():
 
 def send_verification_email(to_email, code):
     """Send verification code via email"""
+    if not all([SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD]):
+        print("SMTP configuration is incomplete")
+        return False
+        
     message = MIMEMultipart()
-    message["From"] = SMTP_USERNAME
+    message["From"] = "no-reply@example.com"  # Use a generic sender
     message["To"] = to_email
     message["Subject"] = "Email Verification Code"
     
@@ -40,16 +44,30 @@ def send_verification_email(to_email, code):
     message.attach(MIMEText(body, "plain"))
     
     try:
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+        print(f"Connecting to SMTP server: {SMTP_SERVER}:{SMTP_PORT}")
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=10) as server:
+            print("Starting TLS...")
             server.starttls()
+            print(f"Logging in with username: {SMTP_USERNAME}")
             server.login(SMTP_USERNAME, SMTP_PASSWORD)
-            server.send_message(message)
-        return True
+            print(f"Sending email to: {to_email}")
+            server.sendmail("no-reply@example.com", to_email, message.as_string())
+            print("Email sent successfully")
+            return True
+    except smtplib.SMTPAuthenticationError as e:
+        print(f"SMTP Authentication Error: {e}")
+        print(f"Check if username/password are correct. Username: {SMTP_USERNAME}")
+    except smtplib.SMTPConnectError as e:
+        print(f"SMTP Connection Error: {e}")
+        print(f"Check if SMTP server and port are correct: {SMTP_SERVER}:{SMTP_PORT}")
+    except smtplib.SMTPException as e:
+        print(f"SMTP Error: {e}")
     except Exception as e:
-        print(f"Error sending email: {e}")
-        return False
+        print(f"Unexpected Error: {e}")
+    
+    return False
 
-@api_bp.route('/send-verification-code', methods=['POST'])
+@api_bp.route('/send_verification_code', methods=['POST'])
 def send_verification_code():
     """
     发送邮箱验证码
@@ -99,7 +117,6 @@ def send_verification_code():
             user = User(
                 username=username,
                 email=email,
-                login_type='email',
                 is_active=False
             )
             db.session.add(user)
