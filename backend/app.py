@@ -3,6 +3,7 @@ from flask_cors import CORS  # 用于解决跨域问题，如果前端和后端�
 from flask import Blueprint
 from flask_jwt_extended import JWTManager  # 添加 JWT 管理器
 from flasgger import Swagger  # 添加 Swagger
+from flask import request  # 用于记录请求信息
 
 from backend.extensions import db
 from backend.api import api_bp  # 从 api 包导入蓝图
@@ -41,6 +42,21 @@ CORS(app,
             "supports_credentials": True
         }
     })   # 添加跨域支持
+
+@app.after_request
+def log_request_and_response(response):
+    # 尝试从 JSON 响应中提取 msg
+    if response.is_json:
+        data = response.get_json()
+        msg = data.get("message", "No message found")
+    else:
+        msg = "Response is not JSON"
+    
+    # 记录日志
+    app.logger.info(
+        f"URL: {request.url} | Status Code: {response.status_code} | Msg: {msg}"
+    )
+    return response
 
 if __name__ == '__main__':
      # 使用应用上下文

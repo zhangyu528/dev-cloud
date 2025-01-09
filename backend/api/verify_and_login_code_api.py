@@ -12,7 +12,7 @@ from backend.db.models import User
 from backend.extensions import db
 
 from . import api_bp
-from .status_codes import get_status_response
+from .status_codes import StatusCodes, StatusCodeCategory, StatusCodeKey
 
 SMTP_SERVER = "smtp.ethereal.email"
 SMTP_PORT = 587
@@ -100,9 +100,24 @@ def send_verification_code():
     email = data.get('email')
     username = data.get('username')
     
-    if not email:
-        response, status_code = get_status_response('EMAIL', 'INVALID_EMAIL')
-        return jsonify(response), status_code
+    # Validate email format
+    try:
+        from email_validator import validate_email, EmailNotValidError
+        print(f"Validating email: {email}")
+        try:
+            # Validate and normalize the email address
+            valid = validate_email(email)
+            print(f"Email validation successful: {valid.email}")
+            email = valid.email  # Replace with normalized form
+        except EmailNotValidError as e:
+            print(f"Email validation failed: {str(e)}")
+            response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.INVALID_EMAIL)
+            return jsonify(response), status_code
+    except ImportError:
+        # Fallback to simple validation if email-validator not installed
+        if not email or '@' not in email or '.' not in email.split('@')[-1]:
+            response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.INVALID_EMAIL)
+            return jsonify(response), status_code
 
     # 如果没有提供username，使用邮箱前缀
     if not username:
@@ -131,16 +146,16 @@ def send_verification_code():
         
         # 发送验证码邮件
         if send_verification_email(email, verification_code):
-            response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_SENT')
+            response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.VERIFICATION_CODE_SENT)
             return jsonify(response), status_code
         
         db.session.rollback()
-        response, status_code = get_status_response('EMAIL', 'EMAIL_SENDING_FAILED')
+        response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.EMAIL_SENDING_FAILED)
         return jsonify(response), status_code
         
     except Exception as e:
         db.session.rollback()
-        response, status_code = get_status_response('EMAIL', 'EMAIL_SENDING_FAILED')
+        response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.EMAIL_SENDING_FAILED)
         return jsonify(response), status_code
 
 @api_bp.route('/verify_and_login', methods=['POST'])  # 更新路由路径
@@ -172,8 +187,6 @@ def verify_and_login():
         schema:
           type: object
           properties:
-            error_code:
-              type: string
             message:
               type: string
             access_token:
@@ -190,15 +203,15 @@ def verify_and_login():
     code = data.get('code')
     print(email, code)
     if not email or not code:
-        response, status_code = get_status_response('EMAIL', 'INVALID_EMAIL')
+        response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.INVALID_EMAIL)
         return jsonify(response), status_code
     
     # 使用重命名后的方法
     verification = VerificationCode.verify_and_invalidate(email, code)
     
     if not verification:
-        response, status_code = get_status_response('EMAIL', 'INVALID_VERIFICATION_CODE')
-        return jsonify(response), status_code
+        response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.INVALID_VERIFICATION_CODE)
+        return jsonify(response), status_code, 
     
     try:
         # 验证成功后激活用户并登录
@@ -211,19 +224,20 @@ def verify_and_login():
             # 创建访问令牌
             access_token = create_access_token(identity=user.id)
             
-            response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_SUCCESS')
+            response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.VERIFICATION_CODE_SUCCESS)
             response_data = {
-                'error_code': response['error_code'],
                 'message': response['message'],
                 'access_token': access_token,
                 'username': user.username
             }
             return jsonify(response_data), status_code
-            
+        else:
+            response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.INVALID_VERIFICATION_CODE)
+            return jsonify(response), status_code
     except Exception as e:
         db.session.rollback()
-        response, status_code = get_status_response('EMAIL', 'EMAIL_SENDING_FAILED')
+        response, status_code = StatusCodes.get_status_response('EMAIL', 'EMAIL_SENDING_FAILED')
         return jsonify(response), status_code
 
-    response, status_code = get_status_response('EMAIL', 'VERIFICATION_CODE_SUCCESS')
+    response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.VERIFICATION_CODE_SUCCESS)
     return jsonify(response), status_code

@@ -32,3 +32,16 @@ def client():
         # 创建应用上下文
         with app.app_context():
             yield client
+
+@pytest.fixture
+def jwt_token(client):
+    """生成测试用的JWT token"""
+    from flask_jwt_extended import create_access_token
+    
+    # 创建测试用户ID
+    test_user_id = 'test_user_123'
+    
+    # 生成access token
+    access_token = create_access_token(identity=test_user_id)
+    
+    return access_token

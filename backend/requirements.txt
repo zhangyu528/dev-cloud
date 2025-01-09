@@ -1,4 +1,5 @@
-﻿docker==6.0.0           # Docker SDK for Python，用于与 Docker 容器交互
+﻿
+docker==6.0.0           # Docker SDK for Python，用于与 Docker 容器交互
 python-dotenv==0.21.0   # 加载环境变量（如 Docker 主机配置等）
 requests==2.26.0        # 发起 HTTP 请求，用于外部 API 交互
 celery==5.2.7           # 任务队列，用于处理异步任务（如启动多个容器等）
@@ -20,6 +21,7 @@ PyMySQL==1.0.2              # MySQL 数据库驱动
 Werkzeug==2.1.2             # 密码哈希、安全工具
 PyJWT==2.3.0                # JWT 令牌生成与验证
 flask-jwt-extended==4.4.4   # Flask JWT 扩展
+email-validator==1.3.1      # 邮箱格式验证
 
 # 跨域与网络
 Flask-Cors==3.0.10          # 处理跨域资源共享
