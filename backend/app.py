@@ -15,9 +15,9 @@ from backend.db.models.verification_code import VerificationCode
 
 # 创建 Flask 应用
 app = Flask(__name__)
+app.config.from_object(DevelopmentConfig)  # 加载配置
 # 初始化 SQLAlchemy
 db.init_app(app)  
-app.config.from_object(DevelopmentConfig)  # 加载配置
 
 # 所有 API 路由都会以 /api 为前缀
 app.register_blueprint(api_bp, url_prefix='/api')  

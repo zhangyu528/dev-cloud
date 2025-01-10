@@ -1,9 +1,9 @@
 #!/bin/bash
-source backend/scripts/utils/venv.sh
-source backend/scripts/utils/requrirements.sh
-
 # 获取脚本所在目录
 SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
+
+source "$SCRIPT_DIR/utils/venv.sh"
+source "$SCRIPT_DIR/utils/requrirements.sh"
 
 # 项目根目录：使用 Git 获取项目的根目录
 PROJECT_DIR=$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)
