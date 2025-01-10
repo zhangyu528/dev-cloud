@@ -1,4 +1,10 @@
 class ProductionConfig:
+    # CORS 允许的源
+    CORS_ORIGINS = [
+        "https://www.devcloud.com",
+        "https://admin.devcloud.com"
+    ]
+    
     # 基础配置
     DEBUG = False
     TESTING = False

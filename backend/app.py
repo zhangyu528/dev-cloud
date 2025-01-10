@@ -24,24 +24,15 @@ app.register_blueprint(api_bp, url_prefix='/api')
 # 初始化 JWT
 jwt = JWTManager(app)
 
- # Swagger 配置
-swagger_template = app.config.get('SWAGGER_TEMPLATE')
-swagger_config = app.config.get('SWAGGER_CONFIG')
+# Initialize Swagger with separate template and config
+Swagger(
+    app,
+    template=app.config['SWAGGER_TEMPLATE'],
+    config=app.config['SWAGGER_CONFIG']
+)
 
-if swagger_template and swagger_config:
-    Swagger(app, 
-            template=swagger_template,
-            config=swagger_config)
-
-CORS(app,
-    resources={
-        r"/api/*": {
-            "origins": ["http://localhost:3000"],
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"],
-            "supports_credentials": True
-        }
-    })   # 添加跨域支持
+# 初始化 CORS
+CORS(app, **app.config['CORS_CONFIG'])  # 从配置加载 CORS 设置
 
 @app.after_request
 def log_request_and_response(response):
