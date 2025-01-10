@@ -1,4 +1,6 @@
 #!/bin/bash
+source backend/scripts/utils/venv.sh
+source backend/scripts/utils/requrirements.sh
 
 # 获取脚本所在目录
 SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
@@ -10,73 +12,12 @@ echo "Project directory: $PROJECT_DIR"
 export PYTHONPATH="$PROJECT_DIR"
 echo "PYTHONPATH set to: $PYTHONPATH"
 
-# 虚拟环境目录（根据实际路径修改）
-VENV_DIR="$PROJECT_DIR/backend/venv"
-echo "Virtual environment directory: $VENV_DIR"
+# 导入虚拟环境激活函数
+create_venv
+activate_venv
 
-# 激活虚拟环境的函数
-activate_venv() {
-    if [[ "$OSTYPE" == "linux-gnu"* || "$OSTYPE" == "darwin"* ]]; then
-        # Linux 或 macOS
-        source "$VENV_DIR/bin/activate"
-    elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
-        # Windows
-        if [[ -f "$VENV_DIR/Scripts/activate" ]]; then
-            # PowerShell
-            source "$VENV_DIR/Scripts/activate"
-        elif [[ -f "$VENV_DIR/Scripts/activate.bat" ]]; then
-            # 命令行
-            "$VENV_DIR/Scripts/activate.bat"
-        fi
-    else
-        echo "Unsupported OS type: $OSTYPE"
-        exit 1
-    fi
-    # 确认虚拟环境已激活
-    echo "Virtual environment activated: $VENV_DIR"
-}
-
-# 检查虚拟环境是否存在
-if [[ ! -d "$VENV_DIR" ]]; then
-    echo "Virtual environment not found at $VENV_DIR"
-    echo "Creating virtual environment..."
-
-    # 创建虚拟环境
-    python -m venv "$VENV_DIR" || {
-        echo "Failed to create virtual environment."
-        exit 1
-    }
-
-    echo "Virtual environment created at $VENV_DIR"
-    
-    # 激活虚拟环境
-    activate_venv
-
-    echo "Installing dependencies..."
-    # 安装项目依赖
-    pip install -r "$PROJECT_DIR/backend/requirements.txt" -q || {
-        echo "Failed to install dependencies."
-        exit 1
-    }
-else
-    echo "Virtual environment found. Activating..."
-
-    # 激活虚拟环境
-    activate_venv
-
-    echo "Updating dependencies..."
-    # 更新项目依赖
-    pip install --upgrade -r "$PROJECT_DIR/backend/requirements.txt" -q || {
-        echo "Failed to update dependencies."
-        exit 1
-    }
-fi
-
-# 确认虚拟环境已激活
-if [[ -z "$VENV_DIR" ]]; then
-    echo "Virtual environment activation failed."
-    exit 1
-fi
+# 安装项目依赖
+install_requirements
 
 # 测试文件路径
 TEST_PATH="$PROJECT_DIR/backend/tests"
