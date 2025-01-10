@@ -1,14 +1,6 @@
 # 忽略环境配置文件
 .env                # 环境变量文件
 
-# 忽略 Python 项目生成的文件
-# Python cache files
-__pycache__
-__pycache__/
-**/__pycache__
-**/__pycache__/
-**/__pycache__/**
-*.py[cod]
 
 # 忽略 Node.js 项目生成的文件
 node_modules/       # Node.js 的依赖文件夹
@@ -26,9 +18,7 @@ docker-compose.override.yml  # 覆盖文件（如有）
 .docker/                     # 本地 Docker 配置
 .dockerignore                # Docker 忽略规则文件
 
-# 忽略虚拟环境文件夹
-/venv/
-**/venv/             # Python 虚拟环境
+
 # IDE and Editor files
 .vscode
 .vscode/
@@ -55,14 +45,3 @@ build/              # 构建输出文件夹
 docker-data/        # 容器的挂载数据
 volumes/            # Docker volumes 文件夹
 *.tar               # 导出的容器镜像
-
-# 忽略数据库文件（如 SQLite）
-**/*.db               # 数据库文件（如 SQLite）
-*.db                # 数据库文件（如 SQLite）
-**/*.db.*            # 多模式数据库文件
-*.db.*               # 多模式数据库文件
-**/*.sqlite          # SQLite 文件
-*.sqlite             # SQLite 文件
-
-backend/tests/test_database.db
-backend/dev_database.db

@@ -42,7 +42,7 @@ class StatusCodes:
         },
         StatusCodeKey.USER_Token_INVALID: {
             'message': 'Invalid token',
-            'status_code': 401
+            'status_code': 400
         }
     }
 
@@ -71,10 +71,6 @@ class StatusCodes:
             'message': 'Verification code validated successfully',
             'status_code': 200
         },
-        StatusCodeKey.SMTP_CONFIG_MISSING: {
-            'message': 'SMTP configuration is missing',
-            'status_code': 500
-        }
     }
 
     @classmethod

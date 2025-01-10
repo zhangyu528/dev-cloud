@@ -1,0 +1,17 @@
+
+
+# 忽略 Python 项目生成的文件
+__pycache__
+**/__pycache__/
+
+
+# 忽略虚拟环境文件夹
+/venv/
+**/venv/
+
+
+# 忽略数据库文件（如 SQLite）
+**/*.db               
+*.db                
+**/*.sqlite         
+*.sqlite             

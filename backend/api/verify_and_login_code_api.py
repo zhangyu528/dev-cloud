@@ -1,9 +1,5 @@
 from flask import request, jsonify
-import os
-import random
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from .util import validate_email_format, generate_verification_code, send_verification_email
 from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import create_access_token
 
@@ -13,59 +9,6 @@ from backend.extensions import db
 
 from . import api_bp
 from .status_codes import StatusCodes, StatusCodeCategory, StatusCodeKey
-
-SMTP_SERVER = "smtp.ethereal.email"
-SMTP_PORT = 587
-SMTP_USERNAME = "jennyfer9@ethereal.email"
-SMTP_PASSWORD = "aqpGF4YMHKa54u5mtc"
-
-def generate_verification_code():
-    """Generate a 6-digit verification code"""
-    return str(random.randint(100000, 999999))
-
-def send_verification_email(to_email, code):
-    """Send verification code via email"""
-    if not all([SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD]):
-        print("SMTP configuration is incomplete")
-        return False
-        
-    message = MIMEMultipart()
-    message["From"] = "no-reply@example.com"  # Use a generic sender
-    message["To"] = to_email
-    message["Subject"] = "Email Verification Code"
-    
-    body = f"""
-    Your verification code is: {code}
-    
-    This code will expire in 10 minutes.
-    If you didn't request this code, please ignore this email.
-    """
-    
-    message.attach(MIMEText(body, "plain"))
-    
-    try:
-        print(f"Connecting to SMTP server: {SMTP_SERVER}:{SMTP_PORT}")
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=10) as server:
-            print("Starting TLS...")
-            server.starttls()
-            print(f"Logging in with username: {SMTP_USERNAME}")
-            server.login(SMTP_USERNAME, SMTP_PASSWORD)
-            print(f"Sending email to: {to_email}")
-            server.sendmail("no-reply@example.com", to_email, message.as_string())
-            print("Email sent successfully")
-            return True
-    except smtplib.SMTPAuthenticationError as e:
-        print(f"SMTP Authentication Error: {e}")
-        print(f"Check if username/password are correct. Username: {SMTP_USERNAME}")
-    except smtplib.SMTPConnectError as e:
-        print(f"SMTP Connection Error: {e}")
-        print(f"Check if SMTP server and port are correct: {SMTP_SERVER}:{SMTP_PORT}")
-    except smtplib.SMTPException as e:
-        print(f"SMTP Error: {e}")
-    except Exception as e:
-        print(f"Unexpected Error: {e}")
-    
-    return False
 
 @api_bp.route('/send_verification_code', methods=['POST'])
 def send_verification_code():
@@ -100,24 +43,14 @@ def send_verification_code():
     email = data.get('email')
     username = data.get('username')
     
-    # Validate email format
-    try:
-        from email_validator import validate_email, EmailNotValidError
-        print(f"Validating email: {email}")
-        try:
-            # Validate and normalize the email address
-            valid = validate_email(email)
-            print(f"Email validation successful: {valid.email}")
-            email = valid.email  # Replace with normalized form
-        except EmailNotValidError as e:
-            print(f"Email validation failed: {str(e)}")
-            response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.INVALID_EMAIL)
-            return jsonify(response), status_code
-    except ImportError:
-        # Fallback to simple validation if email-validator not installed
-        if not email or '@' not in email or '.' not in email.split('@')[-1]:
-            response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.INVALID_EMAIL)
-            return jsonify(response), status_code
+    # Validate email format using utility function
+    print(f"Validating email: {email}")
+    validated_email = validate_email_format(email)
+    if not validated_email:
+        print("Email validation failed")
+        response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.INVALID_EMAIL)
+        return jsonify(response), status_code
+    email = validated_email  # Use normalized email
 
     # 如果没有提供username，使用邮箱前缀
     if not username:
