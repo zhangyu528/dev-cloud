@@ -23,7 +23,8 @@ class TestUser:
     def test_logout_unauthorized(self, client):
         """Test logout without JWT token"""
         response = client.post('/api/logout')
-        assert response.status_code == 400
+        # Expect 401 Unauthorized since JWT is required
+        assert response.status_code == 401
 
     def test_logout_success(self, client, jwt_token):
         """Test successful logout with valid JWT"""

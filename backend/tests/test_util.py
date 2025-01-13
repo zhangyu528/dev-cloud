@@ -1,6 +1,5 @@
 import pytest
 import os
-from unittest.mock import patch
 from api.util import send_verification_email
 
 class TestUtil:

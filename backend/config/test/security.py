@@ -1,4 +1,3 @@
-import os
 
 class TestSecurityConfig:
     SECRET_KEY = 'test-secret-key'

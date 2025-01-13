@@ -23,7 +23,10 @@ TEMP_SCRIPT=$(mktemp)
 cat <<EOF > $TEMP_SCRIPT
 from flask import Flask
 from flask_migrate import Migrate
-from app import app
+from app import create_app
+from config import DevelopmentConfig
+
+app = create_app(DevelopmentConfig)
 
 with app.app_context():
     from flask_migrate import upgrade
