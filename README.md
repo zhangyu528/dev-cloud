@@ -113,3 +113,79 @@ npm run lint
 ### Frontend
 - `NEXT_PUBLIC_API_URL`: Backend API endpoint
 - `NEXT_PUBLIC_TOKEN_SECRET`: Token encryption key
+
+## 操作手册
+
+### 数据库管理脚本
+
+#### 初始化数据库迁移
+```bash
+cd backend/scripts/db
+./run_init_db.sh
+```
+
+#### 应用数据库迁移
+```bash
+cd backend/scripts/db
+./run_upgrade_db.sh
+```
+
+#### 创建新的数据库迁移
+```bash
+cd backend/scripts/db
+./run_migrate_db.sh "Your migration message"
+```
+
+### 环境管理脚本
+
+#### 创建虚拟环境
+```bash
+cd backend/scripts/utils
+./venv.sh create
+```
+
+#### 激活虚拟环境
+```bash
+cd backend/scripts/utils
+./venv.sh activate
+```
+
+#### 安装依赖
+```bash
+cd backend/scripts/utils
+./requirements.sh install
+```
+
+### 应用管理脚本
+
+#### 启动开发服务器
+```bash
+cd backend/scripts
+./run_app.sh
+```
+
+#### 运行测试
+```bash
+cd backend/scripts
+./test_coverage.sh
+```
+
+### 安装脚本
+
+#### 安装Python环境
+```bash
+cd backend/scripts/install
+./install_python_env.sh
+```
+
+#### 安装虚拟机环境
+```bash
+cd backend/scripts/install
+./install_vm.sh
+```
+
+### 注意事项
+1. 所有脚本都需要在项目根目录下执行
+2. 确保已安装所有依赖项
+3. 数据库脚本需要先配置好数据库连接字符串
+4. 脚本执行失败时会返回非零退出码
