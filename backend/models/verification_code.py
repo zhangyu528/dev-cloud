@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from backend.extensions import db
+from extensions import db
 
 class VerificationCode(db.Model):
     __tablename__ = 'verification_codes'

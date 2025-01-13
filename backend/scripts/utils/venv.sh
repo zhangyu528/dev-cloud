@@ -1,10 +1,21 @@
 #!/bin/bash
 
+# 获取当前脚本路径，即使通过 source 调用也能正常获取
+get_script_dir() {
+  local SOURCE="${BASH_SOURCE[0]}"
+  while [ -h "$SOURCE" ]; do
+    local DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+  done
+  echo "$(cd -P "$(dirname "$SOURCE")" && pwd)"
+}
+
 # 获取脚本所在目录
-SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
+SCRIPT_DIR_VEVN=$(get_script_dir)
 
 # 项目根目录：使用 Git 获取项目的根目录
-PROJECT_DIR=$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)
+PROJECT_DIR=$(cd "$SCRIPT_DIR_VEVN" && git rev-parse --show-toplevel)
 
 # 虚拟环境目录（根据实际路径修改）
 VENV_DIR="$PROJECT_DIR/backend/venv"
@@ -45,16 +56,20 @@ activate_venv() {
     elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
         # Windows
         if [[ -f "$VENV_DIR/Scripts/activate" ]]; then
-            # PowerShell
+            # Git Bash 或其他终端
             source "$VENV_DIR/Scripts/activate"
         elif [[ -f "$VENV_DIR/Scripts/activate.bat" ]]; then
-            # 命令行
+            # CMD
             "$VENV_DIR/Scripts/activate.bat"
+        elif [[ -f "$VENV_DIR/Scripts/Activate.ps1" ]]; then
+            # PowerShell
+            source "$VENV_DIR/Scripts/Activate.ps1"
         fi
     else
         echo "Unsupported OS type: $OSTYPE"
         exit 1
     fi
+
     # 检查虚拟环境是否已激活
     if [[ -z "$VIRTUAL_ENV" ]]; then
         echo "Virtual environment is not activated."

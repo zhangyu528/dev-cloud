@@ -1,7 +1,7 @@
 import pytest
 import os
 from unittest.mock import patch
-from backend.api.util import send_verification_email
+from api.util import send_verification_email
 
 class TestUtil:
     def test_send_verification_email_real(self):

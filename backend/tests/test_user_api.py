@@ -1,11 +1,12 @@
 import pytest
 from datetime import datetime, timedelta, timezone
-from backend.db.models import User, VerificationCode
+from models.user import User
+from models.verification_code import VerificationCode
 
 class TestUser:
     @pytest.fixture(autouse=True, scope='class')
     def setup_database(self):
-        from backend.extensions import db
+        from extensions import db
         db.create_all()
         yield
         db.session.remove()
@@ -14,7 +15,7 @@ class TestUser:
     @pytest.fixture(autouse=True)
     def cleanup_test_data(self):
         yield
-        from backend.extensions import db
+        from extensions import db
         User.query.delete()
         VerificationCode.query.delete()
         db.session.commit()

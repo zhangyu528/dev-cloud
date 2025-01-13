@@ -3,9 +3,9 @@ from .util import validate_email_format, generate_verification_code, send_verifi
 from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import create_access_token
 
-from backend.db.models import VerificationCode
-from backend.db.models import User
-from backend.extensions import db
+from models.verification_code import VerificationCode
+from models.user import User
+from extensions import db
 
 from . import api_bp
 from .status_codes import StatusCodes, StatusCodeCategory, StatusCodeKey

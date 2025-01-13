@@ -1,7 +1,5 @@
-﻿
-docker==6.0.0           # Docker SDK for Python，用于与 Docker 容器交互
+﻿docker==6.0.0           # Docker SDK for Python，用于与 Docker 容器交互
 python-dotenv==0.21.0   # 加载环境变量（如 Docker 主机配置等）
-requests==2.26.0        # 发起 HTTP 请求，用于外部 API 交互
 celery==5.2.7           # 任务队列，用于处理异步任务（如启动多个容器等）
 
 
@@ -15,6 +13,7 @@ flask-restx==0.5.1          # RESTful API 支持
 Flask-SQLAlchemy==2.5.1     # ORM 框架，用于操作数据库
 sqlalchemy==1.4.46          # SQL 框架，数据库底层支持
 PyMySQL==1.0.2              # MySQL 数据库驱动
+Flask-Migrate==4.1.0        # 数据库迁移工具
 
 
 # 安全与认证

@@ -2,9 +2,10 @@ import pytest
 from unittest.mock import patch
 from datetime import datetime, timedelta, timezone
 
-from backend.extensions import db
-from backend.api.status_codes import StatusCodes
-from backend.db.models import User, VerificationCode
+from extensions import db
+from api.status_codes import StatusCodes
+from models.user import User
+from models.verification_code import VerificationCode
 
 class TestVerificationCodeApi:
     @pytest.fixture(autouse=True, scope='class')
@@ -22,7 +23,7 @@ class TestVerificationCodeApi:
         db.session.commit()
 
     # 测试验证码发送相关用例
-    @patch('backend.api.verify_and_login_code_api.send_verification_email')
+    @patch('api.verify_and_login_code_api.send_verification_email')
     def test_send_code_success(self, mock_send_email, client):
         """测试发送验证码成功"""
         mock_send_email.return_value = True
@@ -31,7 +32,7 @@ class TestVerificationCodeApi:
         
         assert response.status_code == 200
 
-    @patch('backend.api.verify_and_login_code_api.send_verification_email')
+    @patch('api.verify_and_login_code_api.send_verification_email')
     def test_send_code_invalid_email(self, mock_send_email, client):
         """测试无效邮箱地址"""
         mock_send_email.return_value = True
@@ -40,7 +41,7 @@ class TestVerificationCodeApi:
         
         assert response.status_code == 400
 
-    @patch('backend.api.verify_and_login_code_api.send_verification_email')
+    @patch('api.verify_and_login_code_api.send_verification_email')
     def test_send_code_email_failed(self, mock_send_email, client):
         """测试邮件发送失败"""
         mock_send_email.return_value = False

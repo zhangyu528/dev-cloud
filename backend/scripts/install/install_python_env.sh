@@ -17,6 +17,6 @@ elif [[ "$OS" == "Darwin"* ]]; then
     brew install python
 elif [[ "$OS" == "MINGW"* ]] || [[ "$OS" == "MSYS"* ]] || [[ "$OS" == "CYGWIN"* ]]; then
     # Windows (使用 chocolatey)
-    python -m pip install --upgrade pip
+    choco install python -y
 fi
 echo "Python 环境已安装。"

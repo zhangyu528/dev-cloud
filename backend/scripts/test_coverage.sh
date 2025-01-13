@@ -1,23 +1,23 @@
 #!/bin/bash
 # 获取脚本所在目录
-SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
+SCRIPT_DIR_TEST=$(cd "$(dirname "$0")"; pwd)
 
-source "$SCRIPT_DIR/utils/venv.sh"
-source "$SCRIPT_DIR/utils/requrirements.sh"
 
 # 项目根目录：使用 Git 获取项目的根目录
-PROJECT_DIR=$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)
+PROJECT_DIR=$(cd "$SCRIPT_DIR_TEST" && git rev-parse --show-toplevel)
 echo "Project directory: $PROJECT_DIR"
 
-export PYTHONPATH="$PROJECT_DIR"
-echo "PYTHONPATH set to: $PYTHONPATH"
-
+source "$SCRIPT_DIR_TEST/utils/venv.sh"
 # 导入虚拟环境激活函数
 create_venv
 activate_venv
 
+source "$SCRIPT_DIR_TEST/utils/requirements.sh"
 # 安装项目依赖
 install_requirements
+
+export PYTHONPATH="$PROJECT_DIR/backend"
+echo "PYTHONPATH set to: $PYTHONPATH"
 
 # 测试文件路径
 TEST_PATH="$PROJECT_DIR/backend/tests"

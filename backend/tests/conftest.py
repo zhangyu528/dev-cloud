@@ -7,9 +7,9 @@ from flask_cors import CORS  # 用于解决跨域问题，如果前端和后端�
 from flask import Blueprint
 from flask_jwt_extended import JWTManager
 
-from backend.api import api_bp  # 从 api 包导入蓝图
-from backend.extensions import db
-from backend.config import TestConfig
+from api import api_bp  # 从 api 包导入蓝图
+from extensions import db
+from config import TestConfig
 
 
 @pytest.fixture(scope='session')
