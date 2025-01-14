@@ -71,8 +71,8 @@ def send_verification_email(to_email, code):
     """Send verification code via email"""
     SMTP_SERVER = "smtp.ethereal.email"
     SMTP_PORT = 587
-    SMTP_USERNAME = "jennyfer9@ethereal.email"
-    SMTP_PASSWORD = "aqpGF4YMHKa54u5mtc"
+    SMTP_USERNAME = "enoch20@ethereal.email"
+    SMTP_PASSWORD = "kvaEbf4214Q7pMCtNb"
     if not all([SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD]):
         print("SMTP configuration is incomplete")
         return False
@@ -99,7 +99,7 @@ def send_verification_email(to_email, code):
             print(f"Logging in with username: {SMTP_USERNAME}")
             server.login(SMTP_USERNAME, SMTP_PASSWORD)
             print(f"Sending email to: {to_email}")
-            server.sendmail("no-reply@example.com", to_email, message.as_string())
+            server.sendmail(SMTP_USERNAME, to_email, message.as_string())
             print("Email sent successfully")
             return True
     except smtplib.SMTPAuthenticationError as e:

@@ -1,9 +1,12 @@
+import logging
 from flask import Flask
+
+logger = logging.getLogger(__name__)
 
 def create_app(config=None):
     """Application factory function"""
     app = Flask(__name__)
-
+        
     # 加载配置
     if config is None:
         from config import DevelopmentConfig
@@ -11,11 +14,14 @@ def create_app(config=None):
     else:
         app.config.from_object(config)
 
+    # 初始化日志
+    from extensions import logging_init_app
+    logging_init_app(app)
+
     # 注册蓝图
     from api import bp_init_app
     bp_init_app(app)
 
-    print("Initializing extensions...")
     from extensions import db_init_app
     db_init_app(app)
 
@@ -35,7 +41,7 @@ def create_app(config=None):
     from api.middleware.logging import init_request_logging
     app = init_request_logging(app)
 
-    print("Extensions initialized")
+    logger.info("App Extensions initialized")
     return app
 
 app = create_app()

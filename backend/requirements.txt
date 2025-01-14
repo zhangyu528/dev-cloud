@@ -29,3 +29,5 @@ Flask-Cors==3.0.10          # 处理跨域资源共享
 pytest==7.1.1               # 单元测试框架
 coverage==6.3.2             # 代码覆盖率分析
 flasgger==0.9.5             # API 文档生成
+colorlog==6.7.0             # 带颜色的日志输出
+python-json-logger==2.0.7   # JSON格式日志输出

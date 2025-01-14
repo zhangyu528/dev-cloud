@@ -1,7 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
+import logging.config
 
 # 创建全局 SQLAlchemy 实例
 db = SQLAlchemy()
+
+def logging_init_app(app):
+    """Initialize logging with the Flask app"""
+    if 'LOGGING_CONFIG' in app.config:
+        logging.config.dictConfig(app.config['LOGGING_CONFIG'])
 
 def db_init_app(app):
     """Initialize extensions with the Flask app"""

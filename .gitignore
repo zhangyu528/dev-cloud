@@ -8,10 +8,7 @@ npm-debug.log*      # npm 调试日志
 yarn-debug.log*     # Yarn 调试日志
 yarn-error.log*     # Yarn 错误日志
 
-# 忽略日志文件
-*.log               # 通用日志文件
-logs/               # 日志文件夹
-*.log.*             # 分片日志文件
+
 
 # 忽略 Docker 相关文件
 docker-compose.override.yml  # 覆盖文件（如有）

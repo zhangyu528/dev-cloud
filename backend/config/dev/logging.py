@@ -1,13 +1,22 @@
 import os
 import logging
+from colorlog import ColoredFormatter
 
 class DevLoggingConfig:
     LOGGING_CONFIG = {
         'version': 1,
         'disable_existing_loggers': False,
         'formatters': {
-            'standard': {
-                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+            'colored': {
+                '()': 'colorlog.ColoredFormatter',
+                'format': '%(log_color)s%(asctime)s %(levelname)-8s %(name)s %(reset)s%(message)s',
+                'log_colors': {
+                    'DEBUG': 'cyan',
+                    'INFO': 'green',
+                    'WARNING': 'yellow',
+                    'ERROR': 'red',
+                    'CRITICAL': 'red,bg_white',
+                }
             },
             'json': {
                 '()': 'pythonjsonlogger.jsonlogger.JsonFormatter',
@@ -18,12 +27,12 @@ class DevLoggingConfig:
             'console': {
                 'level': 'DEBUG',
                 'class': 'logging.StreamHandler',
-                'formatter': 'standard'
+                'formatter': 'colored'
             },
             'file': {
                 'level': 'INFO',
                 'class': 'logging.handlers.RotatingFileHandler',
-                'filename': os.getenv('LOG_FILE', 'dev.log'),
+                'filename': os.getenv('LOG_FILE', 'backend/dev.log'),
                 'maxBytes': 10485760,  # 10MB
                 'backupCount': 5,
                 'formatter': 'json'

@@ -15,3 +15,11 @@ __pycache__
 *.db                
 **/*.sqlite         
 *.sqlite             
+
+# 忽略日志文件
+# 通用日志文件
+*.log               
+# 日志文件夹
+logs/              
+# 分片日志文件
+*.log.*            
