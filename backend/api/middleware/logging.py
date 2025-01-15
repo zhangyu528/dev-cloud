@@ -14,4 +14,3 @@ def init_request_logging(app):
         app.logger.info(
             f"URL: {request.url} | Status Code: {response.status_code} | Msg: {msg}"
         )
-    return app

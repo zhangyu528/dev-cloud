@@ -1,5 +1,5 @@
 // Auth-related API methods
-import { apiRequest, setAuthToken, clearAuthToken} from '@/request/apiRequest'
+import { apiRequest, setAuthToken, clearAuthToken, API_BASE_URL } from '@/request/apiRequest'
 
 interface VerifyAndLoginResponse {
     username: string,
@@ -47,6 +47,13 @@ export const authApi = {
       clearAuthToken()
       throw error
     }
+  },
+
+  /**
+   * Redirect to GitHub OAuth login
+   */
+  githubLogin: () => {
+    window.location.href = `${API_BASE_URL}/auth/github`
   }
 
 }

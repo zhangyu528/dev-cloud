@@ -39,7 +39,7 @@ def create_app(config=None):
 
     # 初始化请求日志
     from api.middleware.logging import init_request_logging
-    app = init_request_logging(app)
+    init_request_logging(app)
 
     logger.info("App Extensions initialized")
     return app

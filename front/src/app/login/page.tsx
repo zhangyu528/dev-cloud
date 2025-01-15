@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { GithubIcon } from '@/components/icons/GithubIcon'
 import { GitlabIcon } from '@/components/icons/GitlabIcon'
 import { BitbucketIcon } from '@/components/icons/BitbucketIcon'
+import { authApi } from '@/api/auth'
 
 export default function LoginPage() {
   return (
@@ -15,7 +16,9 @@ export default function LoginPage() {
         </h2>
 
         <div className="space-y-3 max-w-sm mx-auto">
-          <button className="w-full flex items-center justify-center px-4 py-4 rounded-md 
+          <button 
+            onClick={authApi.githubLogin}
+            className="w-full flex items-center justify-center px-4 py-4 rounded-md 
                   text-base text-white bg-[#24292e] hover:bg-[#2f363d] 
                   dark:bg-[#333] dark:hover:bg-[#444] transition-colors">
             <GithubIcon />
