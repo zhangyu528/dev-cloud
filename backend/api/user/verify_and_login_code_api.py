@@ -1,5 +1,6 @@
 from flask import request, jsonify
-from .util import validate_email_format, generate_verification_code, send_verification_email
+from flask import Blueprint
+from ..utils.util import validate_email_format, generate_verification_code, send_verification_email
 from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import create_access_token
 
@@ -7,10 +8,12 @@ from models.verification_code import VerificationCode
 from models.user import User
 from extensions import db
 
-from . import api_bp
-from .status_codes import StatusCodes, StatusCodeCategory, StatusCodeKey
+from .. import api_bp
+from ..status_codes import StatusCodes, StatusCodeCategory, StatusCodeKey
 
-@api_bp.route('/send_verification_code', methods=['POST'])
+verify_and_login_code_bp = Blueprint('user_bp', __name__)
+
+@verify_and_login_code_bp.route('/send_verification_code', methods=['POST'])
 def send_verification_code():
     """
     发送邮箱验证码
@@ -91,7 +94,7 @@ def send_verification_code():
         response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.EMAIL_SENDING_FAILED)
         return jsonify(response), status_code
 
-@api_bp.route('/verify_and_login', methods=['POST'])  # 更新路由路径
+@verify_and_login_code_bp.route('/verify_and_login', methods=['POST'])  # 更新路由路径
 def verify_and_login():
     """
     验证邮箱验证码并登录

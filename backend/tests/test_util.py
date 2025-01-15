@@ -1,6 +1,6 @@
 import pytest
 import os
-from api.util import send_verification_email
+from backend.api.utils.util import send_verification_email
 
 class TestUtil:
     def test_send_verification_email_real(self):

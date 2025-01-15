@@ -6,7 +6,7 @@ from models.user import User
 from extensions import db
 from config.dev.security import DevSecurityConfig as SecurityConfig
 
-github_auth_bp = Blueprint('github_auth', __name__)
+github_auth_bp = Blueprint('github_auth_bp', __name__)
 
 # GitHub OAuth configuration
 github = OAuth2Session(

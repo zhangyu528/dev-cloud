@@ -1,21 +1,6 @@
 # 忽略环境配置文件
 .env                # 环境变量文件
 
-
-# 忽略 Node.js 项目生成的文件
-node_modules/       # Node.js 的依赖文件夹
-npm-debug.log*      # npm 调试日志
-yarn-debug.log*     # Yarn 调试日志
-yarn-error.log*     # Yarn 错误日志
-
-
-
-# 忽略 Docker 相关文件
-docker-compose.override.yml  # 覆盖文件（如有）
-.docker/                     # 本地 Docker 配置
-.dockerignore                # Docker 忽略规则文件
-
-
 # IDE and Editor files
 .vscode
 .vscode/
@@ -29,16 +14,3 @@ docker-compose.override.yml  # 覆盖文件（如有）
 .DS_Store           # macOS 系统文件
 Thumbs.db           # Windows 缩略图缓存
 desktop.ini         # Windows 文件夹配置
-
-# 忽略构建文件
-dist/               # 打包输出文件夹
-build/              # 构建输出文件夹
-*.out               # 编译输出文件
-*.o                 # 对象文件
-*.a                 # 静态库文件
-*.so                # 共享库文件
-
-# 忽略容器数据
-docker-data/        # 容器的挂载数据
-volumes/            # Docker volumes 文件夹
-*.tar               # 导出的容器镜像

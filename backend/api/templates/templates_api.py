@@ -1,10 +1,9 @@
 from flask import Blueprint, request, jsonify
-
-from . import api_bp
 from .templates import TEMPLATES
 
+templates_bp = Blueprint('templates_bp', __name__)
 
-@api_bp.route('/available-templates', methods=['GET'])
+@templates_bp('/available-templates', methods=['GET'])
 def available_templates():
     """
     获取可用的开发环境模板

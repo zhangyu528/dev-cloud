@@ -1,13 +1,14 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-from . import api_bp
-from .status_codes import (
+from ..status_codes import (
     StatusCodes,
     StatusCodeCategory,
     StatusCodeKey)
 
-@api_bp.route('/logout', methods=['POST'])
+user_bp = Blueprint('user_bp', __name__)
+
+@user_bp.route('/logout', methods=['POST'])
 @jwt_required()
 def logout():
     # Verify JWT token is valid

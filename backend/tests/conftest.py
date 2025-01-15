@@ -19,10 +19,6 @@ def client():
     from extensions import jwt_init_app
     jwt_init_app(app)
         
-    # 注册蓝图
-    from api import bp_init_app
-    bp_init_app(app)
-
     # 创建测试客户端
     with app.test_client() as client:
         # 创建应用上下文
