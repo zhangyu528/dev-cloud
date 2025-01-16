@@ -6,11 +6,11 @@ def test_github_auth_redirect(client):
     assert response.status_code == 302
     assert 'github.com' in response.location
 
-def test_github_callback(client):
+def test_github_exchange(client):
     """测试GitHub OAuth回调流程"""
     with client.application.app_context():
         # 模拟GitHub回调URL，包含授权码
-        callback_url = url_for('github_auth_bp.github_callback', _external=False)
+        callback_url = url_for('github_auth_bp.github_exchange', _external=False)
         callback_url_with_code = f"{callback_url}?code=test_code"
         
         # 发送请求

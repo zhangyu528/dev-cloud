@@ -15,7 +15,8 @@ def github_login():
         github = OAuth2Session(
             client_id=current_app.config['GITHUB_CLIENT_ID'],
             redirect_uri=current_app.config['GITHUB_REDIRECT_URI'],
-            scope=['user:email']
+            scope=['user:email'],
+            state=request.args['state']
         )
         
         authorization_url, state = github.authorization_url(
@@ -26,9 +27,9 @@ def github_login():
         current_app.logger.error(f"GitHub login error: {str(e)}", exc_info=True)
         return jsonify({'error': 'Failed to initiate GitHub login'}), 500
 
-@github_auth_bp.route('/github/callback')
-def github_callback():
-    """Handle GitHub OAuth callback"""
+@github_auth_bp.route('/github/exchange')
+def github_exchange():
+    """Exchange GitHub OAuth code for access token"""
     try:
         # Verify state parameter
         if 'state' not in request.args:
@@ -45,7 +46,7 @@ def github_callback():
         token = github.fetch_token(
             current_app.config['GITHUB_TOKEN_URL'],
             client_secret=current_app.config['GITHUB_CLIENT_SECRET'],
-            authorization_response=request.url)
+            code=request.args['code'])
         
         # Get user info
         github_user = github.get(current_app.config['GITHUB_USER_INFO_URL']).json()
@@ -79,9 +80,11 @@ def github_callback():
         # Create JWT token
         access_token = create_access_token(identity=user.id)
         
-        # Redirect to frontend with token
-        params = urlencode({'token': access_token})
-        return redirect(f'http://localhost:3000/')
+        # Return token in JSON response
+        return jsonify({
+            'token': access_token,
+            'username': user.username
+        })
     
     except Exception as e:
         current_app.logger.error(f"GitHub OAuth callback error: {str(e)}", exc_info=True)

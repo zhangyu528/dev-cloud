@@ -2,19 +2,32 @@
 
 ## 运行步骤
 
-### 1. 安装Python环境（如未安装）
+### 0. 进入backend目录
 ```bash
-./backend/scripts/install/install_python_env.sh
+cd d:/work/dev-cloud/backend
 ```
 
-### 2. 数据库迁移（仅在首次运行时需要）
+### 1. 安装Python环境（如未安装）
 ```bash
-./backend/scripts/db/run_migrate_db.sh
+./scripts/install/install_python_env.sh
 ```
+
+### 2. 数据库初始化与升级
+
+由于数据库文件不在代码库中，首次运行需要初始化数据库：
+
+```bash
+./scripts/db/run_upgrade_db.sh
+```
+
+在以下情况也需要运行数据库升级：
+- 修改了数据模型（models）后
+
+注意：该命令会创建数据库文件并应用所有迁移脚本
 
 ### 3. 运行应用
 ```bash
-./backend/scripts/run_app.sh
+./scripts/run_app.sh
 ```
 
 ## 环境变量
