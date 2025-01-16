@@ -10,10 +10,14 @@ def client():
     app = Flask(__name__)
     # 使用单元测试配置
     app.config.from_object(UnitTestConfig)
-    
+
     # 初始化数据库
     from extensions import db_init_app
     db_init_app(app)
+
+    # 初始化蓝图
+    from api import bp_init_app
+    bp_init_app(app)
 
     # 初始化 JWT
     from extensions import jwt_init_app

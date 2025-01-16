@@ -3,16 +3,10 @@ from unittest.mock import patch
 from datetime import datetime, timedelta, timezone
 from flask import url_for
 
-from backend.extensions import db
-from backend.api.status_codes import StatusCodes
-from backend.models.user import User
-from backend.models.verification_code import VerificationCode
-from backend.api.user.verify_and_login_code_api import verify_and_login_code_bp
-
-@pytest.fixture
-def client(app):
-    app.register_blueprint(verify_and_login_code_bp)
-    return app.test_client()
+from extensions import db
+from api.status_codes import StatusCodes
+from models.user import User
+from models.verification_code import VerificationCode
 
 class TestVerificationCodeApi:
     @pytest.fixture(autouse=True, scope='class')
@@ -30,30 +24,30 @@ class TestVerificationCodeApi:
         db.session.commit()
 
     # 测试验证码发送相关用例
-    @patch('backend.api.user.verify_and_login_code_api.send_verification_email')
+    @patch('api.user.verify_and_login_code_api.send_verification_email')
     def test_send_code_success(self, mock_send_email, client):
         """测试发送验证码成功"""
         mock_send_email.return_value = True
         with client.application.app_context():
-            response = client.post(url_for('user_bp.send_verification_code'), 
+            response = client.post(url_for('verify_bp.send_verification_code'), 
                                  json={'email': 'test@163.com'})
             assert response.status_code == 200
 
-    @patch('backend.api.user.verify_and_login_code_api.send_verification_email')
+    @patch('api.user.verify_and_login_code_api.send_verification_email')
     def test_send_code_invalid_email(self, mock_send_email, client):
         """测试无效邮箱地址"""
         mock_send_email.return_value = True
         with client.application.app_context():
-            response = client.post(url_for('user_bp.send_verification_code'), 
+            response = client.post(url_for('verify_bp.send_verification_code'), 
                                  json={'email': 'invalid-email'})
             assert response.status_code == 400
 
-    @patch('backend.api.user.verify_and_login_code_api.send_verification_email')
+    @patch('api.user.verify_and_login_code_api.send_verification_email')
     def test_send_code_email_failed(self, mock_send_email, client):
         """测试邮件发送失败"""
         mock_send_email.return_value = False
         with client.application.app_context():
-            response = client.post(url_for('user_bp.send_verification_code'), 
+            response = client.post(url_for('verify_bp.send_verification_code'), 
                                  json={'email': 'test@example.com'})
             assert response.status_code == 400
 
@@ -64,7 +58,7 @@ class TestVerificationCodeApi:
         code = '123456'
         
         with client.application.app_context():
-            response = client.post(url_for('user_bp.verify_and_login'), 
+            response = client.post(url_for('verify_bp.verify_and_login'), 
                                  json={'email': email, 'code': code})
             assert response.status_code == 400
 
@@ -83,7 +77,7 @@ class TestVerificationCodeApi:
         db.session.commit()
 
         with client.application.app_context():
-            response = client.post(url_for('user_bp.verify_and_login'), 
+            response = client.post(url_for('verify_bp.verify_and_login'), 
                                  json={'email': email, 'code': code})
             assert response.status_code == 200
             assert 'access_token' in response.json
@@ -106,7 +100,7 @@ class TestVerificationCodeApi:
         db.session.commit()
 
         with client.application.app_context():
-            response = client.post(url_for('user_bp.verify_and_login'), 
+            response = client.post(url_for('verify_bp.verify_and_login'), 
                                  json={'email': email, 'code': '000000'})
             assert response.status_code == 400
             # 验证验证码未被删除
@@ -124,7 +118,7 @@ class TestVerificationCodeApi:
         db.session.commit()
 
         with client.application.app_context():
-            response = client.post(url_for('user_bp.verify_and_login'), 
+            response = client.post(url_for('verify_bp.verify_and_login'), 
                                  json={'email': email, 'code': code})
             assert response.status_code == 400
             # 验证过期验证码未被删除

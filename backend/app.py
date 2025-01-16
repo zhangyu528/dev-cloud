@@ -37,15 +37,18 @@ def create_app(config=None):
     from extensions import cors_init_app
     cors_init_app(app)
 
-    # 初始化请求日志
-    from api.middleware.logging import init_request_logging
-    init_request_logging(app)
+    # # 初始化请求日志
+    # from api.middleware.logging import init_request_logging
+    # init_request_logging(app)
 
     logger.info("App Extensions initialized")
     return app
 
+logger.info("App Factory loaded")
 app = create_app()
 
 if __name__ == "__main__":
     # 启动 Flask 应用
+    import os
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
     app.run(host='0.0.0.0', port=5000)

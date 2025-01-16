@@ -1,14 +1,8 @@
 import pytest
 from datetime import datetime, timedelta, timezone
 from flask import url_for
-from backend.models.user import User
-from backend.models.verification_code import VerificationCode
-from backend.api.user.user_api import user_bp
-
-@pytest.fixture
-def client(app):
-    app.register_blueprint(user_bp)
-    return app.test_client()
+from models.user import User
+from models.verification_code import VerificationCode
 
 class TestUser:
     @pytest.fixture(autouse=True, scope='class')

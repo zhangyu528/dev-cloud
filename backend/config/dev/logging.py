@@ -32,7 +32,7 @@ class DevLoggingConfig:
             'file': {
                 'level': 'INFO',
                 'class': 'logging.handlers.RotatingFileHandler',
-                'filename': os.getenv('LOG_FILE', 'backend/dev.log'),
+                'filename': os.getenv('LOG_FILE', 'dev.log'),
                 'maxBytes': 10485760,  # 10MB
                 'backupCount': 5,
                 'formatter': 'json'

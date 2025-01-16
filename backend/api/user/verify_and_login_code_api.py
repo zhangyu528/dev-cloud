@@ -8,12 +8,12 @@ from models.verification_code import VerificationCode
 from models.user import User
 from extensions import db
 
-from .. import api_bp
 from ..status_codes import StatusCodes, StatusCodeCategory, StatusCodeKey
 
-verify_and_login_code_bp = Blueprint('user_bp', __name__)
+# 创建独立的蓝图
+verify_bp = Blueprint('verify_bp_bp', __name__)
 
-@verify_and_login_code_bp.route('/send_verification_code', methods=['POST'])
+@verify_bp.route('/send_verification_code', methods=['POST'])
 def send_verification_code():
     """
     发送邮箱验证码
@@ -94,7 +94,7 @@ def send_verification_code():
         response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.EMAIL_SENDING_FAILED)
         return jsonify(response), status_code
 
-@verify_and_login_code_bp.route('/verify_and_login', methods=['POST'])  # 更新路由路径
+@verify_bp.route('/verify_and_login', methods=['POST'])
 def verify_and_login():
     """
     验证邮箱验证码并登录

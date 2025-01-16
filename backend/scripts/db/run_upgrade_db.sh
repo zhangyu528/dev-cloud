@@ -6,12 +6,12 @@ SCRIPT_DIR_DB=$(cd "$(dirname "$0")"; pwd)
 PROJECT_DIR=$(cd "$SCRIPT_DIR_DB" && git rev-parse --show-toplevel)
 
 # 激活虚拟环境
-source "$SCRIPT_DIR_DB/utils/venv.sh"
+source "$SCRIPT_DIR_DB/../utils/venv.sh"
 create_venv
 activate_venv
 
 # 安装项目依赖
-source "$SCRIPT_DIR_DB/utils/requirements.sh"
+source "$SCRIPT_DIR_DB/../utils/requirements.sh"
 install_requirements
 
 export PYTHONPATH="$PROJECT_DIR/backend"

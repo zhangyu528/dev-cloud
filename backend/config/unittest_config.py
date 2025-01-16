@@ -8,3 +8,5 @@ class UnitTestConfig(DevDatabaseConfig, DevSecurityConfig):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     SWAGGER_ENABLED = False
+    SERVER_NAME = 'localhost.localdomain:5000'
+    
