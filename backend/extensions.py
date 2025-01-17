@@ -19,7 +19,7 @@ def migrate_init_app(app):
     from flask_migrate import Migrate
     # 创建全局 Migrate 实例
     migrate = Migrate()
-    migrate.init_app(app, db, directory=app.config['MIGRATIONS_DIR'])
+    migrate.init_app(app, db)
 
 def jwt_init_app(app):
     """Initialize JWTManager with the Flask app"""

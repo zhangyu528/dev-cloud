@@ -24,12 +24,24 @@ from flask import Flask
 from flask_migrate import Migrate
 from app import create_app
 from config import DevelopmentConfig
+import os
+import sys
 
 app = create_app(DevelopmentConfig)
 
 with app.app_context():
+    # 配置 migrations 目录路径
+    migrations_dir = os.path.join(os.environ['PYTHONPATH'], "db/migrations")
+    
+    # 检查 migrations 目录是否存在
+    if not os.path.exists(migrations_dir):
+        print(f"Error: Migrations directory not found at {migrations_dir}")
+        print("Please run run_init_db.sh first to initialize the migrations directory")
+        sys.exit(1)
+    
+    # 执行数据库迁移
     from flask_migrate import migrate
-    migrate()
+    migrate(directory=migrations_dir)
 EOF
 
 echo "Running database migrations..."
