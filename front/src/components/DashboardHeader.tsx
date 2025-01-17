@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import { Logo } from './icons/Logo';
-import { ProjectIcon } from './icons/ProjectIcon';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import UserMenu from './UserMenu';
+import Image from 'next/image';
 
 interface DashboardHeaderProps {
   isAtTop?: boolean;
+  avatarUrl?: string;
 }
 
-export default function DashboardHeader({ isAtTop = false }: DashboardHeaderProps) {
+export default function DashboardHeader({ 
+  isAtTop = false,
+  avatarUrl 
+}: DashboardHeaderProps) {
   const params = useParams();
   const username = params.username as string;
 
@@ -27,8 +31,17 @@ export default function DashboardHeader({ isAtTop = false }: DashboardHeaderProp
             <div className="flex items-center">
               <div className="mx-6 h-6 w-px bg-gray-200 dark:bg-gray-700" />
               <div className="flex items-center space-x-3 text-gray-900 dark:text-white">
-                <ProjectIcon className="w-6 h-6" />
-                <span className="text-sm font-medium">{username}&apos;s projects</span>
+                {avatarUrl && (
+                  <div className="relative w-8 h-8 rounded-full overflow-hidden">
+                    <Image
+                      src={avatarUrl}
+                      alt={`${username}'s avatar`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+                <span className="text-sm font-medium">{username}'s projects</span>
               </div>
             </div>
           </div>

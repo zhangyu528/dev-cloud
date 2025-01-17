@@ -9,6 +9,8 @@ class StatusCodeKey(str, Enum):
     USER_LOGIN_SUCCESS = "USER_LOGIN_SUCCESS"
     USER_LOGOUT_SUCCESS = "USER_LOGOUT_SUCCESS"
     USER_Token_INVALID = "USER_Token_INVALID"
+    USER_NOT_FOUND = "USER_NOT_FOUND"
+    USER_INFO_SUCCESS = "USER_INFO_SUCCESS"
 
     INVALID_EMAIL = "INVALID_EMAIL"
     VERIFICATION_CODE_SENT = "VERIFICATION_CODE_SENT"
@@ -43,6 +45,14 @@ class StatusCodes:
         StatusCodeKey.USER_Token_INVALID: {
             'message': 'Invalid token',
             'status_code': 400
+        },
+        StatusCodeKey.USER_NOT_FOUND: {
+            'message': 'User not found',
+            'status_code': 404
+        },
+        StatusCodeKey.USER_INFO_SUCCESS: {
+            'message': 'User information retrieved successfully',
+            'status_code': 200
         }
     }
 

@@ -11,7 +11,7 @@ export const authApi = {
    * Send verification code to user's email
    */
   sendVerificationCode: (email: string, username?: string) =>
-    apiRequest<{ message: string }>('/send_verification_code', {
+    apiRequest<{ message: string }>('/verify/send_verification_code', {
       method: 'POST',
       body: { email, username },
       skipAuth: true
@@ -22,7 +22,7 @@ export const authApi = {
    * Verify code and login user
    */
   verifyAndLogin: async (email: string, code: string) => {
-    const { access_token, username } = await apiRequest<VerifyAndLoginResponse>('/verify_and_login', {
+    const { access_token, username } = await apiRequest<VerifyAndLoginResponse>('/verify/verify_and_login', {
       method: 'POST',
       body: { email, code },
       skipAuth: true

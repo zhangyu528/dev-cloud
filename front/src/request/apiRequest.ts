@@ -18,7 +18,7 @@ import CryptoJS from 'crypto-js'
 
 // Auth token management
 const TOKEN_KEY = 'authToken'
-const SECRET_KEY = process.env.NEXT_PUBLIC_TOKEN_SECRET || 'dev-secret-key'
+const SECRET_KEY = process.env.NEXT_PUBLIC_TOKEN_SECRET || 'dev-jwt-secret-key'
 
 export function setAuthToken(token: string) {
   const encrypted = CryptoJS.AES.encrypt(token, SECRET_KEY).toString()

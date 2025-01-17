@@ -3,6 +3,7 @@ from flask import Blueprint
 from ..utils.util import validate_email_format, generate_verification_code, send_verification_email
 from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import create_access_token
+from flask import current_app
 
 from models.verification_code import VerificationCode
 from models.user import User
@@ -11,7 +12,7 @@ from extensions import db
 from ..status_codes import StatusCodes, StatusCodeCategory, StatusCodeKey
 
 # 创建独立的蓝图
-verify_bp = Blueprint('verify_bp_bp', __name__)
+verify_bp = Blueprint('verify_bp', __name__)
 
 @verify_bp.route('/send_verification_code', methods=['POST'])
 def send_verification_code():
@@ -71,7 +72,6 @@ def send_verification_code():
                 is_active=False
             )
             db.session.add(user)
-        
         # 保存验证码
         code_obj = VerificationCode(
             email=email,
@@ -79,7 +79,7 @@ def send_verification_code():
         )
         db.session.add(code_obj)
         db.session.commit()
-        
+
         # 发送验证码邮件
         if send_verification_email(email, verification_code):
             response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.VERIFICATION_CODE_SENT)
@@ -91,8 +91,8 @@ def send_verification_code():
         
     except Exception as e:
         db.session.rollback()
-        response, status_code = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.EMAIL_SENDING_FAILED)
-        return jsonify(response), status_code
+        response = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.EMAIL_SENDING_FAILED)
+        return jsonify(response), 500
 
 @verify_bp.route('/verify_and_login', methods=['POST'])
 def verify_and_login():
