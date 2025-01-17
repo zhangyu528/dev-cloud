@@ -6,4 +6,4 @@ class DevDatabaseConfig:
     SQLALCHEMY_ECHO = True
 
     # 动态设置迁移目录
-    MIGRATIONS_DIR = 'backend/db/migrations'
+    MIGRATIONS_DIR = 'db/migrations'
