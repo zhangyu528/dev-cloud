@@ -13,6 +13,15 @@ export default function EmailLoginPage() {
   const router = useRouter()
   const [isVerification, setIsVerification] = useState(false)
   const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search)
+    const usernameParam = searchParams.get('username')
+    if (usernameParam) {
+      setUsername(decodeURIComponent(usernameParam))
+    }
+  }, [])
   const [verificationCode, setVerificationCode] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const verificationRef = useRef<HTMLInputElement>(null)
@@ -39,8 +48,8 @@ export default function EmailLoginPage() {
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const { username } = await authApi.verifyAndLogin(email, verificationCode)
-      router.push(`/projects/${username}`)
+      const { username: apiUsername } = await authApi.verifyAndLogin(email, verificationCode, username)
+      router.push(`/projects/${apiUsername}`)
     } catch (error) {
       console.error('Verification error:', error)
       // TODO: Add error handling UI

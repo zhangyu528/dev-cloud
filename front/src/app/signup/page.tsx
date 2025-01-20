@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
@@ -11,8 +12,9 @@ export default function SignupPage() {
   const [isTrialExpanded, setIsTrialExpanded] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const router = useRouter()
   const handleContinue = () => {
-    window.location.href = '/login/email'
+    router.push(`/login/email?username=${encodeURIComponent(name)}&from=signup`)
   }
 
   useEffect(() => {

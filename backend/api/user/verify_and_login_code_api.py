@@ -117,6 +117,10 @@ def verify_and_login():
               type: string
               description: 验证码
               example: "123456"
+            username:
+              type: string
+              description: 用户名
+              example: "johndoe"
     responses:
       200:
         description: 验证成功并登录

@@ -21,10 +21,10 @@ export const authApi = {
   /**
    * Verify code and login user
    */
-  verifyAndLogin: async (email: string, code: string) => {
-    const { access_token, username } = await apiRequest<VerifyAndLoginResponse>('/verify/verify_and_login', {
+  verifyAndLogin: async (email: string, code: string, username?: string) => {
+    const { access_token, username: responseUsername } = await apiRequest<VerifyAndLoginResponse>('/verify/verify_and_login', {
       method: 'POST',
-      body: { email, code },
+      body: { email, code, username },
       skipAuth: true
     })
     setAuthToken(access_token)
