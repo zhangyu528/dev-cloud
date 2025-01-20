@@ -1,9 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ThemeToggle } from './ThemeToggle';
 import { HomeIcon, LogOutIcon } from './icons/MenuIcons';
 
-export default function UserMenu() {
+interface UserMenuProps {
+  avatarUrl?: string;
+}
+
+export default function UserMenu({ avatarUrl }: UserMenuProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const email = "zhangyu528@example.com"; // TODO: 从用户状态获取邮箱
@@ -27,7 +32,18 @@ export default function UserMenu() {
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
       >
-        <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+        {avatarUrl ? (
+          <div className="relative h-8 w-8 rounded-full overflow-hidden">
+            <Image
+              src={avatarUrl}
+              alt="User avatar"
+              fill
+              className="object-cover"
+            />
+          </div>
+        ) : (
+          <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+        )}
       </button>
 
       {isMenuOpen && (

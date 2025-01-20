@@ -31,16 +31,6 @@ export default function DashboardHeader({
             <div className="flex items-center">
               <div className="mx-6 h-6 w-px bg-gray-200 dark:bg-gray-700" />
               <div className="flex items-center space-x-3 text-gray-900 dark:text-white">
-                {avatarUrl && (
-                  <div className="relative w-8 h-8 rounded-full overflow-hidden">
-                    <Image
-                      src={avatarUrl}
-                      alt={`${username}'s avatar`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                )}
                 <span className="text-sm font-medium">{username}'s projects</span>
               </div>
             </div>
@@ -48,7 +38,7 @@ export default function DashboardHeader({
 
           {/* Right section */}
           <div className="flex items-center space-x-4">
-            <UserMenu />
+            <UserMenu avatarUrl={avatarUrl} />
           </div>
         </div>
       </div>
