@@ -31,7 +31,7 @@ export default function DashboardHeader({
             <div className="flex items-center">
               <div className="mx-6 h-6 w-px bg-gray-200 dark:bg-gray-700" />
               <div className="flex items-center space-x-3 text-gray-900 dark:text-white">
-                <span className="text-sm font-medium">{username}'s projects</span>
+                <span className="text-sm font-medium">{username}'s workspace</span>
               </div>
             </div>
           </div>

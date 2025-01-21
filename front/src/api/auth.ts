@@ -28,7 +28,7 @@ export const authApi = {
       skipAuth: true
     })
     setAuthToken(access_token)
-    return { token: access_token, username }
+    return { token: access_token, username: responseUsername }
   },
 
   /**

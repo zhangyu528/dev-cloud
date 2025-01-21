@@ -50,7 +50,7 @@ export default function SignupPage() {
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 mb-2">
                   Hobby
                 </span>
-                <p className="text-sm text-gray-600 dark:text-gray-400">For personal projects</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">For personal workspace</p>
               </div>
             </div>
             <div 
@@ -65,7 +65,7 @@ export default function SignupPage() {
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 mb-2">
                   Pro
                 </span>
-                <p className="text-sm text-gray-600 dark:text-gray-400">For team projects</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">For team workspace</p>
               </div>
             </div>
           </div>

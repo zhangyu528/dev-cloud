@@ -28,7 +28,7 @@ export default function GithubCallbackPage() {
         localStorage.setItem('token', token)
         localStorage.setItem('username', username)
         setStatus('Login successful, redirecting...')
-        router.push(`/projects/${username}`)
+        router.push(`/workspace/${username}`)
       } catch (error) {
         console.error('GitHub authentication error:', error)
         setStatus('Authentication failed, redirecting to login...')
