@@ -12,7 +12,6 @@ export interface CurrentUser {
 
 interface VerifyTokenResponse {
   valid: boolean;
-  user?: CurrentUser;
 }
 
 export class UserApi {
@@ -66,7 +65,7 @@ export class UserApi {
    * Verify authentication token
    */
   async verifyToken(): Promise<VerifyTokenResponse> {
-    return httpRequest.post('/user/verify-token', null);
+    return httpRequest.post('/user/verify-token');
   }
 }
 

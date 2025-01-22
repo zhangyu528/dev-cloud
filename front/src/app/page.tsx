@@ -2,26 +2,21 @@
 
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import { userApi } from '@/api/user'
+import { getAuthToken } from '@/request/authToken'
 
 export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken')
+    const token = getAuthToken()
     if (token) {
-      fetch('/api/verify-token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.valid) {
-          router.replace('/workspace')
-        }
-      })
+      userApi.verifyToken()
+        .then(data => {
+          if (data.valid) {
+            router.replace('/workspace')
+          }
+        })
     }
   }, [router])
 

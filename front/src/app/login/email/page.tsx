@@ -50,7 +50,7 @@ export default function EmailLoginPage() {
     e.preventDefault()
     try {
       const { username: apiUsername } = await userApi.verifyAndLogin(email, verificationCode, username)
-      router.push(`/workspace/${apiUsername}`)
+      router.push('/workspace')
     } catch (error) {
       console.error('Verification error:', error)
       // TODO: Add error handling UI

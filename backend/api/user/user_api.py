@@ -49,6 +49,22 @@ def get_current_user():
     return jsonify(response), status_code
 
 
+@user_bp.route('/verify-token', methods=['POST'])
+@jwt_required()
+def verify_token():
+    # Verify JWT token is valid
+    current_user = get_jwt_identity()
+    if not current_user:
+        return jsonify({
+            'valid': False
+        }), 401
+
+    # Return verification result
+    return jsonify({
+        'valid': True
+    }), 200
+
+
 @user_bp.route('/logout', methods=['POST'])
 @jwt_required()
 def logout():
