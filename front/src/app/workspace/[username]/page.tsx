@@ -1,7 +1,7 @@
 'use client';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { clearAuthToken } from '@/request/apiRequest';
+import { clearAuthToken } from '@/request/authToken';
 import { userApi } from '@/api/user';
 import Footer from '@/components/Footer';
 import DashboardHeader from '@/components/DashboardHeader';

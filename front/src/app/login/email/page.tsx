@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { VerificationInput } from '@/components/VerificationInput'
 import { useRouter } from 'next/navigation'
 import { authApi } from '@/api/auth'
+import { userApi } from '@/api/user'
 
 
 
@@ -37,7 +38,7 @@ export default function EmailLoginPage() {
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await authApi.sendVerificationCode(email)
+      await userApi.sendVerificationCode(email)
       setIsVerification(true)
     } catch (error) {
       console.error('Error sending verification code:', error)
@@ -48,7 +49,7 @@ export default function EmailLoginPage() {
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const { username: apiUsername } = await authApi.verifyAndLogin(email, verificationCode, username)
+      const { username: apiUsername } = await userApi.verifyAndLogin(email, verificationCode, username)
       router.push(`/workspace/${apiUsername}`)
     } catch (error) {
       console.error('Verification error:', error)

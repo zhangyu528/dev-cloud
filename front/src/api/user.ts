@@ -1,4 +1,5 @@
-import { apiRequest } from '../request/apiRequest';
+import { httpRequest } from '@/request/httpRequest'
+import { setAuthToken, clearAuthToken } from '@/request/authToken'
 
 export interface CurrentUser {
   id: string;
@@ -9,12 +10,64 @@ export interface CurrentUser {
   updated_at: string;
 }
 
-export const userApi = {
+interface VerifyTokenResponse {
+  valid: boolean;
+  user?: CurrentUser;
+}
+
+export class UserApi {
+  /**
+   * Send verification code to user's email
+   */
+  async sendVerificationCode(email: string, username?: string) {
+    console.log('sendVerificationCode', email, username)
+    return httpRequest.post('/verify/send_verification_code', 
+      { email, username }, 
+      true)
+  }
+
+  /**
+   * Verify code and login user
+   */
+  async verifyAndLogin(email: string, code: string, username?: string) {
+    const { access_token, username: responseUsername } = await httpRequest.post(
+      '/verify/verify_and_login',
+      { email, code, username },
+      true
+    )
+    setAuthToken(access_token)
+    return { token: access_token, username: responseUsername }
+  }
+
+  /**
+   * Logout user and clear auth token
+   */
+  async logout() {
+    try {
+      const result = await httpRequest.post('/logout', null, true)
+      clearAuthToken()
+      return result
+    } catch (error) {
+      // Clear token even if logout API fails
+      clearAuthToken()
+      throw error
+    }
+  }
+  
   /**
    * Get current authenticated user
    */
-  getCurrentUser: async (): Promise<CurrentUser> => {
-    const response = await apiRequest('/user/me');
-    return response.data;
+  async getCurrentUser(): Promise<CurrentUser> {
+    const response = await httpRequest.get('/user/me');
+    return response;
+  }
+
+  /**
+   * Verify authentication token
+   */
+  async verifyToken(): Promise<VerifyTokenResponse> {
+    return httpRequest.post('/user/verify-token', null);
   }
 }
+
+export const userApi = new UserApi();

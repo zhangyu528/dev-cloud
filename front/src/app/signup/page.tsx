@@ -2,20 +2,14 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
 import Link from 'next/link'
 
 export default function SignupPage() {
+  const router = useRouter()
   const [selectedPlan, setSelectedPlan] = useState<string>('')
   const [name, setName] = useState('')
   const [isTrialExpanded, setIsTrialExpanded] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-
-  const router = useRouter()
-  const handleContinue = () => {
-    router.push(`/login/email?username=${encodeURIComponent(name)}&from=signup`)
-  }
 
   useEffect(() => {
     if (selectedPlan && inputRef.current) {
@@ -25,7 +19,6 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
-      <Navbar />
       <main className="flex-grow flex justify-center px-4 mt-48 mb-8">
         <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md dark:shadow-gray-900/30 max-w-md w-full border border-gray-200 dark:border-gray-700 h-fit">
           <h2 className="text-2xl font-bold mb-6 text-black dark:text-white text-center">
@@ -128,9 +121,11 @@ export default function SignupPage() {
               </>
             )}
             <button
+              onClick={() => {
+                router.push(`/login/email?username=${encodeURIComponent(name)}&from=signup`)
+              }}
               disabled={!selectedPlan || !name.trim()}
-              onClick={handleContinue}
-              className={`w-full py-2 px-4 rounded-md transition-colors
+              className={`w-full py-2 px-4 rounded-md transition-colors text-center block
                 ${(!selectedPlan || !name.trim())
                   ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed'
                   : 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600'
@@ -158,7 +153,6 @@ export default function SignupPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   )
 }
