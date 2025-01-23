@@ -6,9 +6,10 @@ import { HomeIcon, LogOutIcon } from './icons/MenuIcons';
 
 interface UserMenuProps {
   avatarUrl?: string;
+  username?: string;
 }
 
-export default function UserMenu({ avatarUrl }: UserMenuProps) {
+export default function UserMenu({ avatarUrl, username }: UserMenuProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const email = "zhangyu528@example.com"; // TODO: 从用户状态获取邮箱
@@ -42,7 +43,11 @@ export default function UserMenu({ avatarUrl }: UserMenuProps) {
             />
           </div>
         ) : (
-          <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+          <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+            <span className="text-gray-700 dark:text-gray-300 font-medium">
+              {username?.charAt(0).toUpperCase()}
+            </span>
+          </div>
         )}
       </button>
 

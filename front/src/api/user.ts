@@ -2,12 +2,9 @@ import { httpRequest } from '@/request/httpRequest'
 import { setAuthToken, clearAuthToken } from '@/request/authToken'
 
 export interface CurrentUser {
-  id: string;
   username: string;
   email: string;
   avatar_url?: string;
-  created_at: string;
-  updated_at: string;
 }
 
 interface VerifyTokenResponse {
@@ -58,7 +55,8 @@ export class UserApi {
    */
   async getCurrentUser(): Promise<CurrentUser> {
     const response = await httpRequest.get('/user/me');
-    return response;
+    const {username, avatar_url, email} = response.data;
+    return {username, avatar_url, email};
   }
 
   /**

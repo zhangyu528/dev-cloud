@@ -1,5 +1,8 @@
 import Link from 'next/link'
 
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+
 export default function LoginLayout({
   children,
 }: {
@@ -7,6 +10,7 @@ export default function LoginLayout({
 }) {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+      <Header />
       {children}
       <div className="text-center py-4 border-t border-b border-gray-200 dark:border-gray-700">
         <Link 
@@ -16,6 +20,7 @@ export default function LoginLayout({
           Don't have an account? Sign Up
         </Link>
       </div>
+      <Footer />
     </div>
   )
 }

@@ -1,51 +1,39 @@
 'use client'
+import { Suspense, useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import { getAuthToken } from '@/request/authToken';
 
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { userApi } from '@/api/user'
-import { getAuthToken } from '@/request/authToken'
+const LandingPageLayout = dynamic(() => import('@/app/landing/layout'), {
+  ssr: false,
+});
+const LandingPageContent = dynamic(() => import('@/app/landing/landingPage'), {
+  ssr: false,
+});
+const WorkspaceLayout = dynamic(() => import('@/app/workspace/layout'), {
+  ssr: false,
+});
+const WorkspacePage = dynamic(() => import('@/app/workspace/workspacePage'), {
+  ssr: false,
+});
 
 export default function Home() {
-  const router = useRouter()
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const token = getAuthToken()
-    if (token) {
-      userApi.verifyToken()
-        .then(data => {
-          if (data.valid) {
-            router.replace('/workspace')
-          }
-        })
-    }
-  }, [router])
+    setIsLoggedIn(!!getAuthToken());
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white sm:text-5xl">
-            Welcome to Dev Cloud
-          </h1>
-          <p className="mt-6 text-xl text-gray-600 dark:text-gray-300">
-            Your cloud development environment
-          </p>
-          <div className="mt-10 flex justify-center space-x-4">
-            <a
-              href="/login"
-              className="inline-block px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700"
-            >
-              Get Started
-            </a>
-            <a
-              href="/about"
-              className="inline-block px-6 py-3 text-blue-600 font-medium border border-blue-600 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900"
-            >
-              Learn More
-            </a>
-          </div>
-        </div>
-      </main>
-    </div>
-  )
+    <Suspense fallback={<div>加载中...</div>}>
+      {isLoggedIn ? (
+        <WorkspaceLayout>
+          <WorkspacePage />
+        </WorkspaceLayout>
+      ) : (
+        <LandingPageLayout>
+          <LandingPageContent />
+        </LandingPageLayout>
+      )}
+    </Suspense>
+  );
 }
