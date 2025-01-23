@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { clearAuthToken } from '@/request/authToken';
+import { clearAuthToken, getAuthToken } from '@/request/authToken';
 import { userApi } from '@/api/user';
 import DashboardHeader from '@/components/DashboardHeader';
 import Footer from '@/components/Footer';
@@ -17,6 +17,12 @@ export default function WorkspaceLayout({
 
   useEffect(() => {
     const checkAuth = async () => {
+      const token = getAuthToken();
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+      
       try {
         const currentUser = await userApi.getCurrentUser();
         setAvatarUrl(currentUser.avatar_url);

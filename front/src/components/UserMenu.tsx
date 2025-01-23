@@ -1,7 +1,11 @@
+'use client';
+
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ThemeToggle } from './ThemeToggle';
+import { useRouter } from 'next/navigation';
+import { userApi } from '@/api/user';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { HomeIcon, LogOutIcon } from './icons/MenuIcons';
 
 interface UserMenuProps {
@@ -9,12 +13,46 @@ interface UserMenuProps {
   username?: string;
 }
 
+// 根据首字母生成固定颜色
+const getColorForInitial = (initial?: string) => {
+  if (!initial) return '#6b7280';
+  
+  // 将字母映射到固定颜色
+  const colors = [
+    '#ef4444', // red
+    '#f97316', // orange
+    '#eab308', // yellow
+    '#22c55e', // green
+    '#3b82f6', // blue
+    '#8b5cf6', // violet
+    '#ec4899', // pink
+  ];
+  
+  // 根据字母的ASCII码选择颜色
+  const index = initial.charCodeAt(0) % colors.length;
+  return colors[index];
+};
+
 export default function UserMenu({ avatarUrl, username }: UserMenuProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const email = "zhangyu528@example.com"; // TODO: 从用户状态获取邮箱
 
+
+  const handleLogoutClick = async () => {
+    try {
+      // 等待 logout 完成
+      await userApi.logout()
+      router.push('/login');
+    } catch (error) {
+      // 即使出错也跳转到首页
+      router.push('/login');
+    }
+  }
+
   useEffect(() => {
+
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
@@ -43,8 +81,11 @@ export default function UserMenu({ avatarUrl, username }: UserMenuProps) {
             />
           </div>
         ) : (
-          <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-            <span className="text-gray-700 dark:text-gray-300 font-medium">
+          <div 
+            className="h-8 w-8 rounded-full flex items-center justify-center"
+            style={{ backgroundColor: getColorForInitial(username?.charAt(0)) }}
+          >
+            <span className="text-white font-medium">
               {username?.charAt(0).toUpperCase()}
             </span>
           </div>
@@ -86,7 +127,7 @@ export default function UserMenu({ avatarUrl, username }: UserMenuProps) {
             <div className="border-t border-gray-200 dark:border-gray-600"></div>
             <button
               className="w-full flex items-center justify-between px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600"
-              onClick={() => {/* 处理登出逻辑 */}}
+              onClick={handleLogoutClick}
             >
               <span>Log Out</span>
               <LogOutIcon className="w-4 h-4" />

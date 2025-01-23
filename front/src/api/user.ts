@@ -16,7 +16,6 @@ export class UserApi {
    * Send verification code to user's email
    */
   async sendVerificationCode(email: string, username?: string) {
-    console.log('sendVerificationCode', email, username)
     return httpRequest.post('/verify/send_verification_code', 
       { email, username }, 
       true)
@@ -40,7 +39,7 @@ export class UserApi {
    */
   async logout() {
     try {
-      const result = await httpRequest.post('/logout', null, true)
+      const result = await httpRequest.post('/user/logout')
       clearAuthToken()
       return result
     } catch (error) {

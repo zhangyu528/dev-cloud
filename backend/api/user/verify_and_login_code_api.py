@@ -77,6 +77,7 @@ def send_verification_code():
             email=email,
             code=verification_code,
         )
+        current_app.logger.debug(f"Verification code: {verification_code}")
         db.session.add(code_obj)
         db.session.commit()
 

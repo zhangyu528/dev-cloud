@@ -3,7 +3,7 @@ import os
 class DevSecurityConfig:
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key')
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'dev-jwt-secret-key')
-    JWT_ACCESS_TOKEN_EXPIRES = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 3600))
+    JWT_ACCESS_TOKEN_EXPIRES = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 3600*24*30))
     SECURITY_PASSWORD_SALT = os.getenv('SECURITY_PASSWORD_SALT', 'dev-password-salt')
     SECURITY_PASSWORD_HASH = 'bcrypt'
     SECURITY_PASSWORD_COMPLEXITY = {

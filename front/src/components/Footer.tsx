@@ -1,4 +1,6 @@
-import { ThemeToggle } from './ThemeToggle'
+'use client'
+
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 export default function Footer() {
   return (
