@@ -46,7 +46,7 @@ def get_current_user():
         StatusCodeKey.USER_INFO_SUCCESS
     )
     response['data'] = user_data
-    return jsonify(response), status_code
+    return jsonify(response['data']), status_code
 
 
 @user_bp.route('/verify-token', methods=['POST'])

@@ -5,7 +5,6 @@ import { EmailIcon } from '@/components/icons/EmailIcon'
 import { useEffect, useRef, useState } from 'react'
 import { VerificationInput } from '@/components/VerificationInput'
 import { useRouter } from 'next/navigation'
-import { authApi } from '@/api/auth'
 import { userApi } from '@/api/user'
 import Loading from '@/components/Loading'
 
@@ -42,7 +41,7 @@ export default function EmailLoginPage() {
     setIsLoading(true)
     setLoadingText('Sending verification code...')
     try {
-      await userApi.sendVerificationCode(email)
+      await userApi.sendVerificationCode(email, username)
       setIsVerification(true)
     } catch (error) {
       console.error('Error sending verification code:', error)
@@ -116,7 +115,7 @@ export default function EmailLoginPage() {
                     }}
                     className="mt-4 w-full text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 
                              dark:hover:text-blue-300 text-center"
-                    disabled={isLoading}
+                disabled={isLoading || email.length === 0}
                   >
                     Resend verification code
                   </button>
@@ -135,8 +134,9 @@ export default function EmailLoginPage() {
                          text-base text-white bg-gray-900 hover:bg-gray-800 
                          dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100
                          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
-                         transition-colors"
-                disabled={isLoading}
+                         transition-colors disabled:bg-gray-400 disabled:hover:bg-gray-400 
+                         disabled:cursor-not-allowed dark:disabled:bg-gray-500 dark:disabled:hover:bg-gray-500"
+                disabled={isLoading || email.length === 0}
               >
                 {!isVerification && <EmailIcon />}
                 {isVerification ? 'Verify' : 'Continue with Email'}

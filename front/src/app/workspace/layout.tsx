@@ -15,6 +15,7 @@ export default function WorkspaceLayout({
   const router = useRouter();
   const [avatar_url, setAvatarUrl] = useState<string>();
   const [email, setEmail] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -28,6 +29,7 @@ export default function WorkspaceLayout({
         const currentUser = await userApi.getCurrentUser();
         setAvatarUrl(currentUser.avatar_url);
         setEmail(currentUser.email);
+        setUsername(currentUser.username);
       } catch {
         clearAuthToken();
         router.push('/login');
@@ -42,6 +44,7 @@ export default function WorkspaceLayout({
       <DashboardHeader 
         avatarUrl={avatar_url}
         email={email}
+        username={username}
       />
       {children}
       <Footer />

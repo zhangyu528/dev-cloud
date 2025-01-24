@@ -47,18 +47,13 @@ export default function SignupPage() {
               </div>
             </div>
             <div 
-              className={`p-4 border rounded-lg cursor-pointer transition-colors
-                ${selectedPlan === 'pro' 
-                  ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20' 
-                  : 'border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400'
-                }`}
-              onClick={() => setSelectedPlan('pro')}
+              className="p-4 border rounded-lg cursor-not-allowed bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600"
             >
-              <div className="flex flex-col items-start">
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 mb-2">
+              <div className="flex flex-col items-start opacity-50">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 mb-2">
                   Pro
                 </span>
-                <p className="text-sm text-gray-600 dark:text-gray-400">For team workspace</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">For team workspace</p>
               </div>
             </div>
           </div>

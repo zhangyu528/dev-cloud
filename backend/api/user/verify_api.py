@@ -15,33 +15,6 @@ from .user_api import user_bp
 
 @user_bp.route('/send_verification_code', methods=['POST'])
 def send_verification_code():
-    """
-    发送邮箱验证码
-    ---
-    tags:
-      - 验证码
-    summary: 发送邮箱验证码
-    parameters:
-      - in: body
-        name: body
-        required: true
-        schema:
-          type: object
-          properties:
-            email:
-              type: string
-              description: 邮箱地址
-              example: "user@example.com"
-            username:
-              type: string
-              description: 用户名(可选)
-              example: "johndoe"
-    responses:
-      200:
-        description: 验证码发送成功
-      400:
-        description: 邮箱格式错误或发送失败
-    """
     data = request.get_json()
     email = data.get('email')
     username = data.get('username')
@@ -96,48 +69,6 @@ def send_verification_code():
 
 @user_bp.route('/verify_and_login', methods=['POST'])
 def verify_and_login():
-    """
-    验证邮箱验证码并登录
-    ---
-    tags:
-      - 验证码
-    summary: 验证邮箱验证码并登录
-    parameters:
-      - in: body
-        name: body
-        required: true
-        schema:
-          type: object
-          properties:
-            email:
-              type: string
-              description: 邮箱地址
-              example: "user@example.com"
-            code:
-              type: string
-              description: 验证码
-              example: "123456"
-            username:
-              type: string
-              description: 用户名
-              example: "johndoe"
-    responses:
-      200:
-        description: 验证成功并登录
-        schema:
-          type: object
-          properties:
-            message:
-              type: string
-            access_token:
-              type: string
-            username:
-              type: string
-      400:
-        description: 验证码无效或已过期
-      404:
-        description: 未找到验证码记录
-    """
     data = request.get_json()
     email = data.get('email')
     code = data.get('code')

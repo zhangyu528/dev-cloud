@@ -11,7 +11,8 @@ import { HomeIcon, LogOutIcon } from './icons/MenuIcons';
 
 interface UserMenuProps {
   avatarUrl?: string;
-  email?: string;
+  email: string;
+  username?: string;
 }
 
 const getColorForInitial = (initial?: string) => {
@@ -31,7 +32,7 @@ const getColorForInitial = (initial?: string) => {
   return colors[index];
 };
 
-export default function UserMenu({ avatarUrl, email }: UserMenuProps) {
+export default function UserMenu({ avatarUrl, email, username }: UserMenuProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -62,8 +63,7 @@ export default function UserMenu({ avatarUrl, email }: UserMenuProps) {
     };
   }, []);
 
-  const initial = email ? email[0].toUpperCase() : '';
-
+  const initial = username ? username[0].toUpperCase() : email ? email[0].toUpperCase() : '';
   return (
     <div className="relative" ref={menuRef}>
       <Loading fullScreen isLoading={isLoggingOut} text="Logging out..." />

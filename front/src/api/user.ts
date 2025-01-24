@@ -53,9 +53,7 @@ export class UserApi {
    * Get current authenticated user
    */
   async getCurrentUser(): Promise<CurrentUser> {
-    const response = await httpRequest.get('/api/user/me');
-    const {username, avatar_url, email} = response.data;
-    return {username, avatar_url, email};
+    return httpRequest.get('/api/user/me');
   }
 
   /**
