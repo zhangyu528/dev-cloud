@@ -1,6 +1,34 @@
-import { TemplateList } from '@/components/TemplateList';
+'use client'
+
+import { useState, useEffect } from 'react';
+import { TemplateList,Template } from '@/components/TemplateList';
+import Loading from '@/components/Loading';
+import { templatesApi } from '@/api/templates';
 
 export default function WorkspacePage() {
+  const [loading, setLoading] = useState(false);
+  const [templates, setTemplates] = useState<Template[]>([]);
+
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      setLoading(true);
+      try {
+        const data = await templatesApi.getAvailableTemplates();
+        setTemplates(data);
+      } catch (error) {
+        console.error('Failed to fetch templates:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTemplates();
+  }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <div className="flex-1 grid grid-cols-2 gap-8 p-8">
       {/* Left Section */}
@@ -18,7 +46,7 @@ export default function WorkspacePage() {
         <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
           Choose a Template
         </h2>
-        <TemplateList />
+        <TemplateList templates={templates} />
       </div>
     </div>
   );

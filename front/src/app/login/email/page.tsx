@@ -7,14 +7,15 @@ import { VerificationInput } from '@/components/VerificationInput'
 import { useRouter } from 'next/navigation'
 import { authApi } from '@/api/auth'
 import { userApi } from '@/api/user'
-
-
+import Loading from '@/components/Loading'
 
 export default function EmailLoginPage() {
   const router = useRouter()
   const [isVerification, setIsVerification] = useState(false)
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [loadingText, setLoadingText] = useState('')
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search)
@@ -23,6 +24,7 @@ export default function EmailLoginPage() {
       setUsername(decodeURIComponent(usernameParam))
     }
   }, [])
+
   const [verificationCode, setVerificationCode] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const verificationRef = useRef<HTMLInputElement>(null)
@@ -37,28 +39,38 @@ export default function EmailLoginPage() {
 
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsLoading(true)
+    setLoadingText('Sending verification code...')
     try {
       await userApi.sendVerificationCode(email)
       setIsVerification(true)
     } catch (error) {
       console.error('Error sending verification code:', error)
       // TODO: Add error handling UI
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsLoading(true)
+    setLoadingText('Verifying code...')
     try {
       const { username: apiUsername } = await userApi.verifyAndLogin(email, verificationCode, username)
       router.push('/workspace')
     } catch (error) {
       console.error('Verification error:', error)
       // TODO: Add error handling UI
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
     <>
+      <Loading fullScreen isLoading={isLoading} text={loadingText} />
+      
       <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-sm w-full space-y-8">
           <div>
@@ -104,6 +116,7 @@ export default function EmailLoginPage() {
                     }}
                     className="mt-4 w-full text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 
                              dark:hover:text-blue-300 text-center"
+                    disabled={isLoading}
                   >
                     Resend verification code
                   </button>
@@ -123,6 +136,7 @@ export default function EmailLoginPage() {
                          dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100
                          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
                          transition-colors"
+                disabled={isLoading}
               >
                 {!isVerification && <EmailIcon />}
                 {isVerification ? 'Verify' : 'Continue with Email'}
@@ -138,6 +152,7 @@ export default function EmailLoginPage() {
                     setVerificationCode('')
                   }}
                   className="text-sm text-blue-600 hover:text-blue-700 hover:underline dark:text-blue-500 dark:hover:text-blue-400"
+                  disabled={isLoading}
                 >
                   ← Use a different email
                 </button>

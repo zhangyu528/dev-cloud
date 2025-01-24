@@ -6,53 +6,50 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { userApi } from '@/api/user';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import Loading from '@/components/Loading';
 import { HomeIcon, LogOutIcon } from './icons/MenuIcons';
 
 interface UserMenuProps {
   avatarUrl?: string;
-  username?: string;
+  email?: string;
 }
 
-// 根据首字母生成固定颜色
 const getColorForInitial = (initial?: string) => {
   if (!initial) return '#6b7280';
   
-  // 将字母映射到固定颜色
   const colors = [
-    '#ef4444', // red
-    '#f97316', // orange
-    '#eab308', // yellow
-    '#22c55e', // green
-    '#3b82f6', // blue
-    '#8b5cf6', // violet
-    '#ec4899', // pink
+    '#ef4444',
+    '#f97316', 
+    '#eab308',
+    '#22c55e',
+    '#3b82f6',
+    '#8b5cf6',
+    '#ec4899',
   ];
   
-  // 根据字母的ASCII码选择颜色
   const index = initial.charCodeAt(0) % colors.length;
   return colors[index];
 };
 
-export default function UserMenu({ avatarUrl, username }: UserMenuProps) {
+export default function UserMenu({ avatarUrl, email }: UserMenuProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const email = "zhangyu528@example.com"; // TODO: 从用户状态获取邮箱
-
 
   const handleLogoutClick = async () => {
+    setIsLoggingOut(true);
     try {
-      // 等待 logout 完成
-      await userApi.logout()
+      await userApi.logout();
       router.push('/login');
     } catch (error) {
-      // 即使出错也跳转到首页
       router.push('/login');
+    } finally {
+      setIsLoggingOut(false);
     }
   }
 
   useEffect(() => {
-
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
@@ -65,8 +62,12 @@ export default function UserMenu({ avatarUrl, username }: UserMenuProps) {
     };
   }, []);
 
+  const initial = email ? email[0].toUpperCase() : '';
+
   return (
     <div className="relative" ref={menuRef}>
+      <Loading fullScreen isLoading={isLoggingOut} text="Logging out..." />
+      
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
@@ -83,10 +84,10 @@ export default function UserMenu({ avatarUrl, username }: UserMenuProps) {
         ) : (
           <div 
             className="h-8 w-8 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: getColorForInitial(username?.charAt(0)) }}
+            style={{ backgroundColor: getColorForInitial(initial) }}
           >
             <span className="text-white font-medium">
-              {username?.charAt(0).toUpperCase()}
+              {initial}
             </span>
           </div>
         )}
@@ -94,12 +95,10 @@ export default function UserMenu({ avatarUrl, username }: UserMenuProps) {
 
       {isMenuOpen && (
         <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 z-50">
-          {/* User Info Section */}
           <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-600">
             <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{email}</p>
           </div>
 
-          {/* Menu Items */}
           <div className="py-1" role="menu">
             <Link 
               href="/dashboard"
@@ -128,6 +127,7 @@ export default function UserMenu({ avatarUrl, username }: UserMenuProps) {
             <button
               className="w-full flex items-center justify-between px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600"
               onClick={handleLogoutClick}
+              disabled={isLoggingOut}
             >
               <span>Log Out</span>
               <LogOutIcon className="w-4 h-4" />

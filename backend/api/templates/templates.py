@@ -1,20 +1,42 @@
-TEMPLATES = {
-    "python-dev": {
-        "image": "python:3.9-slim",
-        "default_cmd": "bash",
-        "env_vars": {"LANG": "en_US.UTF-8"},
-        "ports": {"8888": "8888"},
+TEMPLATES = [
+    {
+        "name": "Angular",
+        "description": "description",
+        "icon": "/icons/templates/angular.svg"
     },
-    "nodejs-dev": {
-        "image": "node:16",
-        "default_cmd": "bash",
-        "env_vars": {"NODE_ENV": "development"},
-        "ports": {"3000": "3000"},
+    {
+        "name": "NextJS",
+        "description": "description",
+        "icon": "/icons/templates/nextjs.svg"
     },
-    "java-dev": {
-        "image": "openjdk:11",
-        "default_cmd": "bash",
-        "env_vars": {"JAVA_HOME": "/usr/lib/jvm/java-11-openjdk-amd64"},
-        "ports": {"8080": "8080"},
+    {
+        "name": "Flutter",
+        "description": "description",
+        "icon": "/icons/templates/flutter.svg"
     },
-}
+    {
+        "name": "Vue",
+        "description": "description",
+        "icon": "/icons/templates/vue.svg"
+    },
+    {
+        "name": "Astro",
+        "description": "description",
+        "icon": "/icons/templates/astro.svg"
+    },
+    {
+        "name": "Go",
+        "description": "description",
+        "icon": "/icons/templates/go.svg"
+    },
+    {
+        "name": "Python Flask",
+        "description": "description",
+        "icon": "/icons/templates/flask.svg"
+    },
+    {
+        "name": "Node Express",
+        "description": "description",
+        "icon": "/icons/templates/express.svg"
+    },
+]

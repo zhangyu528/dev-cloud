@@ -1,4 +1,5 @@
-'use client';
+'use client'
+
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { clearAuthToken, getAuthToken } from '@/request/authToken';
@@ -13,7 +14,7 @@ export default function WorkspaceLayout({
 }) {
   const router = useRouter();
   const [avatar_url, setAvatarUrl] = useState<string>();
-  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -26,7 +27,7 @@ export default function WorkspaceLayout({
       try {
         const currentUser = await userApi.getCurrentUser();
         setAvatarUrl(currentUser.avatar_url);
-        setUsername(currentUser.username);
+        setEmail(currentUser.email);
       } catch {
         clearAuthToken();
         router.push('/login');
@@ -40,7 +41,7 @@ export default function WorkspaceLayout({
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       <DashboardHeader 
         avatarUrl={avatar_url}
-        username={username}
+        email={email}
       />
       {children}
       <Footer />

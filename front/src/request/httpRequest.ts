@@ -24,30 +24,33 @@ export const httpRequest = {
     body?: Record<string, any> | BodyInit | null,
     skipAuth?: boolean
   ): Promise<any> {
-    const url = `${API_BASE_URL}${endpoint}`
-    const headers = {
-      'Content-Type': 'application/json',
-      ...(getAuthToken() && !skipAuth ? { Authorization: `Bearer ${getAuthToken()}` } : {})
+    try {
+      const url = `${API_BASE_URL}${endpoint}`
+      const headers = {
+        'Content-Type': 'application/json',
+        ...(getAuthToken() && !skipAuth ? { Authorization: `Bearer ${getAuthToken()}` } : {})
+      }
+
+      const fetchOptions: RequestInit = {
+        method,
+        headers,
+        body: body ? JSON.stringify(body) : null
+      }
+
+      const response = await fetch(url, fetchOptions)
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.message || 'API request failed')
+      }
+      return response.json();
+    } catch (error) {
+      throw error;
     }
-
-    const fetchOptions: RequestInit = {
-      method,
-      headers,
-      body: body ? JSON.stringify(body) : null
-    }
-
-    const response = await fetch(url, fetchOptions)
-
-    if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.message || 'API request failed')
-    }
-
-    return response.json()
-  },
+},
 
   get(endpoint: string, skipAuth?: boolean) {
-    return this.request(endpoint, 'GET', undefined, skipAuth);
+    return this.request(endpoint, 'GET', null, skipAuth);
   },
 
   post(endpoint: string, body?: Record<string, any> | BodyInit | null, skipAuth?: boolean) {

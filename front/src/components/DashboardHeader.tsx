@@ -6,13 +6,13 @@ import UserMenu from '@/components/UserMenu';
 interface DashboardHeaderProps {
   isAtTop?: boolean;
   avatarUrl?: string;
-  username: string;
+  email: string;
 }
 
 export default function DashboardHeader({ 
   isAtTop = false,
   avatarUrl,
-  username
+  email
 }: DashboardHeaderProps) {
 
   return (
@@ -32,7 +32,7 @@ export default function DashboardHeader({
           <div className="flex items-center space-x-4">
             <UserMenu 
               avatarUrl={avatarUrl}
-              username={username}
+              email={email}
             />
           </div>
         </div>
