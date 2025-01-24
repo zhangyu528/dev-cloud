@@ -16,7 +16,7 @@ export class UserApi {
    * Send verification code to user's email
    */
   async sendVerificationCode(email: string, username?: string) {
-    return httpRequest.post('/verify/send_verification_code', 
+    return httpRequest.post('/api/user/send_verification_code', 
       { email, username }, 
       true)
   }
@@ -26,7 +26,7 @@ export class UserApi {
    */
   async verifyAndLogin(email: string, code: string, username?: string) {
     const { access_token, username: responseUsername } = await httpRequest.post(
-      '/verify/verify_and_login',
+      '/api/user/verify_and_login',
       { email, code, username },
       true
     )
@@ -39,7 +39,7 @@ export class UserApi {
    */
   async logout() {
     try {
-      const result = await httpRequest.post('/user/logout')
+      const result = await httpRequest.post('/api/user/logout')
       clearAuthToken()
       return result
     } catch (error) {
@@ -53,7 +53,7 @@ export class UserApi {
    * Get current authenticated user
    */
   async getCurrentUser(): Promise<CurrentUser> {
-    const response = await httpRequest.get('/user/me');
+    const response = await httpRequest.get('/api/user/me');
     const {username, avatar_url, email} = response.data;
     return {username, avatar_url, email};
   }
@@ -62,7 +62,7 @@ export class UserApi {
    * Verify authentication token
    */
   async verifyToken(): Promise<VerifyTokenResponse> {
-    return httpRequest.post('/user/verify-token');
+    return httpRequest.post('/api/user/verify-token');
   }
 }
 

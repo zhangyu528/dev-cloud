@@ -11,10 +11,9 @@ from extensions import db
 
 from ..status_codes import StatusCodes, StatusCodeCategory, StatusCodeKey
 
-# 创建独立的蓝图
-verify_bp = Blueprint('verify_bp', __name__)
+from .user_api import user_bp
 
-@verify_bp.route('/send_verification_code', methods=['POST'])
+@user_bp.route('/send_verification_code', methods=['POST'])
 def send_verification_code():
     """
     发送邮箱验证码
@@ -95,7 +94,7 @@ def send_verification_code():
         response = StatusCodes.get_status_response(StatusCodeCategory.EMAIL, StatusCodeKey.EMAIL_SENDING_FAILED)
         return jsonify(response), 500
 
-@verify_bp.route('/verify_and_login', methods=['POST'])
+@user_bp.route('/verify_and_login', methods=['POST'])
 def verify_and_login():
     """
     验证邮箱验证码并登录

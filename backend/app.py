@@ -18,10 +18,7 @@ def create_app(config=None):
     from extensions import logging_init_app
     logging_init_app(app)
 
-    # 注册蓝图
-    from api import bp_init_app
-    bp_init_app(app)
-
+    # 初始化扩展
     from extensions import db_init_app
     db_init_app(app)
 
@@ -36,6 +33,10 @@ def create_app(config=None):
 
     from extensions import cors_init_app
     cors_init_app(app)
+
+    # 注册蓝图
+    from api import bp_init_app
+    bp_init_app(app)
 
     # # 初始化请求日志
     # from api.middleware.logging import init_request_logging
