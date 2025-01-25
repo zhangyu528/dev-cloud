@@ -14,7 +14,7 @@ class DevCORSConfig:
         'Origin',
         'Access-Control-Allow-Origin'
     ]
-    CORS_EXPOSE_HEADERS = ['Content-Disposition']
+    CORS_EXPOSE_HEADERS = ['Content-Disposition', 'X-Message']
     CORS_SUPPORTS_CREDENTIALS = True
     
     CORS_CONFIG = {

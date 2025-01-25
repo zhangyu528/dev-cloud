@@ -5,6 +5,7 @@ from urllib.parse import urlencode
 from models.user import User
 from extensions import db
 from flask import current_app
+from ..status_codes import get_server_error_response
 
 github_auth_bp = Blueprint('github_auth_bp', __name__)
 
@@ -25,7 +26,7 @@ def github_login():
         return redirect(authorization_url)
     except Exception as e:
         current_app.logger.error(f"GitHub login error: {str(e)}", exc_info=True)
-        return jsonify({'error': 'Failed to initiate GitHub login'}), 500
+        return get_server_error_response()
 
 @github_auth_bp.route('/github/exchange')
 def github_exchange():
@@ -33,8 +34,8 @@ def github_exchange():
     try:
         # Verify state parameter
         if 'state' not in request.args:
-            return jsonify({'error': 'Missing state parameter'}), 400
-            
+            return jsonify({}), 400, {'X-Message': 'Missing state parameter'}
+                        
         github = OAuth2Session(
             client_id=current_app.config['GITHUB_CLIENT_ID'],
             redirect_uri=current_app.config['GITHUB_REDIRECT_URI'],
@@ -96,7 +97,7 @@ def github_exchange():
             db.session.commit()
         except Exception as e:
             current_app.logger.error(f"Database query error: {str(e)}", exc_info=True)
-            return jsonify({'error': 'Failed to query database'}), 500
+            return get_server_error_response()
         
         # Create JWT token
         access_token = create_access_token(identity=user.id)
@@ -105,8 +106,8 @@ def github_exchange():
         return jsonify({
             'token': access_token,
             'username': user.username
-        })
+        }), 200
     
     except Exception as e:
         current_app.logger.error(f"GitHub OAuth callback error: {str(e)}", exc_info=True)
-        return jsonify({'error': str(e)}), 500
+        return get_server_error_response()

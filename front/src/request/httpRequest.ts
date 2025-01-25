@@ -38,10 +38,11 @@ export const httpRequest = {
       }
 
       const response = await fetch(url, fetchOptions)
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.message || 'API request failed')
+      if (!response.ok && response.status == 500) {// 200-299 is not ok
+        throw new Error('服务器开小差，请稍后重试');
+      } else if (!response.ok) {
+        const errorMessage = response.headers?.get('X-Message') || 'Request failed with status ' + response.status
+        throw new Error(errorMessage)
       }
       return response.json();
     } catch (error) {

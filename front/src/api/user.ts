@@ -16,8 +16,8 @@ export class UserApi {
    * Send verification code to user's email
    */
   async sendVerificationCode(email: string, username?: string) {
-    return httpRequest.post('/api/user/send_verification_code', 
-      { email, username }, 
+    return httpRequest.post(
+      '/api/user/send_verification_code', { email, username }, 
       true)
   }
 
@@ -26,10 +26,8 @@ export class UserApi {
    */
   async verifyAndLogin(email: string, code: string, username?: string) {
     const { access_token, username: responseUsername } = await httpRequest.post(
-      '/api/user/verify_and_login',
-      { email, code, username },
-      true
-    )
+      '/api/user/verify_and_login', { email, code, username },
+      true)
     setAuthToken(access_token)
     return { token: access_token, username: responseUsername }
   }

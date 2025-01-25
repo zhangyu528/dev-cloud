@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { userApi } from '@/api/user'
 import Loading from '@/components/Loading'
 import { validateEmail } from '@/utils/validation'
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 
 export default function EmailLoginPage() {
   const router = useRouter()
@@ -54,8 +54,7 @@ export default function EmailLoginPage() {
       await userApi.sendVerificationCode(email, username)
       setIsVerification(true)
     } catch (error) {
-      console.error('Error sending verification code:', error)
-      toast.error('发送验证码失败，请稍后重试')
+      toast.error(error.message)
     } finally {
       setIsLoading(false)
     }
@@ -66,7 +65,7 @@ export default function EmailLoginPage() {
     setIsLoading(true)
     setLoadingText('Verifying code...')
     try {
-      const { username: apiUsername } = await userApi.verifyAndLogin(email, verificationCode, username)
+      await userApi.verifyAndLogin(email, verificationCode, username)
       router.push('/workspace')
     } catch (error) {
       toast.error('验证码错误，请重试')
@@ -77,7 +76,6 @@ export default function EmailLoginPage() {
 
   return (
     <>
-      <Toaster position="top-center" />
       <Loading fullScreen isLoading={isLoading} text={loadingText} />
       
       <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
