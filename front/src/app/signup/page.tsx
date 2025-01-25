@@ -3,6 +3,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import toast, { Toaster } from 'react-hot-toast'
+import { validateUsername } from '@/utils/validation'
 
 export default function SignupPage() {
   const router = useRouter()
@@ -17,8 +19,19 @@ export default function SignupPage() {
     }
   }, [selectedPlan])
 
+
+  const handleContinue = () => {
+    const validationResult = validateUsername(name)
+    if (!validationResult.isValid) {
+      toast.error(validationResult.message)
+      return
+    }
+    router.push(`/login/email?username=${encodeURIComponent(name)}&from=signup`)
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+      <Toaster />
       <main className="flex-grow flex justify-center px-4 mt-48 mb-8">
         <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md dark:shadow-gray-900/30 max-w-md w-full border border-gray-200 dark:border-gray-700 h-fit">
           <h2 className="text-2xl font-bold mb-6 text-black dark:text-white text-center">
@@ -116,9 +129,7 @@ export default function SignupPage() {
               </>
             )}
             <button
-              onClick={() => {
-                router.push(`/login/email?username=${encodeURIComponent(name)}&from=signup`)
-              }}
+              onClick={handleContinue}
               disabled={!selectedPlan || !name.trim()}
               className={`w-full py-2 px-4 rounded-md transition-colors text-center block
                 ${(!selectedPlan || !name.trim())

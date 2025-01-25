@@ -7,6 +7,8 @@ import { VerificationInput } from '@/components/VerificationInput'
 import { useRouter } from 'next/navigation'
 import { userApi } from '@/api/user'
 import Loading from '@/components/Loading'
+import { validateEmail } from '@/utils/validation'
+import toast, { Toaster } from 'react-hot-toast'
 
 export default function EmailLoginPage() {
   const router = useRouter()
@@ -38,6 +40,14 @@ export default function EmailLoginPage() {
 
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validate email format
+    const { isValid, message } = validateEmail(email)
+    if (!isValid) {
+      toast.error(message)
+      return
+    }
+
     setIsLoading(true)
     setLoadingText('Sending verification code...')
     try {
@@ -45,7 +55,7 @@ export default function EmailLoginPage() {
       setIsVerification(true)
     } catch (error) {
       console.error('Error sending verification code:', error)
-      // TODO: Add error handling UI
+      toast.error('发送验证码失败，请稍后重试')
     } finally {
       setIsLoading(false)
     }
@@ -59,8 +69,7 @@ export default function EmailLoginPage() {
       const { username: apiUsername } = await userApi.verifyAndLogin(email, verificationCode, username)
       router.push('/workspace')
     } catch (error) {
-      console.error('Verification error:', error)
-      // TODO: Add error handling UI
+      toast.error('验证码错误，请重试')
     } finally {
       setIsLoading(false)
     }
@@ -68,6 +77,7 @@ export default function EmailLoginPage() {
 
   return (
     <>
+      <Toaster position="top-center" />
       <Loading fullScreen isLoading={isLoading} text={loadingText} />
       
       <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -115,7 +125,7 @@ export default function EmailLoginPage() {
                     }}
                     className="mt-4 w-full text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 
                              dark:hover:text-blue-300 text-center"
-                disabled={isLoading || email.length === 0}
+                    disabled={isLoading || email.length === 0}
                   >
                     Resend verification code
                   </button>
