@@ -28,15 +28,12 @@ def create_app(config=None):
     from extensions import jwt_init_app
     jwt_init_app(app)
 
-    from extensions import swagger_init_app
-    swagger_init_app(app)
-
     from extensions import cors_init_app
     cors_init_app(app)
 
-    # 注册蓝图
-    from api import bp_init_app
-    bp_init_app(app)
+    # 初始化RESTX API
+    from extensions import restx_init_app
+    restx_init_app(app)
 
     # # 初始化请求日志
     # from api.middleware.logging import init_request_logging
@@ -51,5 +48,5 @@ app = create_app()
 if __name__ == "__main__":
     # 启动 Flask 应用
     import os
-    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'# 允许http请求
     app.run(host='0.0.0.0', port=5000)

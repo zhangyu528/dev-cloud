@@ -5,7 +5,7 @@ import { EmailIcon } from '@/components/icons/EmailIcon'
 import { useEffect, useRef, useState } from 'react'
 import { VerificationInput } from '@/components/VerificationInput'
 import { useRouter } from 'next/navigation'
-import { userApi } from '@/api/user'
+import { verifyApi } from '@/api/verify'
 import Loading from '@/components/Loading'
 import { validateEmail } from '@/utils/validation'
 import toast from 'react-hot-toast'
@@ -51,10 +51,10 @@ export default function EmailLoginPage() {
     setIsLoading(true)
     setLoadingText('Sending verification code...')
     try {
-      await userApi.sendVerificationCode(email, username)
+      await verifyApi.sendVerificationCode(email)
       setIsVerification(true)
     } catch (error) {
-      toast.error(error.message)
+      toast.error((error as Error).message || '发生未知错误')
     } finally {
       setIsLoading(false)
     }
@@ -65,10 +65,10 @@ export default function EmailLoginPage() {
     setIsLoading(true)
     setLoadingText('Verifying code...')
     try {
-      await userApi.verifyAndLogin(email, verificationCode, username)
+      await verifyApi.verifyAndLogin(email, verificationCode, username)
       router.push('/workspace')
     } catch (error) {
-      toast.error('验证码错误，请重试')
+      toast.error((error as Error).message || '发生未知错误')
     } finally {
       setIsLoading(false)
     }

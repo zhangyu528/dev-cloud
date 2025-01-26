@@ -1,11 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
-import logging.config
-
 # 创建全局 SQLAlchemy 实例
 db = SQLAlchemy()
 
+
 def logging_init_app(app):
     """Initialize logging with the Flask app"""
+    import logging.config
     if 'LOGGING_CONFIG' in app.config:
         logging.config.dictConfig(app.config['LOGGING_CONFIG'])
 
@@ -26,14 +26,30 @@ def jwt_init_app(app):
     from flask_jwt_extended import JWTManager
     jwt = JWTManager(app)
 
-def swagger_init_app(app):
-    """Initialize Swagger with the Flask app"""
-    from flasgger import Swagger
-    swagger = Swagger(app, 
-                     template=app.config['SWAGGER_TEMPLATE'],
-                     config=app.config['SWAGGER_CONFIG'])
 
 def cors_init_app(app):
     """Initialize CORS with the Flask app"""
     from flask_cors import CORS
     cors = CORS(app, **app.config['CORS_CONFIG'])
+
+def restx_init_app(app):
+    """Initialize RESTX API with the Flask app"""
+    from flask_restx import Api
+    api = Api(
+        app,
+        version='1.0',
+        title='DevCloud API',
+        description='开发者云平台接口文档',
+        doc='/docs',
+        security='Bearer Auth',
+        authorizations={
+            'Bearer Auth': {
+                'type': 'apiKey', 
+                'in': 'header',
+                'name': 'Authorization'
+            }
+        }
+    )
+    # 延迟导入避免循环依赖
+    from api import register_namespaces  
+    register_namespaces(api)

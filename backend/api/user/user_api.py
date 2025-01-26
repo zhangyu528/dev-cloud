@@ -1,64 +1,73 @@
-from flask import Blueprint, request, jsonify
+from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.user import User
-from ..status_codes import get_server_error_response
 
+# 初始化API命名空间
+user_ns = Namespace('user', description='用户相关操作', path='/api/user')
 
-user_bp = Blueprint('user_bp', __name__)
+# 响应模型定义
+user_model = user_ns.model('User', {
+    'id': fields.String(description='用户ID'),
+    'username': fields.String(required=True, description='用户名'),
+    'email': fields.String(required=True, description='邮箱'),
+    'is_active': fields.Boolean(description='激活状态'),
+    'created_at': fields.DateTime(description='创建时间'),
+    'avatar_url': fields.String(description='头像地址')
+})
 
-@user_bp.route('/me', methods=['GET'])
-@jwt_required()
-def get_current_user():
-    try:
-        # Get user identity from JWT
+    # 注意：这里只需要定义需要暴露的字段
+    # 数据库中的敏感字段（如password_hash）不会通过此模型暴露
+
+@user_ns.route('/me')
+class CurrentUser(Resource):
+    @user_ns.doc(security=['jwt'], description='获取当前登录用户信息')
+    @user_ns.marshal_with(user_model)
+    @user_ns.response(200, '成功', user_model)
+    @user_ns.response(401, '无效令牌')
+    @user_ns.response(404, '用户不存在')
+    @jwt_required()
+    def get(self):
+        """获取当前用户详细信息"""
         current_user_id = get_jwt_identity()
-        if not current_user_id:
-            return jsonify({}), 400, {'X-Message': 'Invalid token'}
-
-        # Query user from database
         user = User.query.get(current_user_id)
+        
         if not user:
-            return jsonify({}), 400, {'X-Message': 'User not found'}
-        #
-        # Return user information
-        user_data = {
-            'id': user.id,
+            user_ns.abort(404, "用户不存在")
+            
+        # 使用安全的数据转换方法
+        return {
+            'id': str(user.id),
             'username': user.username,
             'email': user.email,
             'is_active': user.is_active,
             'created_at': user.created_at.isoformat(),
-            'github_profile': user.github_profile,
-            'avatar_url': user.avatar_url
-        }
-        return jsonify(user_data), 200
-    except Exception as e:
-        return get_server_error_response()
+            'avatar_url': user.avatar_url or ''
+        }, 200
 
 
-@user_bp.route('/verify-token', methods=['POST'])
-@jwt_required()
-def verify_token():
-    try:
-        # Verify JWT token is valid
-        current_user = get_jwt_identity()
-        if not current_user:
-            return jsonify({}), 400, {'X-Message': 'Invalid token'}
-
-        # Return verification result
-        return jsonify({}), 200
-    except Exception as e:
-        return get_server_error_response()
+@user_ns.route('/verify-token')
+class TokenVerification(Resource):
+    @user_ns.doc(security=['jwt'], description='验证JWT令牌有效性')
+    @user_ns.response(200, '验证成功')
+    @user_ns.response(401, '无效令牌')
+    @jwt_required()
+    def post(self):
+        """验证JWT令牌有效性"""
+        # JWT装饰器已自动完成令牌验证
+        # 有效令牌才会进入该方法，直接返回验证成功
+        return None, 200
 
 
-@user_bp.route('/logout', methods=['POST'])
-@jwt_required()
-def logout():
-    try:
-        # Verify JWT token is valid
-        current_user = get_jwt_identity()
-        if not current_user:
-            return jsonify({}), 400, {'X-Message': 'Invalid token'}
-        
-        return jsonify({}), 200
-    except Exception as e:
-        return get_server_error_response()
+@user_ns.route('/logout')
+class UserLogout(Resource):
+    @user_ns.doc(security=['jwt'], description='用户注销接口')
+    @user_ns.response(200, '注销成功')
+    @user_ns.response(401, '无效令牌')
+    @jwt_required()
+    def post(self):
+        """处理用户注销请求
+        (依赖JWT自动验证机制，无需手动检查令牌有效性)
+        """
+        # 框架已通过@jwt_required()自动验证令牌有效性
+        # 直接返回成功响应，前端应清除本地存储的令牌
+        return None, 200

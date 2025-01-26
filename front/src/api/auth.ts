@@ -15,7 +15,7 @@ export class AuthApi {
       state,
       timestamp: Date.now()
     }))
-    window.location.href = `${API_BASE_URL}/api/auth/github?state=${state}`
+    window.location.href = `${API_BASE_URL}/auth/github/login?state=${state}`
   }
 
   /**
@@ -41,7 +41,7 @@ export class AuthApi {
     }
     sessionStorage.removeItem('github_oauth_state')
 
-    const response = await httpRequest.get(`/api/auth/github/exchange?code=${code}&state=${state}`)
+    const response = await httpRequest.get(`/auth/github/callback?code=${code}&state=${state}`)
     
     setAuthToken(response.token)
     return {
