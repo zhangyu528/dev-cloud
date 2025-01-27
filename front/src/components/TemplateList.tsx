@@ -23,7 +23,7 @@ export function TemplateList({ templates }: TemplateListProps) {
           key={index}
           template={{
             name: template.name,
-            icon: template.icon
+            icon: `/icons/templates/${template.name.toLowerCase()}.svg`
           }}
         />
       ))}

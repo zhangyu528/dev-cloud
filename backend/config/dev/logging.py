@@ -9,7 +9,7 @@ class DevLoggingConfig:
         'formatters': {
             'colored': {
                 '()': 'colorlog.ColoredFormatter',
-                'format': '%(log_color)s%(asctime)s %(levelname)-8s %(name)s %(reset)s%(message)s',
+                'format': '%(log_color)s%(asctime)s %(levelname)-8s %(name)s %(message)s%(reset)s',
                 'log_colors': {
                     'DEBUG': 'cyan',
                     'INFO': 'green',

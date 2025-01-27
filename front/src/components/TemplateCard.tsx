@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 interface Template {
   name: string;
   icon: string;
@@ -11,7 +13,11 @@ interface TemplateCardProps {
 
 export function TemplateCard({ template }: TemplateCardProps) {
   return (
-    <div className="flex flex-col items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+    <Link
+      href={`/new/${template.name}`}
+      passHref
+      className="flex flex-col items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+    >
       <img 
         src={template.icon} 
         alt={template.name}
@@ -20,6 +26,6 @@ export function TemplateCard({ template }: TemplateCardProps) {
       <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
         {template.name}
       </span>
-    </div>
+    </Link>
   );
 }
