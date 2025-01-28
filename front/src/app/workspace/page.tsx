@@ -1,13 +1,18 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { TemplateList,Template } from '@/components/TemplateList';
 import Loading from '@/components/Loading';
+
+import { TemplateList,Template } from '@/components/TemplateList';
 import { templatesApi } from '@/api/templates';
+
+import  WorkspaceCard from '@/components/WorkspaceCard';
+import { workspacesApi, Workspace} from '@/api/workspaces';
 
 export default function WorkspacePage() {
   const [loading, setLoading] = useState(false);
   const [templates, setTemplates] = useState<Template[]>([]);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -23,6 +28,21 @@ export default function WorkspacePage() {
     };
 
     fetchTemplates();
+
+    const fetchWorkspaces = async () => {
+      setLoading(true);
+      try {
+        const workspaces = await workspacesApi.getWorkspaces();
+        setWorkspaces(workspaces);
+      } catch (error) {
+        console.error('Failed to fetch workspaces:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWorkspaces();
+
   }, []);
 
   if (loading) {
@@ -48,6 +68,19 @@ export default function WorkspacePage() {
         </h2>
         <TemplateList templates={templates} />
       </div>
+
+      {/* workspace card */}
+      {workspaces.length > 0 && (
+        <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-8">
+        <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+          Your Workspace
+        </h2>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <WorkspaceCard name={workspaces[0].name} templateName={workspaces[0].template} onClick={() => {}} />
+        </div>
+      </div>
+      )}
+      
     </div>
   );
 }

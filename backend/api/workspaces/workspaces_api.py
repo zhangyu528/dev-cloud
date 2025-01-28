@@ -4,6 +4,7 @@ from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.workspace import Workspace
 from extensions import db
+from flask import current_app
 
 workspace_ns = Namespace('workspaces', description='工作区管理接口', path='/api/workspaces')
 create_request_model = workspace_ns.model('CreateRequest', {
@@ -41,5 +42,9 @@ class WorkspaceList(Resource):
     @jwt_required()
     def get(self):
         """获取工作区列表"""
-        workspaces = Workspace.query.filter_by(owner_id=get_jwt_identity()).all()
+        try:
+            workspaces = Workspace.query.filter_by(owner_id=get_jwt_identity()).all()
+        except Exception as e:
+            current_app.logger.warn(e)
+            return "fefefef", 500
         return workspaces

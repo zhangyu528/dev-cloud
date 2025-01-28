@@ -1,11 +1,25 @@
 'use client'
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { workspacesApi } from '@/api/workspaces';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 
 export default function NewWorkspacePage() {
-  const { template } = useParams();
-  const templateName = Array.isArray(template) ? template[0] : template;
+  const { template: templateName } = useParams() as { template: string };
+  console.debug(useParams());
   const templateIcon = `${templateName}.svg`;
+  const router = useRouter();
+  
+  const handleCreateWorkspace = async () => {
+    // 创建工作空间
+    try {
+      await workspacesApi.createWorkspace('New Workspace', templateName);
+      router.push('/workspace');
+    } catch (error) {
+      toast.error((error as Error).message || 'Failed to create workspace');
+    }
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -52,6 +66,7 @@ export default function NewWorkspacePage() {
             </Link>
             <button
               className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors dark:bg-blue-600 dark:hover:bg-blue-700"
+              onClick={handleCreateWorkspace}
             >
               Create
             </button>
