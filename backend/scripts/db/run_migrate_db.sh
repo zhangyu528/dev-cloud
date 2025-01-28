@@ -22,12 +22,9 @@ TEMP_SCRIPT=$(mktemp)
 cat <<EOF > $TEMP_SCRIPT
 from flask import Flask
 from flask_migrate import Migrate
-from app import create_app
-from config import DevelopmentConfig
+from app import app
 import os
 import sys
-
-app = create_app(DevelopmentConfig)
 
 with app.app_context():
     # 配置 migrations 目录路径

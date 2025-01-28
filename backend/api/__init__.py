@@ -2,6 +2,7 @@ from .user import user_ns
 from .verify import verify_ns
 from .templates import templates_ns
 from .auth import github_ns
+from .workspaces import workspace_ns
 
 def register_namespaces(api):
     """注册所有API命名空间"""    
@@ -9,3 +10,4 @@ def register_namespaces(api):
     api.add_namespace(templates_ns)
     api.add_namespace(user_ns)
     api.add_namespace(verify_ns)
+    api.add_namespace(workspace_ns)
