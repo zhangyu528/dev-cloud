@@ -1,6 +1,6 @@
-export function SystemIcon() {
+export function SystemIcon({ className = "w-4 h-4" }) {
   return (
-    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

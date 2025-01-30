@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { userApi } from '@/api/user';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import Loading from '@/components/Loading';
-import { HomeIcon, LogOutIcon } from './icons/MenuIcons';
+import { HomeIcon, LogoutIcon } from '@/components/icons';
 
 interface UserMenuProps {
   avatarUrl?: string;
@@ -130,7 +130,7 @@ export default function UserMenu({ avatarUrl, email, username }: UserMenuProps) 
               disabled={isLoggingOut}
             >
               <span>Log Out</span>
-              <LogOutIcon className="w-4 h-4" />
+              <LogoutIcon className="w-4 h-4" />
             </button>
           </div>
         </div>

@@ -1,8 +1,5 @@
-interface LogoProps {
-  className?: string;
-}
 
-export function Logo({ className }: LogoProps) {
+export function Logo({ className = "w-8 h-8" }) {
   return (
     <svg
       width="32"

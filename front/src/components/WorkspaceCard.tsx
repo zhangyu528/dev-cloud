@@ -14,19 +14,11 @@ export default function WorkspaceCard({ name, templateName, onClick }: Workspace
                 className="flex items-center cursor-pointer"
                 onClick={onClick}
             >
-                <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center"
-                    style={{
-                        backgroundColor: '#f0f0f0',
-                        marginRight: '16px',
-                    }}
-                >
                 <img 
                         src={`/icons/templates/${templateName.toLowerCase()}.svg`}
                         alt={name}
                         className="w-12 h-12 mb-2"
-                    />
-                </div>
+                />
                 <div>
                     <h3 className="text-lg font-semibold">{name}</h3>
                     <p className="text-gray-600 dark:text-gray-400">

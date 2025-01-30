@@ -3,12 +3,15 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Logo } from './icons/Logo'
+import Button from '@/components/buttons/Button';
+import { useRouter } from 'next/navigation'
 
 export default function Header() {
   const pathname = usePathname()
-  
+  const router = useRouter()
+
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-md z-50">
+    <nav className=" bg-white dark:bg-gray-800 shadow-md z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex-shrink-0">
@@ -20,12 +23,13 @@ export default function Header() {
             </Link>
           </div>
           <div className="flex space-x-4">
-            <Link
-              href={pathname?.startsWith('/login') ? '/signup' : '/login'}
-              className="text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 px-3 py-2 rounded-md"
+            <Button
+              onClick={() => router.push("/login")}
+              variant="primary"
+              size="md"
             >
-              {pathname?.startsWith('/login') ? 'Sign Up' : 'Log In'}
-            </Link>
+              Get Started
+            </Button>
           </div>
         </div>
       </div>

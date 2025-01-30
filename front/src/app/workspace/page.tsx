@@ -9,6 +9,7 @@ import { templatesApi } from '@/api/templates';
 import  WorkspaceCard from '@/components/WorkspaceCard';
 import { workspacesApi, Workspace} from '@/api/workspaces';
 
+
 export default function WorkspacePage() {
   const [loading, setLoading] = useState(false);
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -60,27 +61,27 @@ export default function WorkspacePage() {
           Welcome to Project IDX, a new web-based development workspace
         </p>
       </div>
-
-      {/* Right Section - Templates */}
-      <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-8">
-        <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-          Choose a Template
-        </h2>
-        <TemplateList templates={templates} />
-      </div>
-
-      {/* workspace card */}
-      {workspaces.length > 0 && (
+      <div className="flex flex-col justify-center gap-8">
+        {/* Right Section - Templates */}
         <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-8">
-        <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-          Your Workspace
-        </h2>
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-          <WorkspaceCard name={workspaces[0].name} templateName={workspaces[0].template} onClick={() => {}} />
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+            Choose a Template
+          </h2>
+          <TemplateList templates={templates} />
         </div>
+
+        {/* workspace card */}
+        {workspaces.length > 0 && (
+          <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-8">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+            Your Workspace
+          </h2>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <WorkspaceCard name={workspaces[0].name} templateName={workspaces[0].template} onClick={() => {}} />
+          </div>
+        </div>
+        )}
       </div>
-      )}
-      
     </div>
   );
 }
