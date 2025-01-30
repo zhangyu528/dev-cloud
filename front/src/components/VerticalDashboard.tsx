@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ProjectIcon, SystemIcon, MenuIcon } from '@/components/icons';
+import { BsPersonWorkspace } from "react-icons/bs";
+import { IoMdSettings } from "react-icons/io";
 
 interface MenuItem {
   name: string;
@@ -15,14 +16,14 @@ export default function VerticalDashboard() {
   const menuItems: MenuItem[] = [
     { 
       name: '工作区', 
-      href: '/workspace', 
-      icon: <ProjectIcon className="w-6 h-6" />
+      href: '/workspace',
+      icon: <BsPersonWorkspace />
     },
     {
       name: '系统设置',
       href: '/settings',
-      icon: <SystemIcon className="w-6 h-6" />
-    },
+      icon: <IoMdSettings />
+    }
   ];
 
   return (

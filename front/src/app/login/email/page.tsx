@@ -1,7 +1,8 @@
 'use client'
 import React from 'react'
 import Link from 'next/link'
-import { EmailIcon } from '@/components/icons/EmailIcon'
+import { MdEmail } from "react-icons/md";
+
 import { useEffect, useRef, useState } from 'react'
 import { VerificationInput } from '@/components/VerificationInput'
 import { useRouter } from 'next/navigation'
@@ -146,7 +147,7 @@ export default function EmailLoginPage() {
                          disabled:cursor-not-allowed dark:disabled:bg-gray-500 dark:disabled:hover:bg-gray-500"
                 disabled={isLoading || email.length === 0}
               >
-                {!isVerification && <EmailIcon />}
+                {!isVerification && <MdEmail className='w-5 h-5 mr-3'/>}
                 {isVerification ? 'Verify' : 'Continue with Email'}
               </button>
             </div>

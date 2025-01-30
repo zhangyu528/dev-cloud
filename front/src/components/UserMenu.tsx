@@ -7,7 +7,8 @@ import { useRouter } from 'next/navigation';
 import { userApi } from '@/api/user';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import Loading from '@/components/Loading';
-import { HomeIcon, LogoutIcon } from '@/components/icons';
+import { RiHomeLine } from "react-icons/ri";
+import { IoIosLogOut } from "react-icons/io";
 
 interface UserMenuProps {
   avatarUrl?: string;
@@ -121,7 +122,7 @@ export default function UserMenu({ avatarUrl, email, username }: UserMenuProps) 
               className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
             >
               <span>Home Page</span>
-              <HomeIcon className="w-4 h-4" />
+              <RiHomeLine className="w-4 h-4" />
             </Link>
             <div className="border-t border-gray-200 dark:border-gray-600"></div>
             <button
@@ -130,7 +131,7 @@ export default function UserMenu({ avatarUrl, email, username }: UserMenuProps) 
               disabled={isLoggingOut}
             >
               <span>Log Out</span>
-              <LogoutIcon className="w-4 h-4" />
+              <IoIosLogOut className="w-4 h-4" />
             </button>
           </div>
         </div>

@@ -1,7 +1,9 @@
 'use client'
 
 import React from 'react'
-import { EmailIcon, GithubIcon, GitlabIcon, BitbucketIcon } from '@/components/icons'
+import { GitlabIcon, BitbucketIcon } from '@/components/icons'
+import { FaGithub } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 import { authApi } from '@/api/auth'
 import Button  from '@/components/buttons/Button'
 import { useRouter } from 'next/navigation'
@@ -19,7 +21,7 @@ export default function LoginPage() {
 
           <div className="space-y-3 max-w-sm mx-auto">
             <Button variant="primary"
-                    icon={<EmailIcon />}
+                    icon={<MdEmail className='w-5 h-5' />}
                     className="h-14 w-full"
                     onClick={() =>router.push('/login/email')}>Continue with Email</Button>
             <button 
@@ -27,7 +29,7 @@ export default function LoginPage() {
               className="w-full flex items-center justify-center px-4 py-4 rounded-md 
                     text-base text-white bg-[#24292e] hover:bg-[#2f363d] 
                     dark:bg-[#333] dark:hover:bg-[#444] transition-colors">
-              <GithubIcon />
+              <FaGithub className='w-5 h-5 mr-3' />
               Continue with GitHub
             </button>
             {/* <button className="w-full flex items-center justify-center px-4 py-4 rounded-md 

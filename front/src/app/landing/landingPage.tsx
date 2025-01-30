@@ -47,7 +47,7 @@ export default function LandingPage() {
 
         {/* Static section for Dev Cloud (no motion) */}
         <div className="max-w-xl mx-auto pt-10 px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xl text-gray-600 dark:text-gray-400">
+          <p className="text-center text-md text-gray-600 dark:text-gray-400">
             Dev Cloud is a powerful workspace for full-stack, multiplatform app development in the cloud. It supports a wide range of frameworks, languages, and services, streamlining your development workflow so you can efficiently build and ship apps across platforms with speed, ease, and quality.
           </p>
         </div>

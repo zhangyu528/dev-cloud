@@ -50,7 +50,7 @@ const Button: FC<ButtonProps> = ({
       disabled={disabled}
       {...props}
     >
-      {icon && <span className={children ? 'mr-2' : ''}>{icon}</span>}
+      {icon && <span className={children ? 'mr-3' : ''}>{icon}</span>}
       {children}
     </button>
   );

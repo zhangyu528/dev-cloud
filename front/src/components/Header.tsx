@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Logo } from './icons/Logo'
+import { IoMdCube } from "react-icons/io";
 import Button from '@/components/buttons/Button';
 import { useRouter } from 'next/navigation'
 
@@ -16,7 +16,7 @@ export default function Header() {
         <div className="flex justify-between h-16 items-center">
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center space-x-3">
-              <Logo />
+              <IoMdCube className="w-6 h-6 text-gray-800 dark:text-white" />
               <span className="text-xl font-semibold text-gray-800 dark:text-white">
                 Dev Cloud
               </span>

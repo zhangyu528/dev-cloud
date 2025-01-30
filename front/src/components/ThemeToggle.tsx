@@ -2,9 +2,9 @@
 
 import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
-import { SystemIcon } from './icons/SystemIcon';
-import { LightIcon } from './icons/LightIcon';
-import { DarkIcon } from './icons/DarkIcon';
+import { GrSystem } from "react-icons/gr";
+import { CiLight } from "react-icons/ci";
+import { MdDarkMode } from "react-icons/md";
 
 export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
@@ -17,9 +17,9 @@ export function ThemeToggle() {
   if (!mounted) return null;
 
   const themes = [
-    { value: 'system', icon: <SystemIcon /> },
-    { value: 'light', icon: <LightIcon /> },
-    { value: 'dark', icon: <DarkIcon /> }
+    { value: 'system', icon: <GrSystem /> },
+    { value: 'light', icon: <CiLight /> },
+    { value: 'dark', icon: <MdDarkMode /> }
   ];
 
   return (
