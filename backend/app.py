@@ -42,11 +42,9 @@ def create_app(config=None):
     logger.info("App Extensions initialized")
     return app
 
-logger.info("App Factory loaded")
-app = create_app()
-
 if __name__ == "__main__":
     # 启动 Flask 应用
     import os
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'# 允许http请求
+    app = create_app()
     app.run(host='0.0.0.0', port=5000)

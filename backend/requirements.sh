@@ -1,14 +1,12 @@
 #!/bin/bash
 
 # 获取脚本所在目录
-SCRIPT_DIR_REQ=$(cd "$(dirname "$0")"; pwd)
-# 项目根目录：使用 Git 获取项目的根目录
-PROJECT_DIR=$(cd "$SCRIPT_DIR_REQ" && git rev-parse --show-toplevel)
+PROJECT_DIR=$(cd "$(dirname "$0")"; pwd)
 
 install_requirements() {
     echo "Installing project dependencies..."
     # 安装项目依赖
-    python -m pip install -r "$PROJECT_DIR/backend/requirements.txt" -q || {
+    python -m pip install -r "$PROJECT_DIR/requirements.txt" -q || {
         echo "Failed to install dependencies."
         exit 1
     }
@@ -18,7 +16,7 @@ install_requirements() {
 update_requirements() {
     echo "Updating project dependencies..."
     # 更新项目依赖
-    python -m pip install -r "$PROJECT_DIR/backend/requirements.txt" --upgrade -q || {
+    python -m pip install -r "$PROJECT_DIR/requirements.txt" --upgrade -q || {
         echo "Failed to update dependencies."
         exit 1
     }

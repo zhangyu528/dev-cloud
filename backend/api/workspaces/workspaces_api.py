@@ -28,7 +28,16 @@ class WorkspaceCreate(Resource):
         workspace.owner_id = get_jwt_identity()
         db.session.add(workspace)
         db.session.commit()
-        return None, 200
+        
+        # 调用docker service运行容器
+        from container.container_service import run_docker_container
+        try:
+            run_docker_container(workspace.name, workspace.template)
+        except Exception as e:
+            current_app.logger.error(f"Failed to start docker container: {str(e)}")
+            return {"message": "Workspace created but failed to start container"}, 201
+            
+        return {"message": "Workspace created and container started successfully"}, 200
 
 workspace_model = workspace_ns.model('Workspace', {
     'id': fields.String(description='工作区ID'),

@@ -12,13 +12,10 @@ get_script_dir() {
 }
 
 # 获取脚本所在目录
-SCRIPT_DIR_VEVN=$(get_script_dir)
-
-# 项目根目录：使用 Git 获取项目的根目录
-PROJECT_DIR=$(cd "$SCRIPT_DIR_VEVN" && git rev-parse --show-toplevel)
+PROJECT_DIR=$(get_script_dir)
 
 # 虚拟环境目录（根据实际路径修改）
-VENV_DIR="$PROJECT_DIR/backend/venv"
+VENV_DIR="$PROJECT_DIR/venv"
 
 # 创建虚拟环境的函数
 create_venv() {

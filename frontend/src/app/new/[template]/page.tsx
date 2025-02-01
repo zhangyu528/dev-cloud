@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { workspacesApi } from '@/api/workspaces';
@@ -7,14 +8,19 @@ import { toast } from 'react-hot-toast';
 
 export default function NewWorkspacePage() {
   const { template: templateName } = useParams() as { template: string };
-  console.debug(useParams());
   const templateIcon = `${templateName}.svg`;
   const router = useRouter();
   
+  const [workspaceName, setWorkspaceName] = useState('');
+
   const handleCreateWorkspace = async () => {
-    // 创建工作空间
+    if (!workspaceName.trim()) {
+      toast.error('Please enter a workspace name');
+      return;
+    }
+    //创建工作空间
     try {
-      await workspacesApi.createWorkspace('New Workspace', templateName);
+      await workspacesApi.createWorkspace(workspaceName, templateName);
       router.push('/workspace');
     } catch (error) {
       toast.error((error as Error).message || 'Failed to create workspace');
@@ -53,6 +59,8 @@ export default function NewWorkspacePage() {
               type="text"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               placeholder="Enter workspace name"
+              value={workspaceName}
+              onChange={(e) => setWorkspaceName(e.target.value)}
             />
           </div>
 
