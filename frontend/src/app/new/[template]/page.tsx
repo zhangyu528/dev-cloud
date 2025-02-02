@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { workspacesApi } from '@/api/workspaces';
@@ -12,15 +12,22 @@ export default function NewWorkspacePage() {
   const router = useRouter();
   
   const [workspaceName, setWorkspaceName] = useState('');
+  const [generatedName, setGeneratedName] = useState('');
+
+  const generateWorkspaceName = (name: string) => {
+    let baseName = name.trim().replace(/\s+/g, '-');
+    let randomNumber = Math.floor(Math.random() * 10000000); // 生成 7 位数字
+    return `${baseName}-${randomNumber.toString().padStart(7, '0')}`; // 确保是7位数字
+  };
+
+  useEffect(() => {
+    setGeneratedName(generateWorkspaceName(workspaceName));
+  }, [workspaceName]);
 
   const handleCreateWorkspace = async () => {
-    if (!workspaceName.trim()) {
-      toast.error('Please enter a workspace name');
-      return;
-    }
     //创建工作空间
     try {
-      await workspacesApi.createWorkspace(workspaceName, templateName);
+      await workspacesApi.createWorkspace(generatedName, templateName);
       router.push('/workspace');
     } catch (error) {
       toast.error((error as Error).message || 'Failed to create workspace');
@@ -62,6 +69,11 @@ export default function NewWorkspacePage() {
               value={workspaceName}
               onChange={(e) => setWorkspaceName(e.target.value)}
             />
+            {workspaceName && (
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                Generated name: {generatedName}
+              </p>
+            )}
           </div>
 
           {/* 区域4：底部按钮 */}
