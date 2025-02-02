@@ -30,9 +30,9 @@ class WorkspaceCreate(Resource):
         db.session.commit()
         
         # 调用docker service运行容器
-        from container.container_service import run_docker_container
+        from container.container_service import create_container
         try:
-            run_docker_container(workspace.name, workspace.template)
+            create_container(workspace.name, workspace.template)
         except Exception as e:
             current_app.logger.error(f"Failed to start docker container: {str(e)}")
             return {"message": "Workspace created but failed to start container"}, 201
