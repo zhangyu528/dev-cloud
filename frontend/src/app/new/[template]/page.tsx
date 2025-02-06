@@ -28,7 +28,7 @@ export default function NewWorkspacePage() {
     //创建工作空间
     try {
       await workspacesApi.createWorkspace(generatedName, templateName);
-      router.push('/workspace');
+      router.push('/board');
     } catch (error) {
       toast.error((error as Error).message || 'Failed to create workspace');
     }
@@ -79,7 +79,7 @@ export default function NewWorkspacePage() {
           {/* 区域4：底部按钮 */}
           <div className="flex justify-between items-center mt-6">
             <Link 
-              href="/workspace"
+              href="/board"
               className="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
             >
               &larr; Back

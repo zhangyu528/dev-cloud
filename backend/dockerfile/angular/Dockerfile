@@ -1,4 +1,3 @@
-#docker build -t <image_name>:<tag> -f <path_to_dockerfile> <context>
 
 # 使用 Node.js 作为基础镜像
 FROM node:18
@@ -9,9 +8,8 @@ ENV NODE_ENV=development
 # 安装 Angular CLI（全局安装）
 RUN npm install -g @angular/cli
 
-# 进入 workspace 项目目录
-WORKDIR /workspace
-VOLUME ["/workspace"]
+# 进入 user 目录
+WORKDIR /home/user
 # 公开端口
 EXPOSE 4200
 

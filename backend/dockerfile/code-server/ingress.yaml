@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: code-server-ingress
+spec:
+  rules:
+    - host: mycode.local  # 你的域名
+      http:
+        paths:
+          - path: /projects/{projectName}/code
+            pathType: ImplementationSpecific  # 使用具体实现的路径类型
+            backend:
+              service:
+                name: code-server-service  # 所有项目共享一个服务
+                port:
+                  number: 8080  # Code-Server 服务的端口

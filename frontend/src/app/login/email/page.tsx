@@ -67,7 +67,7 @@ export default function EmailLoginPage() {
     setLoadingText('Verifying code...')
     try {
       await verifyApi.verifyAndLogin(email, verificationCode, username)
-      router.push('/workspace')
+      router.push('/board')
     } catch (error) {
       toast.error((error as Error).message || '发生未知错误')
     } finally {

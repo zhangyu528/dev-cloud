@@ -2,13 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Loading from '@/components/Loading';
-
-import { TemplateList,Template } from '@/components/TemplateList';
+import { TemplateList, Template } from '@/components/TemplateList';
 import { templatesApi } from '@/api/templates';
-
-import  WorkspaceCard from '@/components/WorkspaceCard';
-import { workspacesApi, Workspace} from '@/api/workspaces';
-
+import WorkspacesCard from '@/components/WorkspacesCard';
+import { workspacesApi, Workspace } from '@/api/workspaces';
 
 export default function WorkspacePage() {
   const [loading, setLoading] = useState(false);
@@ -43,7 +40,6 @@ export default function WorkspacePage() {
     };
 
     fetchWorkspaces();
-
   }, []);
 
   if (loading) {
@@ -70,16 +66,27 @@ export default function WorkspacePage() {
           <TemplateList templates={templates} />
         </div>
 
-        {/* workspace card */}
+        {/* Workspaces Card */}
         {workspaces.length > 0 && (
           <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-8">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-            Your Workspace
-          </h2>
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-            <WorkspaceCard name={workspaces[0].name} templateName={workspaces[0].template} onClick={() => {}} />
+            <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+              Your Workspaces
+            </h2>
+            <WorkspacesCard workspaces={workspaces} onWorkspaceDelete={
+              async (workspaceId) => {
+                setLoading(true);
+                try {
+                  await workspacesApi.deleteWorkspace(workspaceId);
+                  setWorkspaces(workspaces.filter(workspace => workspace.id!== workspaceId));
+                } catch (error) {
+                  console.error('Failed to delete workspace:', error);
+                } finally {
+                  setLoading(false);
+                }
+
+              }
+            } />
           </div>
-        </div>
         )}
       </div>
     </div>

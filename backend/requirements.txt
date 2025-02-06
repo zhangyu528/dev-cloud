@@ -2,6 +2,8 @@
 python-dotenv==0.21.0   # 加载环境变量（如 Docker 主机配置等）
 celery==5.2.7           # 任务队列，用于处理异步任务（如启动多个容器等）
 
+kubernetes==25.3.0      # Kuber
+
 
 # Web 框架核心
 Flask==2.1.2                # Web 应用框架

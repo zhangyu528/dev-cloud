@@ -15,6 +15,10 @@ export class WorkspacesApi {
     async getWorkspaces(): Promise<Workspace[]> {
         return httpRequest.get('/api/workspaces/list')
     }
+
+    async deleteWorkspace(id: number) {
+        return httpRequest.post('/api/workspaces/delete', { id })
+    }
 }
 
 
