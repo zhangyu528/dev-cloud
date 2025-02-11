@@ -6,11 +6,14 @@ import { TemplateList, Template } from '@/components/TemplateList';
 import { templatesApi } from '@/api/templates';
 import WorkspacesCard from '@/components/WorkspacesCard';
 import { workspacesApi, Workspace } from '@/api/workspaces';
+import { useRouter } from 'next/navigation'
 
-export default function WorkspacePage() {
+export default function BoardPage() {
   const [loading, setLoading] = useState(false);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -72,7 +75,7 @@ export default function WorkspacePage() {
             <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
               Your Workspaces
             </h2>
-            <WorkspacesCard workspaces={workspaces} onWorkspaceDelete={
+            <WorkspacesCard workspaces={workspaces} onWorkspaceDeleteClick={
               async (workspaceId) => {
                 setLoading(true);
                 try {
@@ -83,7 +86,10 @@ export default function WorkspacePage() {
                 } finally {
                   setLoading(false);
                 }
-
+              }
+            } onWorkspaceClick={
+              (workspace_name) => {
+                router.push(`/${workspace_name}`);
               }
             } />
           </div>

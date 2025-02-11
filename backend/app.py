@@ -47,4 +47,4 @@ if __name__ == "__main__":
     import os
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'# 允许http请求
     app = create_app()
-    app.run(host='0.0.0.0', port=3030)
+    app.run(host='0.0.0.0', port=5000)

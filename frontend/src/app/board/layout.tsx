@@ -7,7 +7,7 @@ import { userApi } from '@/api/user';
 import VerticalDashboard from '@/components/VerticalDashboard';
 import Footer from '@/components/Footer';
 
-export default function WorkspaceLayout({
+export default function BoardLayout({
   children,
 }: {
   children: React.ReactNode

@@ -1,7 +1,7 @@
 // API configuration for different environments
 const apiConfig = {
   development: {
-    baseUrl: 'http://localhost:3030'
+    baseUrl: 'http://localhost:5000'
   },
   production: {
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL

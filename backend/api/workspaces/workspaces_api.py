@@ -30,7 +30,8 @@ class WorkspaceCreate(Resource):
         db.session.commit()
     
         from kubernetes_pod.pod_manager import KubernetesPodManager
-        mng = KubernetesPodManager(template_name=workspace.template, project_name=workspace.name)
+        mng = KubernetesPodManager(template_name=workspace.template, 
+                                   project_name=workspace.name)
         try:
             mng.create_pod_instance()
         except Exception as e:
@@ -76,7 +77,8 @@ class DeleteWorkspace(Resource):
             db.session.commit()
 
             from kubernetes_pod.pod_manager import KubernetesPodManager
-            mng = KubernetesPodManager(template_name=workspace.template, project_name=workspace.name)
+            mng = KubernetesPodManager(template_name=workspace.template, 
+                                       project_name=workspace.name)
             mng.delete_pod_instance()
         except Exception as e:
             current_app.logger.warning(e)
