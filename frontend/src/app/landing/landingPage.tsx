@@ -4,46 +4,19 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import Button from '@/components/buttons/Button';
 import { IoMdCode, IoMdRocket, IoMdFlash } from 'react-icons/io';
-import { FaAngular, FaFolder, FaFile } from 'react-icons/fa';
 import Image from 'next/image';
+import { InteractiveGradientOverlay } from '@/components/InteractiveGradientOverlay';
 
 // Ensure framer-motion dependency is installed:
 // npm install framer-motion
-
-function AnimatedBackground() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      setMousePosition({ x: event.clientX, y: event.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  return (
-    <div 
-      className="absolute inset-0 overflow-hidden pointer-events-none"
-      style={{
-        background: `radial-gradient(
-          600px circle at ${mousePosition.x}px ${mousePosition.y}px, 
-          rgba(29, 78, 216, 0.15), 
-          transparent 80%
-        )`
-      }}
-    >
-      <div className="absolute inset-0 opacity-20 bg-grid-white/[0.04] dark:bg-grid-black/[0.04]"></div>
-    </div>
-  );
-}
 
 export default function LandingPage() {
   const router = useRouter();
   return (
     <>
+      {/* Hero Section: Engaging headline and subtext with dynamic background */}
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24">
-        <AnimatedBackground />
+        <InteractiveGradientOverlay />
         
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
           <motion.h1
@@ -120,6 +93,7 @@ export default function LandingPage() {
                     variant="primary" 
                     size="lg" 
                     className="flex items-center space-x-2 group"
+                    onClick={() => router.push("/login")}
                   >
                     <IoMdRocket className="w-6 h-6 group-hover:animate-bounce" />
                     <span>Start Building</span>
@@ -159,6 +133,72 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
+
+      {/* Benefits Section: Highlight key advantages */}
+      <section id="benefits" className="py-24 bg-white dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+              Why Choose DevCloud?
+            </h2>
+            <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
+              Unlock unprecedented productivity and collaboration
+            </p>
+          </div>
+          {/* Benefits grid will be added here */}
+        </div>
+      </section>
+
+      {/* Social Proof Section: Testimonials and User Stats */}
+      <section id="social-proof" className="py-24 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+              Trusted by Developers Worldwide
+            </h2>
+            <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
+              Join thousands of developers who are transforming their workflow
+            </p>
+          </div>
+          {/* Testimonials and stats will be added here */}
+        </div>
+      </section>
+
+      {/* CTA (Call to Action) Section: Final Push to Sign Up */}
+      <section id="cta" className="py-24 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-extrabold mb-6">
+            Ready to Supercharge Your Development?
+          </h2>
+          <p className="text-xl mb-8 max-w-3xl mx-auto">
+            Start your journey with DevCloud and turn your most ambitious projects into reality
+          </p>
+          <Button 
+            variant="secondary" 
+            size="lg" 
+            className="flex items-center space-x-2 group mx-auto"
+            onClick={() => router.push("/login")}
+          >
+            <IoMdRocket className="w-6 h-6 group-hover:animate-bounce" />
+            <span>Get Started Now</span>
+          </Button>
+        </div>
+      </section>
+
+      {/* FAQ Section: Common Questions */}
+      <section id="faq" className="py-24 bg-white dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+              Frequently Asked Questions
+            </h2>
+            <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
+              Got questions? We've got answers
+            </p>
+          </div>
+          {/* FAQ accordion or list will be added here */}
+        </div>
+      </section>
     </>
   )
 }
