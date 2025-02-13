@@ -1,9 +1,13 @@
 // Auth-related API methods
-import { setAuthToken } from '@/request/authToken'
-import { httpRequest, API_BASE_URL } from '@/request/httpRequest'
+import { setAuthToken } from '@/utils/authToken'
+import axios from '@/api/axiosConfig'
+
+export interface OAuthResponse {
+  token: string
+  username: string
+}
 
 export class AuthApi {
-
   /**
    * Redirect to GitHub OAuth login
    */
@@ -15,13 +19,13 @@ export class AuthApi {
       state,
       timestamp: Date.now()
     }))
-    window.location.href = `${API_BASE_URL}/auth/github/login?state=${state}`
+    window.location.href = `${axios.defaults.baseURL}/auth/github/login?state=${state}`
   }
 
   /**
    * Handle GitHub OAuth callback
    */
-  async exchangeGithubOAuthCode(code: string, state: string) {
+  async exchangeGithubOAuthCode(code: string, state: string): Promise<OAuthResponse> {
     // Verify state matches what we stored
     const storedData = sessionStorage.getItem('github_oauth_state')
     if (!storedData) {
@@ -41,13 +45,12 @@ export class AuthApi {
     }
     sessionStorage.removeItem('github_oauth_state')
 
-    const response = await httpRequest.get(`/auth/github/callback?code=${code}&state=${state}`)
+    const response = await axios.get(`/auth/github/callback?code=${code}&state=${state}`)
     
-    setAuthToken(response.token)
-    return {
-      token: response.token,
-      username: response.username
-    }
+    const { token, username } = response.data
+    setAuthToken(token)
+    
+    return { token, username }
   }
 }
 

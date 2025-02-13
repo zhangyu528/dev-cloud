@@ -1,5 +1,4 @@
-
-import { httpRequest } from '@/request/httpRequest'
+import axios from '@/api/axiosConfig'
 
 export interface Workspace {
     id: number
@@ -9,17 +8,19 @@ export interface Workspace {
 
 export class WorkspacesApi {
     async createWorkspace(name: string, template: string) {
-        return httpRequest.post('/api/workspaces/create', { name, template })
+        const response = await axios.post('/api/workspaces/create', { name, template })
+        return response.data
     }
 
     async getWorkspaces(): Promise<Workspace[]> {
-        return httpRequest.get('/api/workspaces/list')
+        const response = await axios.get('/api/workspaces/list')
+        return response.data
     }
 
     async deleteWorkspace(id: number) {
-        return httpRequest.post('/api/workspaces/delete', { id })
+        const response = await axios.post('/api/workspaces/delete', { id })
+        return response.data
     }
 }
-
 
 export const workspacesApi = new WorkspacesApi()

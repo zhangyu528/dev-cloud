@@ -1,10 +1,11 @@
-import { httpRequest } from '@/request/httpRequest'
-import { setAuthToken, clearAuthToken } from '@/request/authToken'
+import axios from '@/api/axiosConfig'
+import { setAuthToken, clearAuthToken } from '@/utils/authToken'
 
-export interface CurrentUser {
+export interface CurrentUserResponse {
   username: string;
   email: string;
   avatar_url?: string;
+  user_id: string;
 }
 
 interface VerifyTokenResponse {
@@ -16,18 +17,17 @@ export class UserApi {
    * Send verification code to user's email
    */
   async sendVerificationCode(email: string, username?: string) {
-    return httpRequest.post(
-      '/api/verify/send_code', { email, username }, 
-      true)
+    return axios.post(
+      '/api/verify/send_code', { email, username })
   }
 
   /**
    * Verify code and login user
    */
   async verifyAndLogin(email: string, code: string, username?: string) {
-    const { access_token, username: responseUsername } = await httpRequest.post(
-      '/api/verify/verify_and_login', { email, code, username },
-      true)
+    const response = await axios.post(
+      '/api/verify/verify_and_login', { email, code, username })
+    const { access_token, username: responseUsername } = response.data
     setAuthToken(access_token)
     return { token: access_token, username: responseUsername }
   }
@@ -37,9 +37,9 @@ export class UserApi {
    */
   async logout() {
     try {
-      const result = await httpRequest.post('/api/user/logout')
+      const response = await axios.post('/api/user/logout')
       clearAuthToken()
-      return result
+      return response.data
     } catch (error) {
       // Clear token even if logout API fails
       clearAuthToken()
@@ -50,15 +50,17 @@ export class UserApi {
   /**
    * Get current authenticated user
    */
-  async getCurrentUser(): Promise<CurrentUser> {
-    return httpRequest.get('/api/user/me');
+  async getCurrentUser(): Promise<CurrentUserResponse> {
+    const response = await axios.get('/api/user/me')
+    return response.data
   }
 
   /**
    * Verify authentication token
    */
   async verifyToken(): Promise<VerifyTokenResponse> {
-    return httpRequest.post('/api/user/verify-token');
+    const response = await axios.post('/api/user/verify-token')
+    return response.data
   }
 }
 

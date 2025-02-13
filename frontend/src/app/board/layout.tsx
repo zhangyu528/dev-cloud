@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { clearAuthToken, getAuthToken } from '@/request/authToken';
+import { clearAuthToken, getAuthToken } from '@/utils/authToken';
 import { userApi } from '@/api/user';
 import VerticalDashboard from '@/components/VerticalDashboard';
 import Footer from '@/components/Footer';
