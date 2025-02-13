@@ -17,13 +17,14 @@ export function TemplateList({ templates }: TemplateListProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 w-full">
       {templates.map((template, index) => (
         <TemplateCard 
           key={index}
           template={{
             name: template.name,
-            icon: `/icons/templates/${template.name.toLowerCase()}.svg`
+            description: template.description,
+            icon: `/icons/templates/${template.name.toLowerCase().replace(/\s+/g, '-')}.svg`
           }}
         />
       ))}
