@@ -44,12 +44,12 @@ export default function LandingPage() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
-            className="mt-8 flex justify-center space-x-4"
+            className="mt-8 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4"
           >
             <Button 
               variant="primary" 
               size="lg" 
-              className="flex items-center space-x-2 group"
+              className="w-full sm:w-auto flex items-center justify-center space-x-2 group"
               onClick={() => router.push("/login")}
             >
               <IoMdRocket className="w-6 h-6 group-hover:animate-bounce" />
@@ -58,7 +58,7 @@ export default function LandingPage() {
             <Button 
               variant="secondary" 
               size="lg" 
-              className="flex items-center space-x-2 group"
+              className="w-full sm:w-auto flex items-center justify-center space-x-2 group"
               onClick={() => {
                 const featuresSection = document.getElementById('features');
                 featuresSection?.scrollIntoView({ behavior: 'smooth' });

@@ -44,6 +44,11 @@ export const httpRequest = {
       }
       return response.json();
     } catch (error) {
+      if (error instanceof Error && error.message == 'Failed to fetch') {
+        error.message = '无法连接到服务器。请确保服务正在运行，或检查网络连接。'
+      } else if (error instanceof Error) {
+        error.message = '未知错误'
+      }
       throw error;
     }
 },
