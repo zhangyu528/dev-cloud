@@ -8,11 +8,11 @@ interface Template {
   description?: string;
 }
 
-interface TemplateCardProps {
+interface WorkspaceTemplateCardProps {
   template: Template;
 }
 
-export function TemplateCard({ template }: TemplateCardProps) {
+export function WorkspaceTemplateCard({ template }: WorkspaceTemplateCardProps) {
   return (
     <Link
       href={`/new/${template.name}`}
@@ -30,11 +30,11 @@ export function TemplateCard({ template }: TemplateCardProps) {
           <img 
             src={template.icon} 
             alt={template.name}
-            className="w-12 h-12 object-contain"
+            className="w-10 h-10 object-contain"
           />
         </div>
         <div className="flex flex-col items-center justify-center w-full">
-          <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 
+          <h3 className="text-xs font-medium text-gray-800 dark:text-gray-200 
             group-hover:text-blue-600 dark:group-hover:text-blue-400 
             transition-colors duration-300 truncate w-full">
             {template.name}

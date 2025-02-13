@@ -30,12 +30,12 @@ TEMPLATES = [
         "dockerFile": "Dockerfile.go",
     },
     {
-        "name": "Python Flask",
+        "name": "Flask",
         "description": "description",
         "dockerFile": "Dockerfile.flask",
     },
     {
-        "name": "Node Express",
+        "name": "Express",
         "description": "description",
         "dockerFile": "Dockerfile.express",
     },

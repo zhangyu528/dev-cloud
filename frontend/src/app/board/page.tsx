@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Loading from '@/components/Loading';
-import { TemplateList, Template } from '@/components/TemplateList';
+import { WorkspaceTemplateGrid, Template } from '@/components/WorkspaceTemplateGrid';
 import { templatesApi } from '@/api/templates';
 import WorkspacesCard from '@/components/WorkspacesCard';
 import { workspacesApi, Workspace } from '@/api/workspaces';
@@ -67,10 +67,10 @@ export default function BoardPage() {
       <div className="grid grid-cols-[4fr_5fr] gap-8">
         {/* Welcome Section */}
         <div className="flex flex-col justify-start space-y-6">
-          <h1 className="text-4xl font-extrabold mb-4 text-gray-900 dark:text-white leading-tight">
-            Unleash Your Development Potential
+          <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
+            Welcome back
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+          <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
             Transform your ideas into reality with our cloud-powered development workspace. 
             Seamlessly create, collaborate, and deploy your projects with cutting-edge tools 
             and intuitive workflows.
@@ -94,47 +94,31 @@ export default function BoardPage() {
         {/* Project Launcher Section */}
         <div className="flex flex-col justify-start gap-8">
           {/* Templates Subsection */}
-          <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-8 shadow-md">
-            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
-              Project Templates
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Jumpstart your development with our curated collection of project templates.
-            </p>
-            <TemplateList templates={templates} />
-          </div>
+          <WorkspaceTemplateGrid templates={templates} />
 
           {/* Workspaces Subsection */}
           {workspaces.length > 0 && (
-            <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-8 shadow-md">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
-                Your Development Spaces
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Manage and access your existing workspaces with ease.
-              </p>
-              <WorkspacesCard 
-                workspaces={workspaces} 
-                onWorkspaceDeleteClick={
-                  async (workspaceId) => {
-                    setLoading(true);
-                    try {
-                      await workspacesApi.deleteWorkspace(workspaceId);
-                      setWorkspaces(workspaces.filter(workspace => workspace.id !== workspaceId));
-                    } catch (error) {
-                      console.error('Failed to delete workspace:', error);
-                    } finally {
-                      setLoading(false);
-                    }
+            <WorkspacesCard 
+              workspaces={workspaces} 
+              onWorkspaceDeleteClick={
+                async (workspaceId) => {
+                  setLoading(true);
+                  try {
+                    await workspacesApi.deleteWorkspace(workspaceId);
+                    setWorkspaces(workspaces.filter(workspace => workspace.id !== workspaceId));
+                  } catch (error) {
+                    console.error('Failed to delete workspace:', error);
+                  } finally {
+                    setLoading(false);
                   }
-                } 
-                onWorkspaceClick={
-                  (workspace_name) => {
-                    router.push(`/${workspace_name}`);
-                  }
-                } 
-              />
-            </div>
+                }
+              } 
+              onWorkspaceClick={
+                (workspace_name) => {
+                  router.push(`/${workspace_name}`);
+                }
+              } 
+            />
           )}
         </div>
       </div>
