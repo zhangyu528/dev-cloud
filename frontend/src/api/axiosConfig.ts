@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { getAuthToken, clearAuthToken } from '@/utils/authToken';
 import { redirectToLoginServer } from '@/utils/redirects';
+import { toast } from 'react-hot-toast'; // 确保已安装 react-hot-toast
 
 // API configuration for different environments
 const apiConfig = {
@@ -68,15 +69,21 @@ axiosInstance.interceptors.response.use(
       redirectToLoginServer();
     }
 
-    // 其他错误处理
+    // 统一错误处理和 toast 提示
     if (error.response) {
-      console.error('Error Response:', error.response.data);
-      console.error('Status:', error.response.status);
+      // 服务器返回了错误响应
+      const errorMessage = error.response.data?.message || 
+                           error.response.data || 
+                           '发生未知错误';
+      toast.error(errorMessage);
     } else if (error.request) {
-      console.error('No response received:', error.request);
+      // 请求已发送，但没有收到响应
+      toast.error('无法连接到服务器');
     } else {
-      console.error('Error setting up request:', error.message);
+      // 发生了其他类型的错误
+      toast.error('发生未知错误');
     }
+
     return Promise.reject(error);
   }
 );

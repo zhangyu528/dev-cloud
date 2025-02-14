@@ -10,6 +10,7 @@ import Loading from '@/components/Loading';
 import { RiHomeLine } from "react-icons/ri";
 import { IoIosLogOut } from "react-icons/io";
 import { useUser } from '@/contexts/UserContext';
+import { clearAuthToken, setAuthToken } from '@/utils/authToken';
 
 const getColorForInitial = (initial?: string) => {
   if (!initial) return '#6b7280';
@@ -39,12 +40,11 @@ export default function UserMenu() {
     setIsLoggingOut(true);
     try {
       await userApi.logout();
-      setUser(null);
-      router.push('/login');
-    } catch (error) {
-      router.push('/login');
     } finally {
+      router.push('/login');
       setIsLoggingOut(false);
+      setUser(null);
+      clearAuthToken();
     }
   }
 

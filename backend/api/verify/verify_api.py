@@ -25,7 +25,6 @@ send_code_request_model = verify_ns.model('SendCodeRequest', {
 # 响应模型
 token_model = verify_ns.model('Token', {
     'access_token': fields.String(description='访问令牌'),
-    'username': fields.String(description='用户名')
 })
 
 @verify_ns.route('/send_code')
@@ -111,7 +110,6 @@ class VerifyAndLogin(Resource):
             access_token = create_access_token(identity=user.id)
             model = {
                 'access_token': access_token,
-                'username': user.username
             }
             return model, 200
 

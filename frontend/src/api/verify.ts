@@ -3,9 +3,6 @@ import { setAuthToken } from '@/utils/authToken'
 
 export interface LoginResponse {
   access_token: string
-  username: string
-  user_id: string
-  email: string
 }
 
 export class VerifyApi {
@@ -22,9 +19,7 @@ export class VerifyApi {
    */
   async verifyAndLogin(email: string, code: string, username?: string): Promise<LoginResponse> {
     const response = await axios.post('/api/verify/verify_and_login', { email, code, username })
-    const loginData = response.data as LoginResponse
-    setAuthToken(loginData.access_token)
-    return loginData
+    return response.data
   }
 }
 

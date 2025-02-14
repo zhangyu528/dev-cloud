@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { authApi } from '@/api/auth'
+import { setAuthToken } from '@/utils/authToken'
 
 export default function GithubCallbackPage() {
   const router = useRouter()
@@ -22,15 +23,11 @@ export default function GithubCallbackPage() {
         setStatus('Verifying GitHub credentials...')
 
         // 2. 调用后端API验证code和state
-    const { token, username } = await authApi.exchangeGithubOAuthCode(code, state)
-        
-        // 3. 保存token并跳转
-        localStorage.setItem('token', token)
-        localStorage.setItem('username', username)
+        const { access_token } = await authApi.exchangeGithubOAuthCode(code, state)
+        setAuthToken(access_token)
         setStatus('Login successful, redirecting...')
         router.push('/board')
       } catch (error) {
-        console.error('GitHub authentication error:', error)
         setStatus('Authentication failed, redirecting to login...')
         router.push('/login?error=github_auth_failed')
       }

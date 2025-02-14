@@ -83,4 +83,4 @@ class DeleteWorkspace(Resource):
         except Exception as e:
             current_app.logger.warning(e)
             return "fefefef", 500
-        return {"message": "Workspace deleted"}, 200
+        return None, 200

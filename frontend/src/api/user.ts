@@ -8,43 +8,19 @@ export interface CurrentUser {
   user_id: string;
 }
 
-interface VerifyTokenResponse {
-  valid: boolean;
-}
-
 export class UserApi {
   /**
    * Send verification code to user's email
    */
   async sendVerificationCode(email: string, username?: string) {
-    return axios.post(
-      '/api/verify/send_code', { email, username })
-  }
-
-  /**
-   * Verify code and login user
-   */
-  async verifyAndLogin(email: string, code: string, username?: string) {
-    const response = await axios.post(
-      '/api/verify/verify_and_login', { email, code, username })
-    const { access_token, username: responseUsername } = response.data
-    setAuthToken(access_token)
-    return { token: access_token, username: responseUsername }
+    await axios.post('/api/verify/send_code', { email, username })
   }
 
   /**
    * Logout user and clear auth token
    */
   async logout() {
-    try {
-      const response = await axios.post('/api/user/logout')
-      clearAuthToken()
-      return response.data
-    } catch (error) {
-      // Clear token even if logout API fails
-      clearAuthToken()
-      throw error
-    }
+    await axios.post('/api/user/logout')
   }
   
   /**
@@ -58,9 +34,8 @@ export class UserApi {
   /**
    * Verify authentication token
    */
-  async verifyToken(): Promise<VerifyTokenResponse> {
-    const response = await axios.post('/api/user/verify-token')
-    return response.data
+  async verifyToken() {
+    await axios.post('/api/user/verify-token')
   }
 }
 

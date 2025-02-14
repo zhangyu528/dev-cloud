@@ -10,6 +10,7 @@ import { verifyApi } from '@/api/verify'
 import Loading from '@/components/Loading'
 import { validateEmail } from '@/utils/validation'
 import toast from 'react-hot-toast'
+import { setAuthToken } from '@/utils/authToken';
 
 export default function EmailLoginPage() {
   const router = useRouter()
@@ -54,8 +55,6 @@ export default function EmailLoginPage() {
     try {
       await verifyApi.sendVerificationCode(email)
       setIsVerification(true)
-    } catch (error) {
-      toast.error((error as Error).message || '发生未知错误')
     } finally {
       setIsLoading(false)
     }
@@ -66,10 +65,9 @@ export default function EmailLoginPage() {
     setIsLoading(true)
     setLoadingText('Verifying code...')
     try {
-      await verifyApi.verifyAndLogin(email, verificationCode, username)
+      const resp = await verifyApi.verifyAndLogin(email, verificationCode, username)
+      setAuthToken(resp.access_token)
       router.push('/board')
-    } catch (error) {
-      toast.error((error as Error).message || '发生未知错误')
     } finally {
       setIsLoading(false)
     }

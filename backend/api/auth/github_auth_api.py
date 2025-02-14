@@ -16,8 +16,7 @@ callback_request_model = github_ns.model('CallbackRequest', {
 
 # 响应模型
 token_model = github_ns.model('AuthToken', {
-    'token': fields.String(required=True, description='JWT访问令牌'),
-    'username': fields.String(required=True, description='用户名')
+    'access_token': fields.String(required=True, description='JWT访问令牌'),
 })
 
 @github_ns.route('/login')
@@ -122,9 +121,8 @@ class GitHubCallback(Resource):
         
         # Create JWT token
         access_token = create_access_token(identity=user.id)
-        
+        token_model = {
+                'access_token': access_token,
+        }
         # Return token in JSON response
-        return {
-            'token': access_token,
-            'username': user.username
-        }, 200
+        return token_model, 200

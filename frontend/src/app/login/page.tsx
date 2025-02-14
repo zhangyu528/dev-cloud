@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import { GitlabIcon, BitbucketIcon } from '@/components/icons'
 import { FaGithub } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { authApi } from '@/api/auth'

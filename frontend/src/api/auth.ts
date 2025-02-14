@@ -1,10 +1,8 @@
 // Auth-related API methods
-import { setAuthToken } from '@/utils/authToken'
 import axios from '@/api/axiosConfig'
 
 export interface OAuthResponse {
-  token: string
-  username: string
+  access_token: string
 }
 
 export class AuthApi {
@@ -47,10 +45,7 @@ export class AuthApi {
 
     const response = await axios.get(`/auth/github/callback?code=${code}&state=${state}`)
     
-    const { token, username } = response.data
-    setAuthToken(token)
-    
-    return { token, username }
+    return response.data
   }
 }
 

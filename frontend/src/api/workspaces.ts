@@ -18,8 +18,7 @@ export class WorkspacesApi {
     }
 
     async deleteWorkspace(id: number) {
-        const response = await axios.post('/api/workspaces/delete', { id })
-        return response.data
+        await axios.post('/api/workspaces/delete', { id })
     }
 }
 
