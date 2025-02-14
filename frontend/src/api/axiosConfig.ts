@@ -1,6 +1,7 @@
 // src/api/axiosConfig.ts
 import axios from 'axios';
-import { getAuthToken } from '@/utils/authToken';
+import { getAuthToken, clearAuthToken } from '@/utils/authToken';
+import { redirectToLoginServer } from '@/utils/redirects';
 
 // API configuration for different environments
 const apiConfig = {
@@ -58,7 +59,16 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // 集中处理错误
+    // 处理未授权错误（401）
+    if (error.response && error.response.status === 401) {
+      // 清除 token
+      clearAuthToken();
+      
+      // 重定向到登录页
+      redirectToLoginServer();
+    }
+
+    // 其他错误处理
     if (error.response) {
       console.error('Error Response:', error.response.data);
       console.error('Status:', error.response.status);
