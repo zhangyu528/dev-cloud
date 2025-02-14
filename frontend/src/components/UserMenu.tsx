@@ -9,7 +9,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import Loading from '@/components/Loading';
 import { RiHomeLine } from "react-icons/ri";
 import { IoIosLogOut } from "react-icons/io";
-import { useUser } from '@/context/UserContext';
+import { useUser } from '@/contexts/UserContext';
 
 const getColorForInitial = (initial?: string) => {
   if (!initial) return '#6b7280';
@@ -63,7 +63,7 @@ export default function UserMenu() {
 
   if (!user) return null;
 
-  const initial = user.name ? user.name[0].toUpperCase() : user.email ? user.email[0].toUpperCase() : '';
+  const initial = user.username ? user.username[0].toUpperCase() : user.email ? user.email[0].toUpperCase() : '';
   return (
     <div className="relative" ref={menuRef}>
       <Loading fullScreen isLoading={isLoggingOut} text="Logging out..." />
@@ -72,10 +72,10 @@ export default function UserMenu() {
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
       >
-        {user.avatar ? (
+        {user.avatar_url ? (
           <div className="relative h-8 w-8 rounded-full overflow-hidden">
             <Image
-              src={user.avatar}
+              src={user.avatar_url}
               alt="User avatar"
               fill
               className="object-cover"

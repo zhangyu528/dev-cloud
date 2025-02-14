@@ -1,6 +1,6 @@
 'use client';
 import { WorkspaceTemplateItem } from '@/components/WorkspaceTemplateItem';
-import { useTemplates } from '@/context/TemplateContext';
+import { useTemplates } from '@/contexts/TemplateContext';
 
 export function WorkspaceTemplateGrid() {
   const { templates, loading, error } = useTemplates();

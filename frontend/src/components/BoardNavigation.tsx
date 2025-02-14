@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import UserMenu from './UserMenu';
-import { useUser } from '@/context/UserContext';
+import { useUser } from '@/contexts/UserContext';
 
 export default function BoardNavigation() {
   const pathname = usePathname();

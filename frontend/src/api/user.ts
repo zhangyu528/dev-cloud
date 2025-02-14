@@ -1,7 +1,7 @@
 import axios from '@/api/axiosConfig'
 import { setAuthToken, clearAuthToken } from '@/utils/authToken'
 
-export interface CurrentUserResponse {
+export interface CurrentUser {
   username: string;
   email: string;
   avatar_url?: string;
@@ -50,7 +50,7 @@ export class UserApi {
   /**
    * Get current authenticated user
    */
-  async getCurrentUser(): Promise<CurrentUserResponse> {
+  async getCurrentUser(): Promise<CurrentUser> {
     const response = await axios.get('/api/user/me')
     return response.data
   }

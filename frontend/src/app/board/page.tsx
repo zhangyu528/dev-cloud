@@ -3,20 +3,13 @@
 import { useState, useEffect } from 'react';
 import Loading from '@/components/Loading';
 import { WorkspaceTemplateGrid } from '@/components/WorkspaceTemplateGrid';
-import WorkspacesCard from '@/components/WorkspacesCard';
-import { workspacesApi, Workspace } from '@/api/workspaces';
+import WorkspacesGrid from '@/components/WorkspacesGrid';
 import { useRouter } from 'next/navigation'
 import { IoMdCube } from 'react-icons/io';
 
 export default function BoardPage() {
-  const [loading, setLoading] = useState(false);
-  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
 
   const router = useRouter();
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <div className="flex flex-col p-8">
@@ -65,7 +58,7 @@ export default function BoardPage() {
           <WorkspaceTemplateGrid />
 
           {/* Workspaces Subsection */}
-          <WorkspacesCard />
+          <WorkspacesGrid />
         </div>
       </div>
     </div>

@@ -2,20 +2,12 @@
 'use client';
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { userApi } from '@/api/user';
-
-// Define the shape of the user object
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-}
+import { userApi, CurrentUser } from '@/api/user';
 
 // Define the context type without isAuthenticated
 interface UserContextType {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: CurrentUser | null;
+  setUser: (user: CurrentUser | null) => void;
   fetchCurrentUser: () => Promise<void>;
 }
 
@@ -24,17 +16,17 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 // Create a provider component
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<CurrentUser | null>(null);
 
   // Method to fetch current user
   const fetchCurrentUser = async () => {
     try {
       const currentUser = await userApi.getCurrentUser();
       setUser({
-        id: currentUser.user_id,
-        name: currentUser.username,
+        user_id: currentUser.user_id,
+        username: currentUser.username,
         email: currentUser.email,
-        avatar: currentUser.avatar_url
+        avatar_url: currentUser.avatar_url
       });
     } catch (error) {
       // If fetching fails (e.g., no token), set user to null
