@@ -1,23 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import { TemplateResponse } from '@/api/templates';
 
-interface Template {
-  name: string;
-  icon: string;
-  description?: string;
-}
-
-interface WorkspaceTemplateCardProps {
-  template: Template;
-}
-
-export function WorkspaceTemplateCard({ template }: WorkspaceTemplateCardProps) {
+export function WorkspaceTemplateItem({ template }: { template: TemplateResponse }) {
   return (
     <Link
       href={`/new/${template.name}`}
       passHref
-      className="group block"
+      className="group block w-full"
     >
       <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-gray-800 rounded-xl 
         border border-gray-200 dark:border-gray-700 
@@ -39,6 +30,11 @@ export function WorkspaceTemplateCard({ template }: WorkspaceTemplateCardProps) 
             transition-colors duration-300 truncate w-full">
             {template.name}
           </h3>
+          {template.description && (
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">
+              {template.description}
+            </p>
+          )}
         </div>
       </div>
     </Link>

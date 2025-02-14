@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Loading from '@/components/Loading';
-import { WorkspaceTemplateGrid, Template } from '@/components/WorkspaceTemplateGrid';
-import { templatesApi } from '@/api/templates';
+import { WorkspaceTemplateGrid } from '@/components/WorkspaceTemplateGrid';
 import WorkspacesCard from '@/components/WorkspacesCard';
 import { workspacesApi, Workspace } from '@/api/workspaces';
 import { useRouter } from 'next/navigation'
@@ -11,40 +10,9 @@ import { IoMdCube } from 'react-icons/io';
 
 export default function BoardPage() {
   const [loading, setLoading] = useState(false);
-  const [templates, setTemplates] = useState<Template[]>([]);
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
 
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchTemplates = async () => {
-      setLoading(true);
-      try {
-        const data = await templatesApi.getAvailableTemplates();
-        setTemplates(data);
-      } catch (error) {
-        console.error('Failed to fetch templates:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTemplates();
-
-    const fetchWorkspaces = async () => {
-      setLoading(true);
-      try {
-        const workspaces = await workspacesApi.getWorkspaces();
-        setWorkspaces(workspaces);
-      } catch (error) {
-        console.error('Failed to fetch workspaces:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWorkspaces();
-  }, []);
 
   if (loading) {
     return <Loading />;
@@ -94,32 +62,10 @@ export default function BoardPage() {
         {/* Project Launcher Section */}
         <div className="flex flex-col justify-start gap-8">
           {/* Templates Subsection */}
-          <WorkspaceTemplateGrid templates={templates} />
+          <WorkspaceTemplateGrid />
 
           {/* Workspaces Subsection */}
-          {workspaces.length > 0 && (
-            <WorkspacesCard 
-              workspaces={workspaces} 
-              onWorkspaceDeleteClick={
-                async (workspaceId) => {
-                  setLoading(true);
-                  try {
-                    await workspacesApi.deleteWorkspace(workspaceId);
-                    setWorkspaces(workspaces.filter(workspace => workspace.id !== workspaceId));
-                  } catch (error) {
-                    console.error('Failed to delete workspace:', error);
-                  } finally {
-                    setLoading(false);
-                  }
-                }
-              } 
-              onWorkspaceClick={
-                (workspace_name) => {
-                  router.push(`/${workspace_name}`);
-                }
-              } 
-            />
-          )}
+          <WorkspacesCard />
         </div>
       </div>
     </div>

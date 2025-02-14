@@ -1,25 +1,18 @@
-// components/WorkspacesCard.tsx
 'use client';
 
 import { IoMdTrash } from 'react-icons/io';
+import { useWorkspaces } from '@/context/WorkspacesContext';
+import { useRouter } from 'next/navigation';
+import { Workspace } from '@/api/workspaces';
 
-interface Workspace {
-  id: number;
-  name: string;
-  template: string;
-}
+const WorkspaceListItem = ({ workspace }: { workspace: Workspace }) => {
+  const { deleteWorkspace } = useWorkspaces();
+  const router = useRouter();
 
-interface WorkspaceListItemProps {
-  workspace: Workspace;
-  onWorkspaceClick?: (name: string) => void;
-  onWorkspaceDeleteClick?: (id: number) => void;
-}
+  const handleWorkspaceClick = () => {
+    router.push(`/workspace/${workspace.name}`);
+  };
 
-const WorkspaceListItem: React.FC<WorkspaceListItemProps> = ({ 
-  workspace, 
-  onWorkspaceClick, 
-  onWorkspaceDeleteClick 
-}) => {
   return (
     <div
       className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm hover:shadow-md 
@@ -35,9 +28,7 @@ const WorkspaceListItem: React.FC<WorkspaceListItemProps> = ({
                    transition duration-200 
                    hover:bg-blue-100 dark:hover:bg-blue-900/40 
                    cursor-pointer"
-        onClick={() => {
-          onWorkspaceClick?.(workspace.name)
-        }}
+        onClick={handleWorkspaceClick}
       >
         <img
           src={`/icons/templates/${workspace.template.toLowerCase()}.svg`}
@@ -56,30 +47,28 @@ const WorkspaceListItem: React.FC<WorkspaceListItemProps> = ({
       </div>
       
       {/* 删除按钮 */}
-      {onWorkspaceDeleteClick && (
-        <button
-          onClick={() => onWorkspaceDeleteClick(workspace.id)}
-          className="absolute top-2 right-2 
+      <button
+        onClick={() => deleteWorkspace(workspace.id)}
+        className="absolute top-2 right-2 
                      text-gray-400 hover:text-red-500 
                      opacity-0 group-hover:opacity-100 
                      transition duration-200 
                      p-1 rounded-full 
                      hover:bg-red-50 dark:hover:bg-red-900/20"
-        >
-          <IoMdTrash className="h-5 w-5" />
-        </button>
-      )}
+      >
+        <IoMdTrash className="h-5 w-5" />
+      </button>
     </div>
   );
 };
 
-interface WorkspacesCardProps {
-  workspaces: Workspace[];
-  onWorkspaceClick?: (name: string) => void;
-  onWorkspaceDeleteClick?: (id: number) => void; // 删除回调
-}
+export default function WorkspacesCard() {
+  const { workspaces, loading, error } = useWorkspaces();
 
-export default function WorkspacesCard({ workspaces, onWorkspaceClick, onWorkspaceDeleteClick }: WorkspacesCardProps) {
+  if (loading) return <div>Loading workspaces...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!workspaces || workspaces.length === 0) return null;
+
   return (
     <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
       <h2 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-4">
@@ -90,8 +79,6 @@ export default function WorkspacesCard({ workspaces, onWorkspaceClick, onWorkspa
           <WorkspaceListItem 
             key={workspace.id}
             workspace={workspace}
-            onWorkspaceClick={onWorkspaceClick}
-            onWorkspaceDeleteClick={onWorkspaceDeleteClick}
           />
         ))}
       </div>

@@ -4,6 +4,7 @@ from flask_jwt_extended import jwt_required
 templates_ns = Namespace('templates', description='模板管理接口', path='/api/templates')
 
 template_model = templates_ns.model('Template', {
+    'id': fields.String(required=True, description='模板ID'),
     'name': fields.String(required=True, description='模板名称'),
     'description': fields.String(description='模板描述'),
     'icon': fields.String(required=True, description='图标路径')
