@@ -15,7 +15,7 @@ export default function LandingPage() {
   return (
     <>
       {/* Hero Section: Engaging headline and subtext with dynamic background */}
-      <div className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24">
+      <section id="hero" className="min-h-screen flex items-center justify-center pt-24">
         <InteractiveGradientOverlay />
         
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
@@ -69,10 +69,10 @@ export default function LandingPage() {
             </Button>
           </motion.div>
         </div>
-      </div>
+      </section>
 
       {/* Features Section */}
-      <div id="features" className="py-24 bg-gray-50 dark:bg-gray-900">
+      <section id="features" className="py-24 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8">
@@ -132,7 +132,7 @@ export default function LandingPage() {
             {/* 可以添加更多 features */}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Benefits Section: Highlight key advantages */}
       <section id="benefits" className="py-24 bg-white dark:bg-gray-800">

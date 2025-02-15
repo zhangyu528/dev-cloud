@@ -27,5 +27,5 @@ cd d:/work/dev-cloud/backend
 
 ### 3. 运行应用
 ```bash
-./run_app.sh
+./run_dev.sh
 ```

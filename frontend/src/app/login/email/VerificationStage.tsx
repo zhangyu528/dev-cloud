@@ -54,43 +54,45 @@ export function VerificationStage({
   }
 
   return (
-    <form onSubmit={handleVerify} className="space-y-4">
-      <div className="text-center mb-4">
-        <p className="text-sm text-gray-600">验证码已发送至 {email}</p>
-      </div>
+    <div className="w-full min-h-screen flex flex-col items-center justify-center space-y-6">
+      <form onSubmit={handleVerify} className="space-y-4">
+        <div className="text-center mb-4">
+          <p className="text-sm text-gray-600">验证码已发送至 {email}</p>
+        </div>
 
-      <VerificationInput 
-        value={verificationCode}
-        onChange={setVerificationCode}
-      />
-      
-      <Button
-        type="submit"
-        variant="primary"
-        className="w-full flex items-center justify-center mt-4"
-        disabled={verificationCode.length < 6 || isLoading}
-      >
-        验证
-      </Button>
+        <VerificationInput 
+          value={verificationCode}
+          onChange={setVerificationCode}
+        />
+        
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full flex items-center justify-center mt-4"
+          disabled={verificationCode.length < 6 || isLoading}
+        >
+          验证
+        </Button>
 
-      <div className="flex justify-between items-center mt-4">
-        <Button 
-          type="button" 
-          variant="secondary" 
-          onClick={handleBack}
-          disabled={isLoading}
-        >
-          返回
-        </Button>
-        <Button 
-          type="button" 
-          variant="link" 
-          onClick={handleResendCode}
-          disabled={isLoading}
-        >
-          重新发送验证码
-        </Button>
-      </div>
-    </form>
+        <div className="flex justify-between items-center mt-4">
+          <Button 
+            type="button" 
+            variant="link" 
+            onClick={handleBack}
+            disabled={isLoading}
+          >
+            返回
+          </Button>
+          <Button 
+            type="button" 
+            variant="link" 
+            onClick={handleResendCode}
+            disabled={isLoading}
+          >
+            重新发送验证码
+          </Button>
+        </div>
+      </form>
+    </div>
   )
 }
