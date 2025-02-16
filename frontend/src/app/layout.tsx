@@ -1,9 +1,33 @@
 'use client';
 
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import { Toaster } from 'react-hot-toast';
+import { useMemo } from 'react';
+import { useTheme } from 'next-themes';
 
 import '../app/globals.css';
+
+function ThemeWrapper({ children }: { children: React.ReactNode }) {
+  const { resolvedTheme } = useTheme();
+
+  const theme = useMemo(() => 
+    createTheme({
+      palette: {
+        mode: resolvedTheme === 'dark' ? 'dark' : 'light',
+      },
+    }),
+    [resolvedTheme]
+  );
+
+  return (
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
+      {children}
+    </MuiThemeProvider>
+  );
+}
 
 export default function RootLayout({ 
   children 
@@ -11,13 +35,14 @@ export default function RootLayout({
   children: React.ReactNode 
 }) {
   return (
-      <html lang="zh" suppressHydrationWarning>
-        <body>
-          <ThemeProvider 
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-          >
+    <html lang="zh" suppressHydrationWarning>
+      <body>
+        <NextThemesProvider 
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+        >
+          <ThemeWrapper>
             {children}
             <Toaster 
               position="top-center"
@@ -29,8 +54,9 @@ export default function RootLayout({
                 },
               }}
             />
-          </ThemeProvider>
-        </body>
-      </html>
+          </ThemeWrapper>
+        </NextThemesProvider>
+      </body>
+    </html>
   );
 }
