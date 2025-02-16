@@ -2,7 +2,7 @@
 
 
 export const generateWorkspaceName = (name: string) => {
-    let baseName = name.trim().replace(/\s+/g, '-');
+    let baseName = name.trim().toLowerCase().replace(/\s+/g, '-');
     let randomNumber = Math.floor(Math.random() * 10000000); // 生成 7 位数字
     return `${baseName}-${randomNumber.toString().padStart(7, '0')}`; // 确保是7位数字
 };

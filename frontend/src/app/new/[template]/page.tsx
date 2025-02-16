@@ -14,7 +14,6 @@ export default function NewWorkspacePage() {
   const [workspaceName, setWorkspaceName] = useState('');
   const [generatedName, setGeneratedName] = useState('');
   const [nameError, setNameError] = useState<string | null>(null);
-  const [isValid, setIsValid] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -22,7 +21,6 @@ export default function NewWorkspacePage() {
 
     // 初始化时立即验证
     const { isValid, errorMessage } = validateWorkspaceName(workspaceName);
-    setIsValid(isValid);
     setNameError(errorMessage || null);
   }, []);
 
@@ -30,11 +28,9 @@ export default function NewWorkspacePage() {
   useEffect(() => {
     const { isValid, errorMessage } = validateWorkspaceName(workspaceName);
     if (!isValid) {
-      setIsValid(false);
       setNameError(errorMessage || null);
       return;
     }
-    setIsValid(true);
     setNameError(null);
     setGeneratedName(generateWorkspaceName(workspaceName));
   }, [workspaceName]);
@@ -75,7 +71,7 @@ export default function NewWorkspacePage() {
             }}
             type="text"
             className={`w-full text-sm px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 
-              ${!isValid 
+              ${nameError
                 ? 'border-red-500 focus:ring-red-500' 
                 : 'focus:ring-blue-500 border-gray-300'
               } 
@@ -84,10 +80,10 @@ export default function NewWorkspacePage() {
             value={workspaceName}
             onChange={(e) => setWorkspaceName(e.target.value)}
           />
-          {!isValid && (
+          {nameError && (
             <p className="text-red-500 text-xs mt-1">{nameError}</p>
           )}
-          {workspaceName && isValid && (
+          {workspaceName && !nameError && (
             <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
               Generated name: {generatedName}
             </p>
@@ -106,7 +102,7 @@ export default function NewWorkspacePage() {
             variant={'primary'}
             size={'md'}
             onClick={handleCreateWorkspace}
-            disabled={ !isValid ||!workspaceName}
+            disabled={!!nameError}
           >
             Create
           </Button>
