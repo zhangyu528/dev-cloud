@@ -35,6 +35,9 @@ def create_app(config=None):
     from extensions import restx_init_app
     restx_init_app(app)
 
+    from extensions import sse_init_app
+    sse_init_app(app)
+
     # # 初始化请求日志
     # from api.middleware.logging import init_request_logging
     # init_request_logging(app)

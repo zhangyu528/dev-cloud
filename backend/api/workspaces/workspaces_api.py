@@ -84,3 +84,28 @@ class DeleteWorkspace(Resource):
             current_app.logger.warning(e)
             return "fefefef", 500
         return None, 200
+
+from kubernetes_pod.pod_tracker import PodTracker
+@workspace_ns.route('/track/<string:workspace_name>')
+class WorkspaceTracking(Resource):
+    def get(self, workspace_name):
+        try:
+            # 创建并启动 Pod 追踪器
+            pod_tracker = PodTracker(
+                app=current_app,  # 使用传入的 Flask 应用实例
+                namespace="flask-dev-cloud-server", 
+                workspace_name=workspace_name
+            )
+            pod_tracker.start()
+
+            return {
+                'message': 'Pod tracking started', 
+                'workspace_name': workspace_name
+            }, 200
+
+        except Exception as e:
+            current_app.logger.error(f"Pod tracking error: {e}")
+            return {
+                'message': 'Failed to start pod tracking', 
+                'error': str(e)
+            }, 500

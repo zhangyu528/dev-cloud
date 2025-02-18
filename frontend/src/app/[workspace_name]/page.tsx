@@ -1,26 +1,37 @@
-
 'use client'
+import { useState } from 'react';
 import { useParams } from 'next/navigation';
+import { WorkStatusMonitor } from '@/components/monitors/WorkStatusMonitor';
+
 export default function Workspace() {
   const params = useParams();
-  // 获取 URL 中的路径参数
-  const workspaceName = params.workspace_name;
+  const workspace_name = params.workspace_name as string;
   
-  // 如果 workspaceName 存在，使用它来替换 URL 中的部分
-  const iframeSrc = workspaceName 
-  ? `http://${workspaceName}.127.0.0.1.nip.io`
-  : ''; // 如果 workspaceName 未定义，保持空值或给出默认 URL
+  const [isWorkspaceReady, setIsWorkspaceReady] = useState(false);
+  const [iframeSrc, setIframeSrc] = useState('');
+
+  const handleStatusComplete = () => {
+    // 使用 nip.io 动态域名
+    setIframeSrc(`http://${workspace_name}.127.0.0.1.nip.io`);
+    setIsWorkspaceReady(true);
+  };
+
   return (
-    <div className="min-h-screen flex">
-      {workspaceName ? (
+    <div>
+      {!isWorkspaceReady ? (
+        <WorkStatusMonitor
+          workspace_name={workspace_name}
+          onStatusComplete={handleStatusComplete}
+        />
+      ) : (
         <iframe
           src={iframeSrc}
-          className="mx-auto w-full flex-1"
-          title="Embedded Service"
-        ></iframe>)
-        : (
-          <p>Loading...</p> // 如果 workspaceName 还未加载，显示加载提示
-        )}
+          className="mx-auto w-full min-h-screen"
+          title="Embedded Workspace"
+          // 添加安全属性
+          sandbox="allow-scripts allow-same-origin allow-forms"
+        />
+      )}
     </div>
-  )
+  );
 }

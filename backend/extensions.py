@@ -53,3 +53,14 @@ def restx_init_app(app):
     # 延迟导入避免循环依赖
     from api import register_namespaces  
     register_namespaces(api)
+
+def sse_init_app(app):
+    """Initialize SSE with the Flask app"""
+    from flask_sse import sse
+    app.register_blueprint(sse, url_prefix='/stream')
+
+    # 添加调试日志
+    # @app.route('/stream', methods=['GET'])
+    # def debug_stream():
+    #     app.logger.debug('SSE Stream endpoint accessed')
+    #     return sse.stream()

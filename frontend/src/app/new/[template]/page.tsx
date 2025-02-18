@@ -38,7 +38,7 @@ export default function NewWorkspacePage() {
   const handleCreateWorkspace = async () => {
     //创建工作空间
     await workspacesApi.createWorkspace(generatedName, templateName);
-    router.push('/board');
+    router.push(`/${generatedName}`);
   }
 
   return (

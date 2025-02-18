@@ -8,7 +8,7 @@ const WorkspaceListItem = ({ workspace }: { workspace: Workspace }) => {
     const router = useRouter();
   
     const handleWorkspaceClick = () => {
-      router.push(`/workspace/${workspace.name}`);
+      router.push(`/${workspace.name}`);
     };
   
     return (
