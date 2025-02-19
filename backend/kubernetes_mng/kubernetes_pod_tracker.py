@@ -1,11 +1,11 @@
-# backend/kubernetes_pod/pod_tracker.py
+# kubernetes_pod_tracker.py
 import threading
 from flask import Flask
 from flask_sse import sse
 from kubernetes import client, watch, config
 from typing import Callable, Optional
 
-class PodTracker:
+class KubernetesPodTracker:
     def __init__(
         self, 
         app: Flask,  # 添加 Flask 应用实例参数
@@ -49,12 +49,13 @@ class PodTracker:
         """
         try:
             # 标签选择器，根据工作空间名称过滤 Pod
-            label_selector = f"app={self.workspace_name}-app-pod"
+            label_selector = f"app={self.workspace_name}-app"
             
             # 创建 Kubernetes 资源监听器
             watcher = watch.Watch()
 
-            print("Listing pods in namespace: ", self.namespace)
+            print("listening pods in namespace: ", self.namespace)
+            print("Label selector: ", label_selector)
             
             for event in watcher.stream(
                 self.k8s_client.list_namespaced_pod, 
@@ -71,13 +72,12 @@ class PodTracker:
                 self._publish_status_in_context(status)
 
                 # 如果 Pod 处于终止状态，停止追踪
-                if status in ['Succeeded', 'Failed']:
+                if status in ['Succeeded', 'Failed', 'Running']:
                     break
 
         except Exception as e:
             print("Pod tracking error")
-            print(e)
-            # self.app.logger.error(f"Pod tracking error: {e}")
+            self.stop()
             # self._publish_status('Error')
 
     def _extract_pod_status(self, pod) -> str:
