@@ -1,17 +1,31 @@
-
-# 使用 Node.js 作为基础镜像
-FROM node:18
+# 使用基础镜像
+FROM node:20
 
 # 设置环境变量为开发模式
 ENV NODE_ENV=development
 
 # 安装 Angular CLI（全局安装）
-RUN npm install -g @angular/cli
+RUN npm install -g @angular/cli@15.0.0
 
-# 进入 user 目录
-WORKDIR /home/user
-# 公开端口
+# 复制脚本文件到容器中
+COPY vscode_server_install.sh /usr/local/bin/vscode_server_install.sh
+# 给脚本可执行权限
+RUN chmod +x /usr/local/bin/vscode_server_install.sh
+# 执行vscode server install脚本
+RUN /usr/local/bin/vscode_server_install.sh
+
+# 设置工作目录
+WORKDIR /home/coder/project
+
+# 公开端口 4200
 EXPOSE 4200
+EXPOSE 8080
 
-# 启动 Angular 开发服务器
-CMD ["sh", "-c", "ng new ${PROJECT_NAME:-default-angular-app} --defaults --skip-git && cd ${PROJECT_NAME:-default-angular-app} && npm install && ng serve --host 0.0.0.0 --port 4200"]
+# 复制 entrypoint.sh 脚本到容器中
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# 赋予执行权限
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# 设置容器启动时执行的命令
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
