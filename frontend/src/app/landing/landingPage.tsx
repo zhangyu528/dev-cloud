@@ -145,7 +145,92 @@ export default function LandingPage() {
               Unlock unprecedented productivity and collaboration
             </p>
           </div>
-          {/* Benefits grid will be added here */}
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Scalability */}
+            <div className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center mb-4">
+                <IoMdRocket className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                <h3 className="ml-3 text-xl font-semibold text-gray-800 dark:text-gray-100">
+                  Instant Scalability
+                </h3>
+              </div>
+              <p className="text-gray-600 dark:text-gray-300">
+                Scale your development environment instantly. From small projects to enterprise-level applications, 
+                our cloud infrastructure grows with your needs without any hardware limitations.
+              </p>
+            </div>
+
+            {/* Collaboration */}
+            <div className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center mb-4">
+                <IoMdCode className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+                <h3 className="ml-3 text-xl font-semibold text-gray-800 dark:text-gray-100">
+                  Seamless Collaboration
+                </h3>
+              </div>
+              <p className="text-gray-600 dark:text-gray-300">
+                Work together in real-time with your team. Share development environments, 
+                code reviews, and deployments effortlessly, all in one unified platform.
+              </p>
+            </div>
+
+            {/* Security */}
+            <div className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center mb-4">
+                <IoMdFlash className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
+                <h3 className="ml-3 text-xl font-semibold text-gray-800 dark:text-gray-100">
+                  Enterprise-Grade Security
+                </h3>
+              </div>
+              <p className="text-gray-600 dark:text-gray-300">
+                Rest easy with our robust security measures. Benefit from automated backups, 
+                encryption at rest and in transit, and compliance with industry standards.
+              </p>
+            </div>
+
+            {/* Cost Efficiency */}
+            <div className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center mb-4">
+                <IoMdFlash className="w-8 h-8 text-green-600 dark:text-green-400" />
+                <h3 className="ml-3 text-xl font-semibold text-gray-800 dark:text-gray-100">
+                  Cost Optimization
+                </h3>
+              </div>
+              <p className="text-gray-600 dark:text-gray-300">
+                Pay only for what you use. Eliminate hardware costs and reduce operational overhead 
+                with our flexible pricing model and resource optimization features.
+              </p>
+            </div>
+
+            {/* Global Access */}
+            <div className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center mb-4">
+                <IoMdCode className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+                <h3 className="ml-3 text-xl font-semibold text-gray-800 dark:text-gray-100">
+                  Global Accessibility
+                </h3>
+              </div>
+              <p className="text-gray-600 dark:text-gray-300">
+                Access your development environment from anywhere in the world. Work seamlessly 
+                across devices with consistent performance and reliability.
+              </p>
+            </div>
+
+            {/* Automated Updates */}
+            <div className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center mb-4">
+                <IoMdRocket className="w-8 h-8 text-red-600 dark:text-red-400" />
+                <h3 className="ml-3 text-xl font-semibold text-gray-800 dark:text-gray-100">
+                  Automated Maintenance
+                </h3>
+              </div>
+              <p className="text-gray-600 dark:text-gray-300">
+                Focus on coding while we handle the rest. Automatic updates, dependency management, 
+                and system maintenance ensure your environment is always up-to-date and secure.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
