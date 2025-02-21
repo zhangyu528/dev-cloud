@@ -281,9 +281,85 @@ export default function LandingPage() {
               Got questions? We've got answers
             </p>
           </div>
-          {/* FAQ accordion or list will be added here */}
+          
+          <div className="grid gap-8 md:grid-cols-2">
+            {/* Getting Started */}
+            <div className="space-y-6">
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                  Getting Started
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-white">How do I start using DevCloud?</h4>
+                    <p className="mt-2 text-gray-600 dark:text-gray-300">Simply sign up for an account, choose your plan, and you can immediately start creating your first project. Our intuitive interface will guide you through the process.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-white">What are the system requirements?</h4>
+                    <p className="mt-2 text-gray-600 dark:text-gray-300">DevCloud works on all modern browsers. For optimal performance, we recommend using the latest versions of Chrome, Firefox, or Safari.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Account & Security */}
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                  Account & Security
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-white">How secure is my data?</h4>
+                    <p className="mt-2 text-gray-600 dark:text-gray-300">We use industry-standard encryption and security practices. Your data is encrypted both in transit and at rest, and we regularly perform security audits.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-white">How do I reset my password?</h4>
+                    <p className="mt-2 text-gray-600 dark:text-gray-300">Click on the "Forgot Password" link on the login page. You'll receive an email with instructions to reset your password securely.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Billing & Features */}
+            <div className="space-y-6">
+              {/* Billing & Subscription */}
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                  Billing & Subscription
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-white">What payment methods do you accept?</h4>
+                    <p className="mt-2 text-gray-600 dark:text-gray-300">We accept all major credit cards, PayPal, and wire transfers for enterprise customers. All payments are processed securely through our payment partners.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-white">Can I cancel my subscription anytime?</h4>
+                    <p className="mt-2 text-gray-600 dark:text-gray-300">Yes, you can cancel your subscription at any time. Your service will continue until the end of your current billing period.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Technical Support */}
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                  Technical Support
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-white">How can I get technical support?</h4>
+                    <p className="mt-2 text-gray-600 dark:text-gray-300">Our support team is available 24/7. You can reach us through the in-app chat, email support, or our community forums. Enterprise customers get priority support.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-white">Do you offer training resources?</h4>
+                    <p className="mt-2 text-gray-600 dark:text-gray-300">Yes, we provide comprehensive documentation, video tutorials, webinars, and a knowledge base. Enterprise plans include personalized training sessions.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
+
+      {/* FAQ Section End */}
     </>
   )
 }

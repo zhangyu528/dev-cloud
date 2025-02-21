@@ -39,11 +39,11 @@ export default function Header() {
             <Link href="/" className={`
               flex items-center space-x-3
               ${isScrolled 
-                ? 'text-gray-800 dark:text-white' 
-                : 'text-white dark:text-gray-200'}
+                ? 'text-gray-900 dark:text-white font-bold' 
+                : 'text-blue-300 dark:text-blue-300 font-bold hover:text-blue-200'}
             `}>
               <IoMdCube className="w-6 h-6" />
-              <span className="text-xl font-semibold">
+              <span className="text-xl">
                 Dev Cloud
               </span>
             </Link>

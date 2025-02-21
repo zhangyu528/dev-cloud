@@ -16,13 +16,6 @@ export default function Footer() {
             {/* First group */}
             <div className="flex items-center">
               <Link 
-                href="/forum" 
-                className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
-              >
-                Discussion Forum
-              </Link>
-              <span className="mx-2 text-gray-400 dark:text-gray-600">-</span>
-              <Link 
                 href="/features" 
                 className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
               >
@@ -34,13 +27,6 @@ export default function Footer() {
 
             {/* Second group */}
             <div className="flex items-center">
-              <Link 
-                href="/about" 
-                className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
-              >
-                About IDX
-              </Link>
-              <span className="mx-2 text-gray-400 dark:text-gray-600">-</span>
               <Link 
                 href="/terms" 
                 className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
