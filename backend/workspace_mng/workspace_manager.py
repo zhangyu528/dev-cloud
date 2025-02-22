@@ -79,25 +79,17 @@ class WorkspaceManager:
             
             # 创建模板容器
             template_container = self.container_manager.create_container(
-                name=f"{normalized_template}-container",
+                name=f"{workspace_name}",
                 image=f"localhost:9000/{normalized_template}:latest",
-                port=4200,
+                ports=[4200, 8080],
                 mount_path="/home/user",
                 env_vars={
                     "PROJECT_NAME": workspace_name,
                 }
             )
-            
-            # 创建 VScodeserver 容器
-            codeserver_container = self.container_manager.create_container(
-                name="code-server-container",
-                image="localhost:9000/code-server:latest",
-                port=8080,
-                mount_path="/home/coder/code-server",
-            )
 
             # 准备容器列表
-            containers = [template_container, codeserver_container]
+            containers = [template_container]
 
             # 创建 Pod
             pod = self.pod_manager.create_pod(
@@ -139,13 +131,13 @@ class WorkspaceManager:
         """
         try:
             # 删除 Ingress
-            self.ingress_manager.delete_ingress(f"{workspace_name.lower()}-ingress")
+            self.ingress_manager.delete_ingress(workspace_name)
             
             # 删除服务
-            self.service_manager.delete_service(f"{workspace_name.lower()}-service")
+            self.service_manager.delete_service(workspace_name)
             
             # 删除 Pod
-            self.pod_manager.delete_pod(f"{workspace_name.lower()}-pod")
+            self.pod_manager.delete_pod(workspace_name)
 
             self.logger.info(f"成功删除工作空间: {workspace_name}")
             return True
@@ -154,77 +146,3 @@ class WorkspaceManager:
             error_msg = f"删除工作空间失败: {e}"
             self.logger.error(error_msg)
             return False
-
-    def list_workspaces(self) -> List[Dict[str, Union[str, Dict]]]:
-        """
-        列出所有工作空间
-        
-        :return: 工作空间列表
-        """
-        try:
-            # 获取所有相关资源
-            pods = self.pod_manager.list_pods()
-            services = self.service_manager.list_services()
-            ingresses = self.ingress_manager.list_ingresses()
-
-            # 组合工作空间信息
-            workspaces = []
-            for pod in pods:
-                workspace = {
-                    "name": pod['name'].replace('-pod', '').lower(),
-                    "pod_status": pod['status']
-                }
-                
-                # 匹配服务
-                matching_service = next(
-                    (svc for svc in services if svc['name'] == f"{workspace['name']}-service"), 
-                    None
-                )
-                if matching_service:
-                    workspace['service'] = matching_service
-
-                # 匹配 Ingress
-                matching_ingress = next(
-                    (ing for ing in ingresses if ing['name'] == f"{workspace['name']}-ingress"), 
-                    None
-                )
-                if matching_ingress:
-                    workspace['ingress'] = matching_ingress
-
-                workspaces.append(workspace)
-
-            return workspaces
-
-        except Exception as e:
-            error_msg = f"列出工作空间失败: {e}"
-            self.logger.error(error_msg)
-            return []
-
-    def get_workspace_details(self, workspace_name: str) -> Optional[Dict[str, Union[str, Dict]]]:
-        """
-        获取特定工作空间的详细信息
-        
-        :param workspace_name: 工作空间名称
-        :return: 工作空间详细信息
-        """
-        try:
-            # 获取 Pod 详情
-            pod = self.pod_manager.get_pod(f"{workspace_name.lower()}-pod")
-            
-            # 获取服务详情
-            service = self.service_manager.get_service(f"{workspace_name.lower()}-service")
-            
-            # 获取 Ingress 详情
-            ingress = self.ingress_manager.get_ingress(f"{workspace_name.lower()}-ingress")
-
-            return {
-                "workspace_name": workspace_name,
-                "pod": pod,
-                "service": service,
-                "ingress": ingress
-            }
-
-        except Exception as e:
-            error_msg = f"获取工作空间详情失败: {e}"
-            self.logger.error(error_msg)
-            return None

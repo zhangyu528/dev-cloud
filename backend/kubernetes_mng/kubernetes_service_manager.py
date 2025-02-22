@@ -98,7 +98,7 @@ class KubernetesServiceManager:
         """
         try:
             service = self.core_client.read_namespaced_service(
-                name=service_name, 
+                name=f"{service_name}-service", 
                 namespace=self.namespace
             )
 
@@ -154,7 +154,7 @@ class KubernetesServiceManager:
         """
         try:
             self.core_client.delete_namespaced_service(
-                name=service_name, 
+                name=f"{service_name.lower()}-service", 
                 namespace=self.namespace
             )
             

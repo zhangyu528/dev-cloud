@@ -24,7 +24,7 @@ class KubernetesContainerManager:
         self, 
         name: str, 
         image: str,
-        port: int = 8080,
+        ports: Optional[List[int]] = None,
         mount_path: str = "/workspace",
         env_vars: Optional[Dict[str, str]] = None,
     ) -> client.V1Container:
@@ -33,7 +33,7 @@ class KubernetesContainerManager:
         
         :param name: 容器名称
         :param image: 镜像名称
-        :param port: 容器端口,default=8080
+        :param ports: 容器端口,default=8080
         :param mount_path: 挂载路径,default="/workspace"
         :return: Kubernetes 容器配置
         """
@@ -42,13 +42,15 @@ class KubernetesContainerManager:
             default_resources = self._get_default_resources()
             # 创建环境变量列表
             env_list = self.create_environment_variables(env_vars)
+            # 将端口数组转换为 V1ContainerPort 对象列表
+            container_ports = [
+                client.V1ContainerPort(container_port=port) for port in ports
+            ] if ports else None
             # 创建容器对象
             container = client.V1Container(
-                name=name,
+                name=f"{name}-container",
                 image=image,
-                ports=[
-                    client.V1ContainerPort(container_port=port)
-                ],
+                ports=container_ports,
                 volume_mounts=[
                     client.V1VolumeMount(
                         name="workspace-data",

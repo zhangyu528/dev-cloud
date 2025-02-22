@@ -91,7 +91,7 @@ class KubernetesPodResourceManager:
         """
         try:
             self.core_client.delete_namespaced_pod(
-                name=name, 
+                name=f"{name.lower()}-pod", 
                 namespace=self.namespace
             )
             

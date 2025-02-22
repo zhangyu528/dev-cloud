@@ -118,7 +118,7 @@ class KubernetesIngressManager:
         """
         try:
             ingress = self.networking_client.read_namespaced_ingress(
-                name=ingress_name, 
+                name=f"{ingress_name}-ingress", 
                 namespace=self.namespace
             )
 
@@ -178,7 +178,7 @@ class KubernetesIngressManager:
         """
         try:
             self.networking_client.delete_namespaced_ingress(
-                name=ingress_name, 
+                name=f"{ingress_name}-ingress", 
                 namespace=self.namespace
             )
             
@@ -209,7 +209,7 @@ class KubernetesIngressManager:
         try:
             # 获取当前 Ingress
             ingress = self.networking_client.read_namespaced_ingress(
-                name=ingress_name, 
+                name=f"{ingress_name.lower()}-ingress", 
                 namespace=self.namespace
             )
 
