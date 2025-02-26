@@ -1,8 +1,10 @@
 # kubernetes_pod_resource_manager.py
 import logging
-from mimetypes import init
 from typing import Dict, Optional, List, Union
 from kubernetes import client
+
+from backend.kubernetes_mng.kubernetes_client_manager import KubernetesClientManager
+from backend.kubernetes_mng.kubernetes_pod import KubernetesPod
 
 class KubernetesPodResourceManager:
     """
@@ -10,27 +12,20 @@ class KubernetesPodResourceManager:
     专注于 Pod 的创建、管理和删除
     """
 
-    def __init__(
-        self, 
-        core_client: client.CoreV1Api,
-        namespace: str = "default"
-    ):
+    def __init__(self):
         """
         初始化 Pod 管理器
-        
-        :param core_client: Kubernetes CoreV1Api 客户端
-        :param namespace: Kubernetes 命名空间
         """
-        self.core_client = core_client
-        self.namespace = namespace
+        self.namespace = KubernetesClientManager.get_instance().get_namespace()
         self.logger = logging.getLogger(self.__class__.__name__)
-    
+
+        self.core_v1_api = KubernetesClientManager.get_instance().get_core_v1_api()
 
     def create_pod(
         self, 
         name: str, 
         containers: Optional[List[client.V1Container]] = None,
-    ) -> client.V1Pod:
+    ):
         """
         创建工作空间 Pod
         
@@ -68,21 +63,19 @@ class KubernetesPodResourceManager:
             )
 
             # 创建 Pod
-            result = self.core_client.create_namespaced_pod(
+            result = self.core_v1_api.create_namespaced_pod(
                 body=pod, 
                 namespace=self.namespace
             )
 
             self.logger.info(f"创建 Pod: {result.metadata.name}")
 
-            return result
-
         except client.exceptions.ApiException as e:
             error_msg = f"创建 Pod 失败: {e}"
             self.logger.error(error_msg)
             raise ValueError(error_msg)
             
-    def delete_pod(self, name: str) -> bool:
+    def delete_pod(self, name: str):
         """
         删除 Pod
         
@@ -101,4 +94,22 @@ class KubernetesPodResourceManager:
         except client.exceptions.ApiException as e:
             error_msg = f"删除 Pod 失败: {e}"
             self.logger.error(error_msg)
-            return False
+            raise ValueError(error_msg)
+
+    def get_pod_directory_structure(self, pod_name: str, directory: str = "/home/developer"):
+        """
+        根据 Pod 名称获取目录结构
+        
+        :param pod_name: Pod 的名称
+        :param directory: 目录路径
+        :return: 目录结构的列表
+        """
+        # 获取 Pod 对象
+        pod = self.core_v1_api.read_namespaced_pod(name=pod_name, namespace=self.namespace)
+        
+        # 实例化 KubernetesPod
+        k8s_pod = KubernetesPod(pod=pod)
+        
+        # 获取目录结构
+        directory_structure = k8s_pod.get_directory_structure(directory)
+        return directory_structure

@@ -8,16 +8,10 @@ class KubernetesContainerManager:
     Kubernetes 容器配置管理器
     专注于容器镜像、资源和配置的管理
     """
-    def __init__(
-        self, 
-        namespace: str = "default"
-    ):
+    def __init__(self):
         """
         初始化容器管理器
-        
-        :param namespace: Kubernetes 命名空间
         """
-        self.namespace = namespace
         self.logger = logging.getLogger(self.__class__.__name__)
     
     def create_container(
@@ -25,7 +19,7 @@ class KubernetesContainerManager:
         name: str, 
         image: str,
         ports: Optional[List[int]] = None,
-        mount_path: str = "/workspace",
+        mount_path: str = "/home/developer",
         env_vars: Optional[Dict[str, str]] = None,
     ) -> client.V1Container:
         """
@@ -34,7 +28,7 @@ class KubernetesContainerManager:
         :param name: 容器名称
         :param image: 镜像名称
         :param ports: 容器端口,default=8080
-        :param mount_path: 挂载路径,default="/workspace"
+        :param mount_path: 挂载路径,default="/home/developer"
         :return: Kubernetes 容器配置
         """
         try:
@@ -50,6 +44,7 @@ class KubernetesContainerManager:
             container = client.V1Container(
                 name=f"{name}-container",
                 image=image,
+                image_pull_policy="IfNotPresent", # 如果镜像不存在，选择不拉取
                 ports=container_ports,
                 volume_mounts=[
                     client.V1VolumeMount(
@@ -77,12 +72,12 @@ class KubernetesContainerManager:
         """
         return client.V1ResourceRequirements(
             requests={
-            "cpu": "100m",     # 最小 0.1 核 CPU
-            "memory": "256Mi"  # 256 兆内存
+            "cpu": "2000m",     # 最小 0.1 核 CPU
+            "memory": "512Mi"  # 256 兆内存
         },
         limits={
-            "cpu": "500m",     # 最大 0.5 核 CPU
-            "memory": "512Mi"  # 512 兆内存
+            "cpu": "2000m",     # 最大 0.5 核 CPU
+            "memory": "1Gi"  # 512 兆内存
         }
     )
 

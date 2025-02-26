@@ -33,7 +33,7 @@ class WorkspaceCreate(Resource):
             workspace.owner_id = get_jwt_identity()
             db.session.add(workspace)
         
-            workspace_manager = WorkspaceManager(namespace="flask-dev-cloud-server")
+            workspace_manager = WorkspaceManager.get_instance()
             workspace_manager.create_workspace(workspace.name, workspace.template)
             db.session.commit()
         except Exception as e:
@@ -42,7 +42,7 @@ class WorkspaceCreate(Resource):
             return {"message": "Failed to create workspace"}, 500
         return {"message": "Workspace created successfully"}, 200
 
-
+# 定义工作区响应模型
 list_workspace_resp_model = workspace_ns.model('Workspace', {
     'id': fields.String(required=True, description='工作区ID'),
     'name': fields.String(required=True, description='工作区名称'),
@@ -80,7 +80,7 @@ class DeleteWorkspace(Resource):
                 return {"message": "Unauthorized"}, 401
 
             #删除workspace
-            workspace_manager = WorkspaceManager(namespace="flask-dev-cloud-server")
+            workspace_manager = WorkspaceManager.get_instance()
             workspace_manager.delete_workspace(workspace.name)
             # 删除工作区记录
             db.session.delete(workspace)
@@ -90,6 +90,61 @@ class DeleteWorkspace(Resource):
             db.session.rollback()
             return {"message": "Failed to delete workspace"}, 500
         return {"message": "Workspace deleted successfully"}, 200
+
+# 定义目录结构模型（支持嵌套）
+directory_structure_req_model = workspace_ns.model('DirectoryStructure', {
+    'type': fields.String(required=True, description='项目类型（文件/目录）', enum=['file', 'directory']),
+    'name': fields.String(required=True, description='文件或目录名称'),
+    'content': fields.String(required=False, description='文件内容（仅对文件有效）'),
+    'children': fields.List(
+        fields.Nested(
+            workspace_ns.model('NestedDirectoryStructure', {
+                'type': fields.String(required=True, description='项目类型（文件/目录）', enum=['file', 'directory']),
+                'name': fields.String(required=True, description='文件或目录名称'),
+                'content': fields.String(required=False, description='文件内容（仅对文件有效）'),
+                # 支持无限嵌套
+                'children': fields.List(fields.Raw, required=False)
+            })
+        ),
+        required=False,
+        description='子目录或文件'
+    )
+})
+@workspace_ns.route('/directory/<string:workspace_name>')
+class WorkspaceDirectory(Resource):
+    @workspace_ns.doc(security=['jwt'], description='获取工作区目录')
+    @workspace_ns.marshal_with(directory_structure_req_model, as_list=True)
+    @jwt_required()
+    def get(self, workspace_name):
+        """获取工作区目录"""
+        try:
+            workspace = Workspace.query.filter_by(name=workspace_name, owner_id=get_jwt_identity()).first()
+            if not workspace:
+                return {"message": "Workspace not found"}, 404
+            
+            # 获取工作区目录
+            workspace_manager = WorkspaceManager.get_instance()
+            return workspace_manager.get_workspace_directory_structure(workspace_name)
+        except Exception as e:
+            logger.error(f"Failed to get workspace directory: {str(e)}")
+            return {"message": "Failed to get workspace directory"}, 500
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 from kubernetes_mng.kubernetes_pod_tracker import KubernetesPodTracker
 @workspace_ns.route('/track/<string:workspace_name>')

@@ -1,4 +1,5 @@
 # kubernetes_service_manager.py
+from backend.kubernetes_mng.kubernetes_client_manager import KubernetesClientManager
 from kubernetes import client
 from typing import Dict, Optional, List
 import logging
@@ -8,19 +9,12 @@ class KubernetesServiceManager:
     Kubernetes Service 资源管理器
     专注于 Service 的创建、管理和删除
     """
-    def __init__(
-        self, 
-        core_client: client.CoreV1Api,
-        namespace: str = "default"
-    ):
+    def __init__(self):
         """
         初始化 Service 管理器
-        
-        :param core_client: Kubernetes CoreV1Api 客户端
-        :param namespace: Kubernetes 命名空间
         """
-        self.core_client = core_client
-        self.namespace = namespace
+        self.core_v1_api = KubernetesClientManager.get_instance().get_core_v1_api()
+        self.namespace = KubernetesClientManager.get_instance().get_namespace()
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def create_service(
@@ -68,7 +62,7 @@ class KubernetesServiceManager:
 
         try:
             # 创建 Service
-            result = self.core_client.create_namespaced_service(
+            result = self.core_v1_api.create_namespaced_service(
                 namespace=self.namespace, 
                 body=service
             )
@@ -97,7 +91,7 @@ class KubernetesServiceManager:
         :return: Service 详情
         """
         try:
-            service = self.core_client.read_namespaced_service(
+            service = self.core_v1_api.read_namespaced_service(
                 name=f"{service_name}-service", 
                 namespace=self.namespace
             )
@@ -125,7 +119,7 @@ class KubernetesServiceManager:
         :return: Services 列表
         """
         try:
-            services = self.core_client.list_namespaced_service(
+            services = self.core_v1_api.list_namespaced_service(
                 namespace=self.namespace,
                 label_selector=label_selector
             )
@@ -153,7 +147,7 @@ class KubernetesServiceManager:
         :return: 是否删除成功
         """
         try:
-            self.core_client.delete_namespaced_service(
+            self.core_v1_api.delete_namespaced_service(
                 name=f"{service_name.lower()}-service", 
                 namespace=self.namespace
             )
@@ -182,7 +176,7 @@ class KubernetesServiceManager:
         """
         try:
             # 获取当前 Service
-            service = self.core_client.read_namespaced_service(
+            service = self.core_v1_api.read_namespaced_service(
                 name=service_name, 
                 namespace=self.namespace
             )
@@ -197,7 +191,7 @@ class KubernetesServiceManager:
                 service.spec.type = service_type
 
             # 更新 Service
-            updated_service = self.core_client.patch_namespaced_service(
+            updated_service = self.core_v1_api.patch_namespaced_service(
                 name=service_name, 
                 namespace=self.namespace,
                 body=service

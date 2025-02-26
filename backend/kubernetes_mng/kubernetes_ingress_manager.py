@@ -2,26 +2,19 @@
 import logging
 from kubernetes import client
 from typing import Dict, Optional, List, Union
-
+from backend.kubernetes_mng.kubernetes_client_manager import KubernetesClientManager
 class KubernetesIngressManager:
     """
     Kubernetes Ingress 资源管理器
     专注于 Ingress 的创建、管理和删除
     """
-    def __init__(
-        self, 
-        networking_client: client.NetworkingV1Api,
-        namespace: str = "default"
-    ):
+    def __init__(self):
         """
         初始化 Ingress 管理器
-        
-        :param networking_client: Kubernetes NetworkingV1Api 客户端
-        :param namespace: Kubernetes 命名空间
         """
-        self.networking_client = networking_client
-        self.namespace = namespace
+        self.namespace = KubernetesClientManager.get_instance().get_namespace()
         self.logger = logging.getLogger(self.__class__.__name__)
+        self.networking_v1_api = KubernetesClientManager.get_instance().get_networking_v1_api()
 
     def create_ingress(
         self, 
@@ -35,7 +28,7 @@ class KubernetesIngressManager:
         """
         为工作空间创建 Ingress
         
-        :param workspace_name: 工作空间名称
+        :param name: Ingress 名称
         :param service_name: 关联的 Service 名称
         :param domain: 域名
         :param path: 路径
@@ -47,9 +40,13 @@ class KubernetesIngressManager:
         # Ingress 元数据
         metadata = client.V1ObjectMeta(
             name=f"{name}-ingress",
+            namespace=self.namespace,
             labels={
                 "app": f"{name}-ingress",
-            }
+            },
+            # annotations={
+            #     "kubernetes.io/ingress.class": "traefik"  # 指定使用 Traefik 作为 Ingress Controller
+            # }
         )
 
         # Ingress 规格
@@ -87,7 +84,7 @@ class KubernetesIngressManager:
 
         try:
             # 创建 Ingress
-            result = self.networking_client.create_namespaced_ingress(
+            result = self.networking_v1_api.create_namespaced_ingress(
                 namespace=self.namespace, 
                 body=ingress
             )
@@ -117,7 +114,7 @@ class KubernetesIngressManager:
         :return: Ingress 详情
         """
         try:
-            ingress = self.networking_client.read_namespaced_ingress(
+            ingress = self.networking_v1_api.read_namespaced_ingress(
                 name=f"{ingress_name}-ingress", 
                 namespace=self.namespace
             )
@@ -150,7 +147,7 @@ class KubernetesIngressManager:
         :return: Ingresses 列表
         """
         try:
-            ingresses = self.networking_client.list_namespaced_ingress(
+            ingresses = self.networking_v1_api.list_namespaced_ingress(
                 namespace=self.namespace,
                 label_selector=label_selector
             )
@@ -177,7 +174,7 @@ class KubernetesIngressManager:
         :return: 是否删除成功
         """
         try:
-            self.networking_client.delete_namespaced_ingress(
+            self.networking_v1_api.delete_namespaced_ingress(
                 name=f"{ingress_name}-ingress", 
                 namespace=self.namespace
             )
@@ -208,7 +205,7 @@ class KubernetesIngressManager:
         """
         try:
             # 获取当前 Ingress
-            ingress = self.networking_client.read_namespaced_ingress(
+            ingress = self.networking_v1_api.read_namespaced_ingress(
                 name=f"{ingress_name.lower()}-ingress", 
                 namespace=self.namespace
             )
@@ -226,7 +223,7 @@ class KubernetesIngressManager:
                 ingress.spec.rules[0].http.paths[0].path = path
 
             # 更新 Ingress
-            updated_ingress = self.networking_client.patch_namespaced_ingress(
+            updated_ingress = self.networking_v1_api.patch_namespaced_ingress(
                 name=ingress_name, 
                 namespace=self.namespace,
                 body=ingress
