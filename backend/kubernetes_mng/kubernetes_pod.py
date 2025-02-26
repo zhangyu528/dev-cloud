@@ -1,6 +1,6 @@
 from kubernetes import client
 import json
-from kubernetes.client import stream
+from kubernetes.stream import stream
 from backend.kubernetes_mng.kubernetes_client_manager import KubernetesClientManager
 
 class KubernetesPod:
