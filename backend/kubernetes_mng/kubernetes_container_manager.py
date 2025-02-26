@@ -56,7 +56,7 @@ class KubernetesContainerManager:
                 resources=default_resources,
                 env=env_list
             )
-
+            self.logger.info(f"创建容器配置成功: {container}")
             return container
 
         except Exception as e:

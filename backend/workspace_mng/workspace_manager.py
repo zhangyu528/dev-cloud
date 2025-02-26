@@ -9,13 +9,13 @@ from kubernetes_mng.kubernetes_client_manager import KubernetesClientManager
 
 
 class WorkspaceManager:
-    _instances = {}
+    _instance = None
 
     @classmethod
-    def get_instance(cls, namespace: str = "default"):
-        if namespace not in cls._instances:
-            cls._instances[namespace] = cls(namespace)
-        return cls._instances[namespace]
+    def get_instance(cls):
+        if cls._instance is None:
+            cls._instance = cls()
+        return cls._instance
 
     def __init__(self):
         if not hasattr(self, 'initialized'):
@@ -56,11 +56,10 @@ class WorkspaceManager:
                 env_vars={
                     "PROJECT_NAME": workspace_name,
                 },
-                image_pull_policy="IfNotPresent"
             )
 
             # 准备容器列表
-            containers = [template_container]
+            containers = [self.template_container]
 
             # 创建 Pod
             self.pod = self.pod_manager.create_pod(
@@ -68,30 +67,13 @@ class WorkspaceManager:
                 containers=containers
             )
 
-            # 创建服务
-            # service = self.service_manager.create_service(
-            #     name=f"{workspace_name.lower()}",
-            #     pod_selector={
-            #         "app": f"{workspace_name.lower()}-app"
-            #     },
-            #     port=8080  # 使用 code-server 的固定端口
-            # )
-
-            # 创建 Ingress（可选）
-            # ingress = self.ingress_manager.create_ingress(
-            #     name=f"{workspace_name.lower()}",
-            #     service_name=f"{workspace_name.lower()}-service",
-            #     domain=f"{workspace_name.lower()}.127.0.0.1.nip.io",
-            #     service_port=8080  # 使用 code-server 的固定端口
-            # )
-
             # 记录日志
             self.logger.info(f"成功创建工作空间: {workspace_name}")
             
         except Exception as e:
-            self.delete_workspace(workspace_name)
             error_msg = f"创建工作空间失败: {e}"
             self.logger.error(error_msg)
+            self.delete_workspace(workspace_name)
             raise ValueError(error_msg)
 
     def delete_workspace(self, workspace_name: str):

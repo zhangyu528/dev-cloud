@@ -11,3 +11,6 @@ ng new ${PROJECT_NAME} --defaults --skip-git --skip-install \
 #echo "Angular project served: ${PROJECT_NAME}"
 # 启动 Angular 开发服务器
 #ng serve --host 0.0.0.0 --port 4200
+
+# 保持容器运行
+tail -f /dev/null

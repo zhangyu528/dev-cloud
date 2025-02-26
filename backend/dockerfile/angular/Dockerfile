@@ -7,6 +7,9 @@ ENV NODE_ENV=development
 # 安装 Angular CLI（全局安装）
 RUN npm install -g @angular/cli@15.0.0
 
+# 更新系统并安装 tree
+RUN apt-get update && apt-get install -y tree
+
 # 设置工作目录
 WORKDIR /home/developer
 

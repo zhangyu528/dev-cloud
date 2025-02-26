@@ -83,7 +83,7 @@ class KubernetesPodResourceManager:
         :return: 是否删除成功
         """
         try:
-            self.core_client.delete_namespaced_pod(
+            self.core_v1_api.delete_namespaced_pod(
                 name=f"{name.lower()}-pod", 
                 namespace=self.namespace
             )
@@ -102,10 +102,10 @@ class KubernetesPodResourceManager:
         
         :param pod_name: Pod 的名称
         :param directory: 目录路径
-        :return: 目录结构的列表
+        :return: 目录结构的 JSON 字符串
         """
         # 获取 Pod 对象
-        pod = self.core_v1_api.read_namespaced_pod(name=pod_name, namespace=self.namespace)
+        pod = self.core_v1_api.read_namespaced_pod(name=f"{pod_name.lower()}-pod", namespace=self.namespace)
         
         # 实例化 KubernetesPod
         k8s_pod = KubernetesPod(pod=pod)

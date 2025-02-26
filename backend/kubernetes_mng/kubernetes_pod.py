@@ -1,5 +1,7 @@
 from kubernetes import client
 import json
+import logging
+import os
 from kubernetes.stream import stream
 from backend.kubernetes_mng.kubernetes_client_manager import KubernetesClientManager
 
@@ -13,77 +15,20 @@ class KubernetesPod:
         self.pod = pod
         self.core_v1_api = KubernetesClientManager.get_instance().get_core_v1_api()
 
+        self.logger = logging.getLogger(self.__class__.__name__)
+
     def get_directory_structure(self, directory: str = "/home/developer"):
         """
         获取指定 Pod 中的目录结构
         
         :param directory: 目录路径
-        :return: 目录结构的列表
+        :return: 目录结构的字典
         """
-        exec_command = ['tree', directory]
-        try:
-            response = stream(
-                self.core_v1_api.connect_get_namespaced_pod_exec,
-                self.pod.metadata.name,
-                self.pod.metadata.namespace,
-                command=exec_command,
-                stderr=True,
-                stdin=False,
-                stdout=True,
-                tty=False
-            )
-            response = response.decode('utf-8')
-            # 调用解析函数
-            return self.parse_directory_structure(response)
-        except client.exceptions.ApiException as e:
-            print(f"Error executing command: {e}")
-            return None
-            
-    def parse_directory_structure(output: str):
-        """
-        解析 tree 命令的输出，并返回 JSON 格式的目录结构
+        self.logger.info(f"获取 {directory} 目录结构")
         
-        :param tree_output: tree 命令的标准输出
-        :return: JSON 格式的目录结构
-        """
-        lines = output.strip().split('\n')
-        directory_structure = {}
-        current_path = []
-
-        for line in lines[1:]:  # 跳过第一行（根目录）
-            # 计算当前层级
-            level = line.count('│') + line.count('├') + line.count('└')
-            item_name = line.split()[-1]  # 获取最后一个部分作为文件或目录名
-
-            # 根据层级更新当前路径
-            if level < len(current_path):
-                current_path = current_path[:level]
-
-            # 添加当前项目到路径
-            current_path.append(item_name)
-
-            # 构建嵌套结构
-            current_dict = directory_structure
-            for part in current_path:
-                if part not in current_dict:
-                    current_dict[part] = {}
-                current_dict = current_dict[part]
-
-            # 如果是文件，获取内容并添加
-            if not line.startswith('d'):  # 假设以 'd' 开头的是目录
-                file_content = self.get_file_content(item_name, current_path)
-                current_dict['content'] = file_content
-        return json.dumps(directory_structure, indent=4)
-
-    def get_file_content(self, file_name: str, current_path: list):
-        """
-        获取指定文件的内容
-        :param file_name: 文件名
-        :param current_path: 当前路径
-        :return: 文件内容
-        """
-        full_path = '/'.join(current_path + [file_name])
-        exec_command = ['cat', full_path]
+        # 执行 tree 命令，使用 JSON 输出格式
+        exec_command = ['tree', '-J', directory] # -J 以 JSON 输出格式显示目录结构
+        
         try:
             response = stream(
                 self.core_v1_api.connect_get_namespaced_pod_exec,
@@ -95,7 +40,37 @@ class KubernetesPod:
                 stdout=True,
                 tty=False
             )
-            return response.decode('utf-8')
-        except client.exceptions.ApiException as e:
-            print(f"Error getting file content: {e}")
-            return None
+                        
+            try:
+                # 方法2：替换单引号为双引号
+                import re
+                response = re.sub(r"'", '"', response)
+                tree_json = json.loads(response)
+            except json.JSONDecodeError as json_err:
+                self.logger.error(f"JSON解析错误: {json_err}")
+                self.logger.error(f"无法解析的响应内容: {response}")
+                return {
+                    'type': 'directory',
+                    'name': os.path.basename(directory),
+                    'contents': []
+                }
+
+            # 过滤掉报告部分，只保留目录结构
+            directory_structure = tree_json[0] if tree_json and isinstance(tree_json, list) else {}
+
+            self.logger.debug(f"Parsed directory_structure: {directory_structure}")
+
+            # 转换为标准格式
+            return {
+                'type': directory_structure.get('type', 'directory'),
+                'name': os.path.basename(directory),
+                'contents': directory_structure.get('contents', [])
+            }
+        except Exception as e:
+            error_msg = f"获取 {directory} 目录结构失败: {e}"
+            self.logger.error(error_msg, exc_info=True)
+            return {
+                'type': 'directory',
+                'name': os.path.basename(directory),
+                'contents': []
+            }

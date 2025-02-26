@@ -9,8 +9,7 @@ export interface Workspace {
 export interface DirectoryItem {
     name: string;
     type: 'file' | 'directory';
-    content?: string;
-    children?: DirectoryItem[];
+    contents?: DirectoryItem[];
 }
 
 export class WorkspacesApi {

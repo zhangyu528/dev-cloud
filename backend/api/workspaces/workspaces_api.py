@@ -1,4 +1,3 @@
-
 from flask import request
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -92,28 +91,21 @@ class DeleteWorkspace(Resource):
         return {"message": "Workspace deleted successfully"}, 200
 
 # 定义目录结构模型（支持嵌套）
-directory_structure_req_model = workspace_ns.model('DirectoryStructure', {
-    'type': fields.String(required=True, description='项目类型（文件/目录）', enum=['file', 'directory']),
-    'name': fields.String(required=True, description='文件或目录名称'),
-    'content': fields.String(required=False, description='文件内容（仅对文件有效）'),
-    'children': fields.List(
-        fields.Nested(
-            workspace_ns.model('NestedDirectoryStructure', {
-                'type': fields.String(required=True, description='项目类型（文件/目录）', enum=['file', 'directory']),
-                'name': fields.String(required=True, description='文件或目录名称'),
-                'content': fields.String(required=False, description='文件内容（仅对文件有效）'),
-                # 支持无限嵌套
-                'children': fields.List(fields.Raw, required=False)
-            })
-        ),
-        required=False,
-        description='子目录或文件'
-    )
+directory_structure_resp_model = workspace_ns.model('DirectoryItem', {
+    'type': fields.String(description='节点类型', enum=['directory', 'file'], required=True),
+    'name': fields.String(description='文件或目录名称', required=True),
 })
+# 使用 model 的 clone 方法来支持递归
+directory_structure_resp_model['contents'] = fields.List(
+    fields.Nested(directory_structure_resp_model),
+    description='子目录或文件列表',
+    required=False
+)
+
 @workspace_ns.route('/directory/<string:workspace_name>')
 class WorkspaceDirectory(Resource):
     @workspace_ns.doc(security=['jwt'], description='获取工作区目录')
-    @workspace_ns.marshal_with(directory_structure_req_model, as_list=True)
+    @workspace_ns.marshal_with(directory_structure_resp_model)
     @jwt_required()
     def get(self, workspace_name):
         """获取工作区目录"""
@@ -124,7 +116,11 @@ class WorkspaceDirectory(Resource):
             
             # 获取工作区目录
             workspace_manager = WorkspaceManager.get_instance()
-            return workspace_manager.get_workspace_directory_structure(workspace_name)
+            response = workspace_manager.get_workspace_directory_structure(workspace_name)
+            # 调试代码
+            logger.debug(f"Response type: {type(response)}")
+            logger.debug(f"Response content: {response}")
+            return response, 200
         except Exception as e:
             logger.error(f"Failed to get workspace directory: {str(e)}")
             return {"message": "Failed to get workspace directory"}, 500
