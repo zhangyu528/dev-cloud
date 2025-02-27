@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { 
-  FaFolder, 
   FaChevronDown, 
   FaChevronRight, 
-  FaPlus, 
-  FaFolderPlus, 
   FaSync, 
   FaCompressAlt 
 } from 'react-icons/fa';
+
 import { DirectoryItem } from '@/api/workspaces';
 import { FileNode } from './FileNode';
+import { DirectoryNode } from './DirectoryNode';
 
 interface RootNodeProps {
   item: DirectoryItem;
   onFileSelect: (path: string) => void;
   selectedFilePath: string | null;
+  onRefresh?: () => void;
+  onCollapse?: () => void;
 }
 
 export const RootNode: React.FC<RootNodeProps> = ({ 
   item, 
   onFileSelect, 
-  selectedFilePath 
+  selectedFilePath, 
+  onRefresh, 
+  onCollapse 
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -37,22 +40,19 @@ export const RootNode: React.FC<RootNodeProps> = ({
     toggleExpand();
   };
 
-  const handleNewFile = () => {
-    // TODO: 实现新建文件逻辑
-    console.log('New File');
-  };
-
-  const handleNewFolder = () => {
-    // TODO: 实现新建文件夹逻辑
-    console.log('New Folder');
-  };
-
   const handleRefresh = () => {
-    // TODO: 实现刷新逻辑
-    console.log('Refresh');
+    if (onRefresh) {
+      onRefresh();
+    } else {
+      // TODO: 实现默认刷新逻辑
+      console.log('Refresh');
+    }
   };
 
   const handleCollapse = () => {
+    if (onCollapse) {
+      onCollapse();
+    }
     setIsExpanded(false);
   };
 
@@ -107,8 +107,6 @@ export const RootNode: React.FC<RootNodeProps> = ({
               : <FaChevronRight className="text-xs text-gray-600 dark:text-gray-300" />}
           </div>
 
-          <FaFolder className="mr-2 text-sm text-blue-500 dark:text-blue-300" />
-
           <span 
             className={`
               text-xs 
@@ -132,41 +130,6 @@ export const RootNode: React.FC<RootNodeProps> = ({
             `}
             onClick={(e) => {
               e.stopPropagation();
-              handleSelect();
-              handleNewFile();
-            }}
-            title="New File"
-          >
-            <FaPlus className="text-xs" />
-          </button>
-          <button 
-            className={`
-              text-gray-500 
-              p-1 
-              rounded-full 
-              hover:bg-blue-100 
-              dark:hover:bg-blue-800
-            `}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSelect();
-              handleNewFolder();
-            }}
-            title="New Folder"
-          >
-            <FaFolderPlus className="text-xs" />
-          </button>
-          <button 
-            className={`
-              text-gray-500 
-              p-1 
-              rounded-full 
-              hover:bg-blue-100 
-              dark:hover:bg-blue-800
-            `}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSelect();
               handleRefresh();
             }}
             title="Refresh"
@@ -183,7 +146,6 @@ export const RootNode: React.FC<RootNodeProps> = ({
             `}
             onClick={(e) => {
               e.stopPropagation();
-              handleSelect();
               handleCollapse();
             }}
             title="Collapse Folder"
@@ -196,14 +158,25 @@ export const RootNode: React.FC<RootNodeProps> = ({
       {isExpanded && item.contents && (
         <div className="pl-3 pt-1 pb-2">
           {item.contents.map((child, index) => (
-            <FileNode
-              key={index}
-              item={child}
-              depth={1}
-              fullPath={`${item.name}/${child.name}`.replace(/^\//, '')}
-              onFileSelect={onFileSelect}
-              selectedFilePath={selectedFilePath}
-            />
+            child.type === 'directory' ? (
+              <DirectoryNode
+                key={index}
+                item={child}
+                depth={1}
+                fullPath={`${item.name}/${child.name}`.replace(/^\//, '')}
+                onFileSelect={onFileSelect}
+                selectedFilePath={selectedFilePath}
+              />
+            ) : (
+              <FileNode
+                key={index}
+                item={child}
+                depth={1}
+                fullPath={`${item.name}/${child.name}`.replace(/^\//, '')}
+                onFileSelect={onFileSelect}
+                selectedFilePath={selectedFilePath}
+              />
+            )
           ))}
         </div>
       )}

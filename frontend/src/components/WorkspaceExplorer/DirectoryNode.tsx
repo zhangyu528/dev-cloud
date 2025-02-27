@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { 
-  FaFolder, 
-  FaFolderOpen, 
   FaChevronDown, 
   FaChevronRight 
 } from 'react-icons/fa';
+import { FaRegFolder } from "react-icons/fa";
 import { DirectoryItem } from '@/api/workspaces';
 import { FileNode } from './FileNode';
 
@@ -89,9 +88,7 @@ export const DirectoryNode: React.FC<DirectoryNodeProps> = ({
               : <FaChevronRight className="text-xs text-gray-600 dark:text-gray-300" />}
           </div>
 
-          {isExpanded 
-            ? <FaFolderOpen className="mr-2 text-sm text-blue-500 dark:text-blue-300" />
-            : <FaFolder className="mr-2 text-sm text-blue-500 dark:text-blue-300" />}
+          <FaRegFolder className="mr-2 w-4 h-4 text-blue-500 dark:text-blue-300" />
 
           <span 
             className={`
