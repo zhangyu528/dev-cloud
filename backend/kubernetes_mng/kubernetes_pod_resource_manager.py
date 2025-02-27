@@ -96,12 +96,11 @@ class KubernetesPodResourceManager:
             self.logger.error(error_msg)
             raise ValueError(error_msg)
 
-    def get_pod_directory_structure(self, pod_name: str, directory: str = "/home/developer"):
+    def get_pod_directory_structure(self, pod_name: str):
         """
         根据 Pod 名称获取目录结构
         
         :param pod_name: Pod 的名称
-        :param directory: 目录路径
         :return: 目录结构的 JSON 字符串
         """
         # 获取 Pod 对象
@@ -109,7 +108,7 @@ class KubernetesPodResourceManager:
         
         # 实例化 KubernetesPod
         k8s_pod = KubernetesPod(pod=pod)
-        
+        directory = f"/home/developer/{pod_name.lower()}"
         # 获取目录结构
         directory_structure = k8s_pod.get_directory_structure(directory)
         return directory_structure

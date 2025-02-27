@@ -117,9 +117,7 @@ class WorkspaceDirectory(Resource):
             # 获取工作区目录
             workspace_manager = WorkspaceManager.get_instance()
             response = workspace_manager.get_workspace_directory_structure(workspace_name)
-            # 调试代码
-            logger.debug(f"Response type: {type(response)}")
-            logger.debug(f"Response content: {response}")
+
             return response, 200
         except Exception as e:
             logger.error(f"Failed to get workspace directory: {str(e)}")

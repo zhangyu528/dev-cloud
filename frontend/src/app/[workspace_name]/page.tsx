@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { WorkspacesApi } from '@/api/workspaces';
 import { DirectoryItem } from '@/api/workspaces';
-import { FileTree } from '@/components/FileTree';
+import { WorkspaceExplorer } from '@/components/WorkspaceExplorer/WorkspaceExplorer';
 
 export default function Workspace() {
   const params = useParams();
@@ -33,8 +33,8 @@ export default function Workspace() {
   return (
     <div className="flex h-screen">
       <div className="w-1/4 border-r">
-        <FileTree 
-          root={directoryStructure} 
+        <WorkspaceExplorer
+          root={directoryStructure}
           onFileSelect={handleFileSelect}
         />
       </div>
