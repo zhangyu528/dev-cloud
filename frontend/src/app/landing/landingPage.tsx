@@ -234,7 +234,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Social Proof Section: Testimonials and User Stats */}
+      {/* Temporarily hidden social proof section
       <section id="social-proof" className="py-24 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -245,9 +245,9 @@ export default function LandingPage() {
               Join thousands of developers who are transforming their workflow
             </p>
           </div>
-          {/* Testimonials and stats will be added here */}
         </div>
       </section>
+      */}
 
       {/* CTA (Call to Action) Section: Final Push to Sign Up */}
       <section id="cta" className="py-24 bg-gradient-to-r from-blue-600 to-purple-600 text-white">

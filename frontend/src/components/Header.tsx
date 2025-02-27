@@ -40,7 +40,7 @@ export default function Header() {
               flex items-center space-x-3
               ${isScrolled 
                 ? 'text-gray-900 dark:text-white font-bold' 
-                : 'text-blue-300 dark:text-blue-300 font-bold hover:text-blue-200'}
+                : 'text-gray-900 dark:text-blue-300 font-bold hover:text-gray-700'}
             `}>
               <IoMdCube className="w-6 h-6" />
               <span className="text-xl">
