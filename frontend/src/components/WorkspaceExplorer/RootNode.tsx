@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { 
   FaChevronDown, 
   FaChevronRight, 
+  FaPlus, 
+  FaFolderPlus, 
   FaSync, 
   FaCompressAlt 
 } from 'react-icons/fa';
@@ -40,6 +42,16 @@ export const RootNode: React.FC<RootNodeProps> = ({
     toggleExpand();
   };
 
+  const handleNewFile = () => {
+    // TODO: 实现新建文件逻辑
+    console.log('New File');
+  };
+
+  const handleNewFolder = () => {
+    // TODO: 实现新建文件夹逻辑
+    console.log('New Folder');
+  };
+
   const handleRefresh = () => {
     if (onRefresh) {
       onRefresh();
@@ -59,26 +71,15 @@ export const RootNode: React.FC<RootNodeProps> = ({
   const isSelected = selectedFilePath === item.name;
 
   return (
-    <div 
-      className={`
-        border 
-        rounded-lg 
-        ${isSelected 
-          ? 'border-blue-300 dark:border-blue-600' 
-          : 'border-transparent'}
-        transition-all 
-        duration-200 
-        ease-in-out
-        mb-2
-      `}
-    >
+    <div>
       <div
         className={`
+          relative 
+          group 
           flex 
           items-center 
           justify-between 
-          p-2 
-          rounded-lg 
+          p-1
           cursor-pointer 
           transition-all 
           duration-200 
@@ -130,6 +131,41 @@ export const RootNode: React.FC<RootNodeProps> = ({
             `}
             onClick={(e) => {
               e.stopPropagation();
+              handleSelect();
+              handleNewFile();
+            }}
+            title="New File"
+          >
+            <FaPlus className="text-xs" />
+          </button>
+          <button 
+            className={`
+              text-gray-500 
+              p-1 
+              rounded-full 
+              hover:bg-blue-100 
+              dark:hover:bg-blue-800
+            `}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSelect();
+              handleNewFolder();
+            }}
+            title="New Folder"
+          >
+            <FaFolderPlus className="text-xs" />
+          </button>
+          <button 
+            className={`
+              text-gray-500 
+              p-1 
+              rounded-full 
+              hover:bg-blue-100 
+              dark:hover:bg-blue-800
+            `}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSelect();
               handleRefresh();
             }}
             title="Refresh"
@@ -146,6 +182,7 @@ export const RootNode: React.FC<RootNodeProps> = ({
             `}
             onClick={(e) => {
               e.stopPropagation();
+              handleSelect();
               handleCollapse();
             }}
             title="Collapse Folder"
@@ -156,7 +193,7 @@ export const RootNode: React.FC<RootNodeProps> = ({
       </div>
 
       {isExpanded && item.contents && (
-        <div className="pl-3 pt-1 pb-2">
+        <div className="pl-1 pt-1 pb-1">
           {item.contents.map((child, index) => (
             child.type === 'directory' ? (
               <DirectoryNode

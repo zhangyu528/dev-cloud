@@ -19,9 +19,6 @@ export const WorkspaceExplorer: React.FC<WorkspaceExplorerProps> = ({ root, onFi
     <div className="
       bg-white 
       dark:bg-gray-800
-      border 
-      border-gray-200 
-      dark:border-gray-700
       rounded-xl 
       shadow-sm 
       dark:shadow-md
@@ -33,23 +30,17 @@ export const WorkspaceExplorer: React.FC<WorkspaceExplorerProps> = ({ root, onFi
       <div className="
         text-xs 
         font-semibold 
-        text-gray-700 
-        dark:text-gray-300
-        px-4 
-        py-3 
-        border-b 
-        border-gray-200 
-        dark:border-gray-700
-        bg-gray-50
-        dark:bg-gray-900
-      ">
+        text-gray-300 
+        px-6
+        py-2
+      "
+      >
         Workspace Explorer
       </div>
+
       <div className="
         flex-grow 
         overflow-y-auto 
-        p-2 
-        dark:bg-gray-800
       ">
         {root ? (
           <RootNode 

@@ -33,13 +33,12 @@ export const FileNode: React.FC<FileNodeProps> = ({
         items-center 
         cursor-pointer 
         p-1 
-        rounded-lg 
         transition-all 
         duration-200 
         ease-in-out
         ${isSelected 
-          ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-50' 
-          : 'text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700'}
+          ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-white' 
+          : 'text-gray-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}
       `}
     >
       <FileIcon 
