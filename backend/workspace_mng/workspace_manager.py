@@ -102,4 +102,9 @@ class WorkspaceManager:
 
 
     def get_workspace_directory_structure(self, workspace_name: str):
-        return self.pod_manager.get_pod_directory_structure(workspace_name)
+        directory = f"/home/developer/{workspace_name.lower()}"
+        return self.pod_manager.get_pod_directory_structure(workspace_name, directory)
+    
+    def get_workspace_file_content(self, workspace_name: str, file_path: str):
+        full_path = f"/home/developer/{file_path}"
+        return self.pod_manager.get_pod_file_content(workspace_name, full_path)

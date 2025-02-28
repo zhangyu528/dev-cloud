@@ -12,6 +12,11 @@ export interface DirectoryItem {
     contents?: DirectoryItem[];
 }
 
+export interface FileContentResponse {
+    path: string;           // 文件路径
+    content: string;        // 文件内容
+}
+
 export class WorkspacesApi {
     async createWorkspace(name: string, template: string) {
         const response = await axios.post('/api/workspaces/create', { name, template })
@@ -30,6 +35,17 @@ export class WorkspacesApi {
     async getWorkspaceDirectory(workspaceName: string): Promise<DirectoryItem> {
         const response = await axios.get(`/api/workspaces/directory/${workspaceName}`)
         return response.data
+    }
+
+    async getFileContent(workspaceName: string, filePath: string): Promise<FileContentResponse> {
+        const response = await axios.post(`/api/workspaces/file-content/${workspaceName}`, { 
+            file_path: filePath 
+        });
+        return response.data;
+    }
+
+    async createFile(workspaceName: string, filePath: string, content: string) {
+        //await axios.post(`/api/workspaces/create-file/${workspaceName}/${filePath}`, { content })
     }
 }
 

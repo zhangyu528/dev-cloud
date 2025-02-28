@@ -2,31 +2,36 @@ import React, { useState } from 'react';
 import { DirectoryItem } from '@/api/workspaces';
 import { RootNode } from './RootNode';
 
-interface WorkspaceExplorerProps {
+interface ExplorerProps {
   root: DirectoryItem | null;
-  onFileSelect: (path: string) => void;
 }
 
-export const WorkspaceExplorer: React.FC<WorkspaceExplorerProps> = ({ root, onFileSelect }) => {
+export const Explorer: React.FC<ExplorerProps> = ({ root }) => {
   const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
 
   const handleFileSelect = (path: string) => {
     setSelectedFilePath(path);
-    onFileSelect(path);
+    
+    // 触发自定义文件选择事件
+    const fileSelectedEvent = new CustomEvent('file-selected', { 
+      detail: path 
+    });
+    window.dispatchEvent(fileSelectedEvent);
   };
 
   return (
-    <div className="
-      bg-white 
-      dark:bg-gray-800
-      rounded-xl 
-      shadow-sm 
-      dark:shadow-md
-      overflow-hidden 
-      h-full
-      flex 
-      flex-col
-    ">
+    <div 
+      className="
+        bg-white 
+        dark:bg-gray-800
+        rounded-xl 
+        shadow-sm 
+        dark:shadow-md
+        overflow-hidden 
+        h-full
+        flex 
+        flex-col
+      ">
       <div className="
         text-xs 
         font-semibold 

@@ -96,7 +96,7 @@ class KubernetesPodResourceManager:
             self.logger.error(error_msg)
             raise ValueError(error_msg)
 
-    def get_pod_directory_structure(self, pod_name: str):
+    def get_pod_directory_structure(self, pod_name: str, directory: str):
         """
         根据 Pod 名称获取目录结构
         
@@ -108,7 +108,23 @@ class KubernetesPodResourceManager:
         
         # 实例化 KubernetesPod
         k8s_pod = KubernetesPod(pod=pod)
-        directory = f"/home/developer/{pod_name.lower()}"
         # 获取目录结构
         directory_structure = k8s_pod.get_directory_structure(directory)
         return directory_structure
+
+    def get_pod_file_content(self, pod_name: str, file_path: str):
+        """
+        根据 Pod 名称和文件路径获取文件内容
+        
+        :param pod_name: Pod 的名称
+        :param file_path: 文件路径
+        :return: 文件内容
+        """
+        # 获取 Pod 对象
+        pod = self.core_v1_api.read_namespaced_pod(name=f"{pod_name.lower()}-pod", namespace=self.namespace)
+        
+        # 实例化 KubernetesPod
+        k8s_pod = KubernetesPod(pod=pod)
+        # 获取文件内容
+        file_content = k8s_pod.get_file_content(file_path)
+        return file_content

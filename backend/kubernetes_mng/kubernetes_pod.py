@@ -17,7 +17,7 @@ class KubernetesPod:
 
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def get_directory_structure(self, directory: str = "/home/developer"):
+    def get_directory_structure(self, directory: str):
         """
         获取指定 Pod 中的目录结构
         
@@ -73,4 +73,41 @@ class KubernetesPod:
                 'type': 'directory',
                 'name': os.path.basename(directory),
                 'contents': []
+            }
+
+    def get_file_content(self, file_path: str):
+        """
+        获取指定 Pod 中的文件内容
+        
+        :param file_path: 文件路径
+        :return: 文件内容的 JSON 对象
+        """
+        try:
+            # 使用 stream 方法执行命令
+            command = ['cat', file_path]
+            
+            # 使用 exec_stream 方法替代 read_namespaced_pod_exec
+            response = stream(
+                self.core_v1_api.connect_get_namespaced_pod_exec,
+                self.pod.metadata.name,
+                self.pod.metadata.namespace,
+                command=command,
+                stderr=True,
+                stdin=False,
+                stdout=True,
+                tty=False
+            )
+            # 将文件内容放入 JSON 对象
+            return {
+                'path': file_path,
+                'content': response,
+                'size': len(response) if response else 0
+            }
+        except Exception as e:
+            error_msg = f"获取 {file_path} 文件内容失败: {e}"
+            self.logger.error(error_msg, exc_info=True)
+            return {
+                'path': file_path,
+                'content': None,
+                'error': str(e)
             }

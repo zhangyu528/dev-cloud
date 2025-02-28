@@ -122,10 +122,45 @@ class WorkspaceDirectory(Resource):
         except Exception as e:
             logger.error(f"Failed to get workspace directory: {str(e)}")
             return {"message": "Failed to get workspace directory"}, 500
+            
+file_content_req_model = workspace_ns.model('FileContentRequest', {
+    'file_path': fields.String(description='文件路径', required=True),
+})
 
+file_content_resp_model = workspace_ns.model('FileContentResponse', {
+    'path': fields.String(description='文件路径', required=True),
+    'content': fields.String(description='文件内容', required=True),
+})
 
+@workspace_ns.route('/file-content/<string:workspace_name>')
+class WorkspaceFileContent(Resource):
+    @workspace_ns.doc(security=['jwt'], description='获取工作区文件内容')
+    @workspace_ns.expect(file_content_req_model)
+    @workspace_ns.marshal_with(file_content_resp_model)
+    @jwt_required()
+    def post(self, workspace_name):
+        """获取工作区文件内容"""
+        try:
+            # 验证工作区权限
+            workspace = Workspace.query.filter_by(name=workspace_name, owner_id=get_jwt_identity()).first()
+            if not workspace:
+                return {"message": "Workspace not found"}, 404
+            
+            # 解析请求参数
+            data = request.get_json()
+            file_path = data.get('file_path')
+            
+            if not file_path:
+                return {"message": "File path is required"}, 400
+            
+            # 获取工作区文件内容
+            workspace_manager = WorkspaceManager.get_instance()
+            response = workspace_manager.get_workspace_file_content(workspace_name, file_path)
 
-
+            return response, 200
+        except Exception as e:
+            logger.error(f"Failed to get workspace file content: {str(e)}")
+            return {"message": "Failed to get workspace file content"}, 500
 
 
 
