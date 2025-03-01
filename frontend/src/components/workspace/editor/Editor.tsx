@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { WorkspacesApi } from '@/api/workspaces';
+import { EditorTabs } from './EditorTabs';
+import { CodeEditor } from './CodeEditor';
+
+interface FileTab {
+  path: string;
+  name: string;
+  unsavedChanges?: boolean;
+}
 
 interface EditorProps {
   workspaceName: string;
 }
 
 export const Editor: React.FC<EditorProps> = ({ workspaceName }) => {
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
-  const [fileContent, setFileContent] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [tabs, setTabs] = useState<FileTab[]>([]);
+  const [activeTabIndex, setActiveTabIndex] = useState<number>(-1);
+  const [pendingFilePath, setPendingFilePath] = useState<string | null>(null);
 
   useEffect(() => {
-    // 监听文件选择事件
     const handleFileSelect = (event: CustomEvent<string>) => {
       const filePath = event.detail;
-      loadFileContent(filePath);
+      setPendingFilePath(filePath);
     };
 
     window.addEventListener('file-selected', handleFileSelect as EventListener);
@@ -25,43 +30,48 @@ export const Editor: React.FC<EditorProps> = ({ workspaceName }) => {
     };
   }, [workspaceName]);
 
-  const loadFileContent = async (filePath: string) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const workspacesApi = new WorkspacesApi();
-      const { content } = await workspacesApi.getFileContent(workspaceName, filePath);
+  useEffect(() => {
+    if (pendingFilePath) {
+      const existingTabIndex = tabs.findIndex(tab => tab.path === pendingFilePath);
       
-      setSelectedFile(filePath);
-      setFileContent(content);
-    } catch (err) {
-      setError('Failed to load file content');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
+      if (existingTabIndex !== -1) {
+        setActiveTabIndex(existingTabIndex);
+      } else {
+        const newTab: FileTab = {
+          path: pendingFilePath,
+          name: pendingFilePath.split('/').pop() || pendingFilePath
+        };
+
+        setTabs(prevTabs => [...prevTabs, newTab]);
+        setActiveTabIndex(tabs.length);
+      }
+
+      setPendingFilePath(null);
+    }
+  }, [tabs, pendingFilePath]);
+
+  const closeTab = (index: number) => {
+    const updatedTabs = [...tabs];
+    updatedTabs.splice(index, 1);
+    setTabs(updatedTabs);
+
+    if (updatedTabs.length === 0) {
+      setActiveTabIndex(-1);
+    } else if (index <= activeTabIndex) {
+      setActiveTabIndex(Math.max(0, activeTabIndex - 1));
     }
   };
 
-  const handleContentChange = (newContent: string) => {
-    setFileContent(newContent);
+  const handleContentChange = () => {
+    const updatedTabs = [...tabs];
+    updatedTabs[activeTabIndex] = {
+      ...updatedTabs[activeTabIndex],
+      unsavedChanges: true
+    };
+    setTabs(updatedTabs);
   };
 
-  const saveFile = async () => {
-    if (!selectedFile) return;
-
-    try {
-      const workspacesApi = new WorkspacesApi();
-      //await workspacesApi.saveFileContent(workspaceName, selectedFile, fileContent);
-      
-      // 可以添加保存成功的通知
-    } catch (err) {
-      setError('Failed to save file');
-      console.error(err);
-    }
-  };
-
-  if (!selectedFile) {
+  if (tabs.length === 0) {
     return (
       <div className="flex items-center justify-center h-full text-gray-500">
         Select a file to start editing
@@ -70,41 +80,21 @@ export const Editor: React.FC<EditorProps> = ({ workspaceName }) => {
   }
 
   return (
-    <div className="h-full flex flex-col">
-      {/* 文件标题区域 */}
-      <div className="p-2 border-b flex justify-between items-center">
-        <h2 className="text-sm font-medium truncate">{selectedFile}</h2>
-        <button 
-          onClick={saveFile}
-          className="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
-        >
-          Save
-        </button>
-      </div>
+    <div className="h-full w-full flex flex-col">
+      <EditorTabs
+        tabs={tabs}
+        activeTabIndex={activeTabIndex}
+        setActiveTabIndex={setActiveTabIndex}
+        closeTab={closeTab}
+      />
 
-      {/* 加载状态 */}
-      {isLoading && (
-        <div className="flex items-center justify-center h-full">
-          Loading...
-        </div>
-      )}
-
-      {/* 错误状态 */}
-      {error && (
-        <div className="bg-red-100 text-red-700 p-2">
-          {error}
-        </div>
-      )}
-
-      {/* 编辑器区域 */}
-      {!isLoading && !error && (
-        <textarea 
-          value={fileContent}
-          onChange={(e) => handleContentChange(e.target.value)}
-          className="flex-1 p-2 text-sm resize-none focus:outline-none"
-          placeholder="Start editing your file..."
+      <div className="flex-1 overflow-hidden">
+        <CodeEditor
+          workspaceName={workspaceName}
+          filePath={tabs[activeTabIndex].path}
+          onChange={handleContentChange}
         />
-      )}
+      </div>
     </div>
   );
 };

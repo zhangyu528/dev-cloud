@@ -1,14 +1,13 @@
 'use client'
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
 import { Ide } from '@/components/workspace/Ide';
+import { useParams } from 'next/navigation';
 
 export default function Workspace_name() {
   const params = useParams();
   const workspace_name = params.workspace_name as string;
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen min-h-screen w-full">
       <Ide
         workspaceName={workspace_name}
       />

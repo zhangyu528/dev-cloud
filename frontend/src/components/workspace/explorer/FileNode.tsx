@@ -1,28 +1,23 @@
 import React from 'react';
 import { FileIcon } from './FileIcons';
-
 import { DirectoryItem } from '@/api/workspaces';
 
 interface FileNodeProps {
-  item: DirectoryItem;
-  depth: number;
+  file: DirectoryItem;
   fullPath: string;
-  onFileSelect: (path: string) => void;
-  selectedFilePath: string | null;
 }
 
 export const FileNode: React.FC<FileNodeProps> = ({ 
-  item, 
-  depth, 
-  fullPath, 
-  onFileSelect, 
-  selectedFilePath 
+  file, 
+  fullPath
 }) => {
   const handleSelect = () => {
-    onFileSelect(fullPath);
+    // 触发文件选择事件
+    const fileSelectedEvent = new CustomEvent('file-selected', { 
+      detail: fullPath 
+    });
+    window.dispatchEvent(fileSelectedEvent);
   };
-
-  const isSelected = selectedFilePath === fullPath;
 
   return (
     <div 
@@ -36,13 +31,12 @@ export const FileNode: React.FC<FileNodeProps> = ({
         transition-all 
         duration-200 
         ease-in-out
-        ${isSelected 
-          ? 'bg-blue-100 dark:bg-blue-900/30 text-gray-900 dark:text-white' 
-          : 'text-gray-900 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}
+        text-gray-900 dark:text-gray-300 
+        hover:bg-gray-100 dark:hover:bg-gray-700
       `}
     >
       <FileIcon 
-        fileName={item.name}
+        fileName={file.name}
         className="mr-2"
       />
 
@@ -50,11 +44,10 @@ export const FileNode: React.FC<FileNodeProps> = ({
         className={`
           text-xs 
           truncate 
-          flex-1 
-          ${isSelected ? 'font-medium' : 'font-normal'}
+          max-w-[200px]
         `}
       >
-        {item.name}
+        {file.name}
       </span>
     </div>
   );

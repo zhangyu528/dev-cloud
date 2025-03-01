@@ -13,62 +13,19 @@ import { FileNode } from './FileNode';
 import { DirectoryNode } from './DirectoryNode';
 
 interface RootNodeProps {
-  item: DirectoryItem;
-  onFileSelect: (path: string) => void;
-  selectedFilePath: string | null;
-  onRefresh?: () => void;
-  onCollapse?: () => void;
+  directory: DirectoryItem;
 }
 
-export const RootNode: React.FC<RootNodeProps> = ({ 
-  item, 
-  onFileSelect, 
-  selectedFilePath, 
-  onRefresh, 
-  onCollapse 
-}) => {
+export const RootNode: React.FC<RootNodeProps> = ({ directory }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const toggleExpand = () => {
     setIsExpanded(prev => !prev);
   };
 
-  const handleSelect = () => {
-    onFileSelect(item.name);
-  };
-
   const handleToggleAndSelect = () => {
-    onFileSelect(item.name);
     toggleExpand();
   };
-
-  const handleNewFile = () => {
-    // TODO: 实现新建文件逻辑
-    console.log('New File');
-  };
-
-  const handleNewFolder = () => {
-    // TODO: 实现新建文件夹逻辑
-    console.log('New Folder');
-  };
-
-  const handleRefresh = () => {
-    if (onRefresh) {
-      onRefresh();
-    } else {
-      // TODO: 实现默认刷新逻辑
-      console.log('Refresh');
-    }
-  };
-
-  const handleCollapse = () => {
-    if (onCollapse) {
-      onCollapse();
-    }
-    setIsExpanded(false);
-  };
-
-  const isSelected = selectedFilePath === item.name;
 
   return (
     <div>
@@ -84,134 +41,30 @@ export const RootNode: React.FC<RootNodeProps> = ({
           transition-all 
           duration-200 
           ease-in-out
-          ${isSelected 
-            ? 'text-blue-700 dark:text-blue-300' 
-            : 'text-gray-900 dark:text-gray-100'}
+          text-gray-900 dark:text-gray-100
         `}
         onClick={handleToggleAndSelect}
       >
         <div className="flex items-center">
-          <div 
-            className="
-              mr-2 
-              p-0.5 
-              rounded-full 
-              cursor-pointer
-            " 
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleExpand();
-            }}
-          >
-            {isExpanded 
-              ? <FaChevronDown className="text-xs text-gray-600 dark:text-gray-300" /> 
-              : <FaChevronRight className="text-xs text-gray-600 dark:text-gray-300" />}
-          </div>
-
-          <span 
-            className={`
-              text-xs 
-              truncate 
-              max-w-[200px] 
-              ${isSelected ? 'font-medium' : ''}
-            `}
-          >
-            {item.name}
-          </span>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <button 
-            className={`
-              text-gray-500 
-              p-1 
-              rounded-full 
-              hover:bg-blue-100 
-              dark:hover:bg-blue-800
-            `}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSelect();
-              handleNewFile();
-            }}
-            title="New File"
-          >
-            <FaPlus className="text-xs" />
-          </button>
-          <button 
-            className={`
-              text-gray-500 
-              p-1 
-              rounded-full 
-              hover:bg-blue-100 
-              dark:hover:bg-blue-800
-            `}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSelect();
-              handleNewFolder();
-            }}
-            title="New Folder"
-          >
-            <FaFolderPlus className="text-xs" />
-          </button>
-          <button 
-            className={`
-              text-gray-500 
-              p-1 
-              rounded-full 
-              hover:bg-blue-100 
-              dark:hover:bg-blue-800
-            `}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSelect();
-              handleRefresh();
-            }}
-            title="Refresh"
-          >
-            <FaSync className="text-xs" />
-          </button>
-          <button 
-            className={`
-              text-gray-500 
-              p-1 
-              rounded-full 
-              hover:bg-blue-100 
-              dark:hover:bg-blue-800
-            `}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSelect();
-              handleCollapse();
-            }}
-            title="Collapse Folder"
-          >
-            <FaCompressAlt className="text-xs" />
-          </button>
+          {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
+          <span className="ml-2">{directory.name}</span>
         </div>
       </div>
 
-      {isExpanded && item.contents && (
-        <div className="pl-1 pt-1 pb-1">
-          {item.contents.map((child, index) => (
+      {isExpanded && directory.contents && (
+        <div className="pl-4">
+          {directory.contents.map((child, index) => (
             child.type === 'directory' ? (
-              <DirectoryNode
-                key={index}
-                item={child}
-                depth={1}
-                fullPath={`${item.name}/${child.name}`.replace(/^\//, '')}
-                onFileSelect={onFileSelect}
-                selectedFilePath={selectedFilePath}
+              <DirectoryNode 
+                key={`dir-${child.name}-${index}`}
+                directory={child} 
+                fullPath={`${directory.name}/${child.name}`}
               />
             ) : (
-              <FileNode
-                key={index}
-                item={child}
-                depth={1}
-                fullPath={`${item.name}/${child.name}`.replace(/^\//, '')}
-                onFileSelect={onFileSelect}
-                selectedFilePath={selectedFilePath}
+              <FileNode 
+                key={`file-${child.name}-${index}`}
+                file={child} 
+                fullPath={`${directory.name}/${child.name}`}
               />
             )
           ))}
