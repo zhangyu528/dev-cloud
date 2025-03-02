@@ -30,6 +30,11 @@ class KubernetesPod:
         exec_command = ['tree', '-J', directory] # -J 以 JSON 输出格式显示目录结构
         
         try:
+            # 记录执行命令的详细信息
+            self.logger.debug(f"执行命令: {' '.join(exec_command)}")
+            self.logger.debug(f"Pod 名称: {self.pod.metadata.name}")
+            self.logger.debug(f"Pod 命名空间: {self.pod.metadata.namespace}")
+            
             response = stream(
                 self.core_v1_api.connect_get_namespaced_pod_exec,
                 self.pod.metadata.name,
@@ -40,7 +45,11 @@ class KubernetesPod:
                 stdout=True,
                 tty=False
             )
-                        
+            
+            # 记录原始响应
+            self.logger.debug(f"原始响应长度: {len(response)}")
+            self.logger.debug(f"原始响应前100个字符: {repr(response[:100])}")
+            
             try:
                 # 方法2：替换单引号为双引号
                 import re
@@ -57,8 +66,9 @@ class KubernetesPod:
 
             # 过滤掉报告部分，只保留目录结构
             directory_structure = tree_json[0] if tree_json and isinstance(tree_json, list) else {}
-
-            self.logger.debug(f"Parsed directory_structure: {directory_structure}")
+            
+            # 记录解析后的目录结构
+            #self.logger.debug(f"解析后的目录结构: {json.dumps(directory_structure, indent=2)}")
 
             # 转换为标准格式
             return {
@@ -69,6 +79,11 @@ class KubernetesPod:
         except Exception as e:
             error_msg = f"获取 {directory} 目录结构失败: {e}"
             self.logger.error(error_msg, exc_info=True)
+            
+            # 记录更多错误详情
+            self.logger.error(f"异常类型: {type(e).__name__}")
+            self.logger.error(f"异常详细信息: {str(e)}")
+            
             return {
                 'type': 'directory',
                 'name': os.path.basename(directory),
@@ -83,6 +98,11 @@ class KubernetesPod:
         :return: 文件内容的 JSON 对象
         """
         try:
+            # 记录详细的调试信息
+            self.logger.debug(f"尝试获取文件内容: {file_path}")
+            self.logger.debug(f"Pod 名称: {self.pod.metadata.name}")
+            self.logger.debug(f"Pod 命名空间: {self.pod.metadata.namespace}")
+            
             # 使用 stream 方法执行命令
             command = ['cat', file_path]
             
@@ -97,6 +117,27 @@ class KubernetesPod:
                 stdout=True,
                 tty=False
             )
+            
+            # 检查是否为 JSON 文件
+            if file_path.lower().endswith('.json'):
+                try:
+                    import ast
+                    import json
+                    
+                    # 直接使用 ast.literal_eval 解析 Python 字典
+                    parsed_json = ast.literal_eval(response)
+                    
+                    # 使用 json.dumps 格式化，保留 Python 布尔值和 None 的正确表示
+                    response = json.dumps(parsed_json, indent=2, ensure_ascii=False)
+                except Exception as json_error:
+                    # 如果解析失败，记录错误但保留原始内容
+                    self.logger.error(f"JSON 格式化失败: {json_error}")
+                    self.logger.error(f"原始内容: {repr(response)}")
+            
+            # 直接返回内容
+            self.logger.debug(f"原始内容长度: {len(response)}")
+            self.logger.debug(f"原始内容前100个字符: {repr(response[:100])}")
+            
             # 将文件内容放入 JSON 对象
             return {
                 'path': file_path,
@@ -106,6 +147,11 @@ class KubernetesPod:
         except Exception as e:
             error_msg = f"获取 {file_path} 文件内容失败: {e}"
             self.logger.error(error_msg, exc_info=True)
+            
+            # 记录更多错误详情
+            self.logger.error(f"异常类型: {type(e).__name__}")
+            self.logger.error(f"异常详细信息: {str(e)}")
+            
             return {
                 'path': file_path,
                 'content': None,
