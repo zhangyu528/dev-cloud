@@ -37,12 +37,12 @@ export const DirectoryNode: React.FC<DirectoryNodeProps> = ({
       `}
     >
       <div 
-        className="flex items-center cursor-pointer p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
+        className="flex items-center cursor-pointer p-1 hover:bg-gray-100 dark:hover:bg-gray-700 text-xs font-semibold"
         onClick={handleToggleAndSelect}
       >
         {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
         <FaRegFolder className="ml-1 mr-2 text-yellow-600" />
-        <span className="text-sm">{directory.name}</span>
+        <span className="text-xs">{directory.name}</span>
       </div>
 
       {isExpanded && directory.contents && (

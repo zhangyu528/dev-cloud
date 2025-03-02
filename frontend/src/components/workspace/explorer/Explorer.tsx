@@ -41,17 +41,15 @@ export const Explorer: React.FC<ExplorerProps> = ({ workspaceName }) => {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 overflow-hidden h-full flex flex-col">
+    <div className="bg-[#1A1A1A] overflow-hidden h-full flex flex-col">
       <div className="text-xs font-semibold text-gray-300 px-6 py-2">
-        Workspace Explorer
+        Explorer
       </div>
 
       <div className="w-64 flex-grow overflow-y-auto">
         {root ? (
           <RootNode directory={root} />
-        ) : (
-          <div className="text-xs text-gray-500 dark:text-gray-400 text-center py-2">加载中...</div>
-        )}
+        ) : null}
       </div>
     </div>
   );

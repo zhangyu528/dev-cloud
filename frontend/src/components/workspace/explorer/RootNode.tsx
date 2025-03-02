@@ -45,7 +45,7 @@ export const RootNode: React.FC<RootNodeProps> = ({ directory }) => {
         `}
         onClick={handleToggleAndSelect}
       >
-        <div className="flex items-center">
+        <div className="flex items-center text-xs font-semibold">
           {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
           <span className="ml-2">{directory.name}</span>
         </div>

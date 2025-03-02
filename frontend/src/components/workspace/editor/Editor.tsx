@@ -5,7 +5,7 @@ import { CodeEditor } from './CodeEditor';
 interface FileTab {
   path: string;
   name: string;
-  unsavedChanges?: boolean;
+  content?: string;
 }
 
 interface EditorProps {
@@ -66,7 +66,6 @@ export const Editor: React.FC<EditorProps> = ({ workspaceName }) => {
     const updatedTabs = [...tabs];
     updatedTabs[activeTabIndex] = {
       ...updatedTabs[activeTabIndex],
-      unsavedChanges: true
     };
     setTabs(updatedTabs);
   };
@@ -89,11 +88,13 @@ export const Editor: React.FC<EditorProps> = ({ workspaceName }) => {
       />
 
       <div className="flex-1 overflow-hidden">
-        <CodeEditor
-          workspaceName={workspaceName}
-          filePath={tabs[activeTabIndex].path}
-          onChange={handleContentChange}
-        />
+        {activeTabIndex !== -1 && tabs[activeTabIndex] && (
+          <CodeEditor
+            workspaceName={workspaceName}
+            filePath={tabs[activeTabIndex].path}
+            onChange={handleContentChange}
+          />
+        )}
       </div>
     </div>
   );

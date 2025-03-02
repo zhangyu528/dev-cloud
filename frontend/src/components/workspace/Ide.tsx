@@ -7,7 +7,7 @@ import { Editor } from './editor/Editor';
 
 // 可拖动的分隔符组件
 const Resizer = styled.div`
-  width: 8px;
+  width: 4px;
   height: 100%;
   background-color: #2c2c2c;
   cursor: col-resize;
