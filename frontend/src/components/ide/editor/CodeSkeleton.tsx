@@ -3,7 +3,7 @@ import React from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-export const CodeEditorSkeleton: React.FC = () => {
+export const CodeSkeleton: React.FC = () => {
   return (
     <div className="w-full h-full p-4 bg-[#1E1E1E] text-gray-300">
       <div className="space-y-2">

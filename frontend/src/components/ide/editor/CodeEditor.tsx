@@ -2,42 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { editor } from 'monaco-editor';
 import MonacoEditor from '@monaco-editor/react';
 import { WorkspacesApi } from '@/api/workspaces';
-import { CodeEditorSkeleton } from './CodeEditorSkeleton';
-
-// 根据文件扩展名获取语言类型的函数
-const getLanguageFromExtension = (filePath: string): string => {
-  const extension = filePath.split('.').pop()?.toLowerCase();
-  switch (extension) {
-    case 'ts':
-    case 'tsx':
-      return 'typescript';
-    case 'js':
-    case 'jsx':
-      return 'javascript';
-    case 'json':
-      return 'json';
-    case 'md':
-      return 'markdown';
-    case 'py':
-      return 'python';
-    case 'html':
-      return 'html';
-    case 'css':
-      return 'css';
-    case 'scss':
-    case 'sass':
-      return 'scss';
-    case 'yaml':
-    case 'yml':
-      return 'yaml';
-    case 'xml':
-      return 'xml';
-    case 'sql':
-      return 'sql';
-    default:
-      return 'plaintext';
-  }
-};
+import { CodeSkeleton } from './CodeSkeleton';
+import { getLanguageFromExtension } from './editorUtils';
 
 // 全局文件缓存
 const FILE_CACHE: {[filePath: string]: string} = {};
@@ -120,7 +86,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   if (isLoading) {
-    return <CodeEditorSkeleton />;
+    return <CodeSkeleton />;
   }
 
   if (error) {

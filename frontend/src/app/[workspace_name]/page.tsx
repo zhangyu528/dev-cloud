@@ -1,5 +1,5 @@
 'use client'
-import { Ide } from '@/components/workspace/Ide';
+import { Ide } from '@/components/ide/Ide';
 import { useParams } from 'next/navigation';
 
 export default function Workspace_name() {
