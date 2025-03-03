@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { editor } from 'monaco-editor';
 import MonacoEditor from '@monaco-editor/react';
 import { WorkspacesApi } from '@/api/workspaces';
+import { CodeEditorSkeleton } from './CodeEditorSkeleton';
 
 // 根据文件扩展名获取语言类型的函数
 const getLanguageFromExtension = (filePath: string): string => {
@@ -59,7 +60,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   options = {}
 }) => {
   const [content, setContent] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchFileContent = async () => {
@@ -119,7 +120,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <CodeEditorSkeleton />;
   }
 
   if (error) {
