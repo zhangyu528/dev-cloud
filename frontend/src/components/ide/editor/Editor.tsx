@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { EditorTabs } from './EditorTabs';
-import { CodeEditor } from './CodeEditor';
-
-interface FileTab {
-  path: string;
-  name: string;
-  content?: string;
-}
+import { CodeEditor, FileStatus } from './CodeEditor';
+import { FileTab, FileTabStatus } from './EditorTab';
 
 interface EditorProps {
   workspaceName: string;
@@ -39,7 +34,8 @@ export const Editor: React.FC<EditorProps> = ({ workspaceName }) => {
       } else {
         const newTab: FileTab = {
           path: pendingFilePath,
-          name: pendingFilePath.split('/').pop() || pendingFilePath
+          name: pendingFilePath.split('/').pop() || pendingFilePath,
+          status: FileTabStatus.Unchanged
         };
 
         setTabs(prevTabs => [...prevTabs, newTab]);
@@ -62,12 +58,19 @@ export const Editor: React.FC<EditorProps> = ({ workspaceName }) => {
     }
   };
 
-  const handleContentChange = () => {
-    const updatedTabs = [...tabs];
-    updatedTabs[activeTabIndex] = {
-      ...updatedTabs[activeTabIndex],
+  // 检查并更新文件状态
+  const checkFileStatus = (status: FileStatus) => {
+    if (activeTabIndex === -1) return;
+
+    const updatedFiles = [...tabs];
+    
+    // 更新当前活动文件的状态
+    updatedFiles[activeTabIndex] = {
+      ...updatedFiles[activeTabIndex],
+      status: status === FileStatus.Unchanged ? FileTabStatus.Unchanged : FileTabStatus.Modified
     };
-    setTabs(updatedTabs);
+
+    setTabs(updatedFiles);
   };
 
   if (tabs.length === 0) {
@@ -92,7 +95,7 @@ export const Editor: React.FC<EditorProps> = ({ workspaceName }) => {
           <CodeEditor
             workspaceName={workspaceName}
             filePath={tabs[activeTabIndex].path}
-            onChange={handleContentChange}
+            onStatusChange={checkFileStatus}
           />
         )}
       </div>
