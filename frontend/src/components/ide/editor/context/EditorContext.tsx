@@ -33,31 +33,58 @@ export const EditorProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const openFile = useCallback(async (path: string, workspaceName: string) => {
+        // 检查文件是否已经打开
         const existingFileIndex = tabs.findIndex(tab => tab.path === path);
         
         if (existingFileIndex !== -1) {
+            // 如果文件已经打开，切换到该文件
             setActiveTabIndex(existingFileIndex);
-        } else {
-            try {
-                setIsLoading(true);
+            return;
+        }
 
-                const workspacesApi = new WorkspacesApi();
-                const { content } = await workspacesApi.getFileContent(workspaceName, path);
+        // 先创建一个空的 tab
+        const newTab: FileTab = {
+            path: path,
+            name: path.split('/').pop() || path,
+            content: '',  // 初始内容为空
+            status: FileTabStatus.Unchanged
+        };
 
-                const newTab: FileTab = {
-                    path: path,
-                    name: path.split('/').pop() || path,
-                    content: content,
-                    status: FileTabStatus.Unchanged
-                };
+        // 先更新 tabs，设置活动索引
+        setTabs(prev => [...prev, newTab]);
+        setActiveTabIndex(tabs.length);
 
-                setTabs(prev => [...prev, newTab]);
-                setActiveTabIndex(tabs.length);
-            } catch (error) {
-                console.error('Failed to open file:', error);
-            } finally {
-                setIsLoading(false);
-            }
+        try {
+            setIsLoading(true);
+
+            // 异步获取文件内容
+            const workspacesApi = new WorkspacesApi();
+            const { content } = await workspacesApi.getFileContent(workspaceName, path);
+
+            // 更新文件内容
+            setTabs(prev => 
+                prev.map(tab => 
+                    tab.path === path 
+                        ? { ...tab, content, status: FileTabStatus.Unchanged } 
+                        : tab
+                )
+            );
+        } catch (error) {
+            console.error('Failed to open file:', error);
+            // 如果加载失败，更新 tab 状态
+            setTabs(prev => 
+                prev.map(tab => 
+                    tab.path === path 
+                        ? { 
+                            ...tab, 
+                            content: 'Error loading file', 
+                            status: FileTabStatus.Modified 
+                        } 
+                        : tab
+                )
+            );
+        } finally {
+            setIsLoading(false);
         }
     }, [tabs]);
 
