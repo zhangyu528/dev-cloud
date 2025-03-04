@@ -4,6 +4,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { Explorer } from './explorer/Explorer';
 import { Editor } from './editor/Editor';
+import { EditorProvider } from './editor/context/EditorContext';
 
 // 可拖动的分隔符组件
 const Resizer = styled.div`
@@ -109,7 +110,9 @@ export const Ide: React.FC<IdeProps> = ({ workspaceName }) => {
       />
       
       <EditorContainer>
-        <Editor workspaceName={workspaceName} />
+        <EditorProvider>
+          <Editor workspaceName={workspaceName} />
+        </EditorProvider>
       </EditorContainer>
     </IdeContainer>
   );
