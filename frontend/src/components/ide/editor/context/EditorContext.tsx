@@ -11,6 +11,7 @@ interface FileTab {
     path: string;
     name: string;
     content: string;
+    originalContent: string;  // 新增原始内容字段
     status: FileTabStatus;
 }
 
@@ -20,7 +21,6 @@ interface EditorContextType {
     isLoading: boolean;
     openFile: (path: string, workspaceName: string) => Promise<void>;
     closeFile: (path: string) => void;
-    updateFileStatus: (path: string, status: FileTabStatus) => void;
     setActiveTab: (index: number) => void;
     updateFileContent: (path: string, content: string) => void;
 }
@@ -47,6 +47,7 @@ export const EditorProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             path: path,
             name: path.split('/').pop() || path,
             content: '',  // 初始内容为空
+            originalContent: '',
             status: FileTabStatus.Unchanged
         };
 
@@ -65,7 +66,7 @@ export const EditorProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             setTabs(prev => 
                 prev.map(tab => 
                     tab.path === path 
-                        ? { ...tab, content, status: FileTabStatus.Unchanged } 
+                        ? { ...tab, content, originalContent: content, status: FileTabStatus.Unchanged } 
                         : tab
                 )
             );
@@ -78,6 +79,7 @@ export const EditorProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                         ? { 
                             ...tab, 
                             content: 'Error loading file', 
+                            originalContent: 'Error loading file',
                             status: FileTabStatus.Modified 
                         } 
                         : tab
@@ -101,21 +103,13 @@ export const EditorProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         });
     }, [activeTabIndex]);
 
-    const updateFileStatus = useCallback((path: string, status: FileTabStatus) => {
-        setTabs(prev => 
-            prev.map(tab => 
-                tab.path === path ? { ...tab, status } : tab
-            )
-        );
-    }, []);
-
     const updateFileContent = useCallback((path: string, content: string) => {
         setTabs(prev => 
             prev.map(tab => 
                 tab.path === path ? { 
                     ...tab, 
                     content, 
-                    status: tab.content !== content 
+                    status: tab.originalContent !== content 
                         ? FileTabStatus.Modified 
                         : FileTabStatus.Unchanged 
                 } : tab
@@ -134,7 +128,6 @@ export const EditorProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             isLoading,
             openFile,
             closeFile,
-            updateFileStatus,
             setActiveTab,
             updateFileContent
         }}>

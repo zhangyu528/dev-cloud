@@ -5,9 +5,9 @@ import { useEditor } from './context/EditorContext';
 import { FileTabStatus } from './context/EditorContext';
 
 export const EditorTab: React.FC<{ index: number }> = ({ index }) => {
-  const { tabs, activeTabIndex, closeFile, updateFileStatus, setActiveTab } = useEditor();
+  const { tabs, activeTabIndex, closeFile, setActiveTab } = useEditor();
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  
+
   const handleClose = (index: number) => {
     const currentTab = tabs[index];
   
