@@ -1,36 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { WorkspacesApi } from '@/api/workspaces';
-import { DirectoryItem } from '@/api/workspaces';
+import React from 'react';
 import { RootNode } from './RootNode';
+import { useExplorer } from './contexts/ExplorerContext';
 
-interface ExplorerProps {
-  workspaceName: string;
-}
-
-export const Explorer: React.FC<ExplorerProps> = ({ workspaceName }) => {
-  const [root, setRoot] = useState<DirectoryItem | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchDirectoryStructure = async () => {
-      try {
-        const workspacesApi = new WorkspacesApi();
-        const structure = await workspacesApi.getWorkspaceDirectory(workspaceName);
-
-        if (!structure) {
-          throw new Error('No directory structure found');
-        }
-
-        setRoot(structure);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Failed to fetch directory structure', error);
-        setIsLoading(false);
-      }
-    };
-
-    fetchDirectoryStructure();
-  }, [workspaceName]);
+export const Explorer: React.FC = () => {
+  const { isLoading } = useExplorer();
 
   if (isLoading) {
     return (
@@ -47,9 +20,7 @@ export const Explorer: React.FC<ExplorerProps> = ({ workspaceName }) => {
       </div>
 
       <div className="w-64 flex-grow overflow-y-auto">
-        {root ? (
-          <RootNode directory={root} />
-        ) : null}
+        <RootNode />
       </div>
     </div>
   );

@@ -57,7 +57,7 @@ export const DirectoryNode: React.FC<DirectoryNodeProps> = ({
             ) : (
               <FileNode 
                 key={`file-${child.name}-${index}`}
-                file={child} 
+                fileName={child.name} 
                 fullPath={`${fullPath}/${child.name}`}
               />
             )

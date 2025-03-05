@@ -1,6 +1,6 @@
 import React from 'react';
 import { EditorTab } from './EditorTab';
-import { useEditor } from './context/EditorContext';
+import { useEditor } from './contexts/EditorContext';
 
 export const EditorTabs: React.FC = () => {
   const { tabs } = useEditor();

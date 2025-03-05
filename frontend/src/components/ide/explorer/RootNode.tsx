@@ -8,15 +8,12 @@ import {
   FaCompressAlt 
 } from 'react-icons/fa';
 
-import { DirectoryItem } from '@/api/workspaces';
 import { FileNode } from './FileNode';
 import { DirectoryNode } from './DirectoryNode';
+import { useExplorer } from './contexts/ExplorerContext';
 
-interface RootNodeProps {
-  directory: DirectoryItem;
-}
-
-export const RootNode: React.FC<RootNodeProps> = ({ directory }) => {
+export const RootNode: React.FC = () => {
+  const { rootDirectory } = useExplorer();
   const [isExpanded, setIsExpanded] = useState(true);
 
   const toggleExpand = () => {
@@ -47,24 +44,24 @@ export const RootNode: React.FC<RootNodeProps> = ({ directory }) => {
       >
         <div className="flex items-center text-xs font-semibold">
           {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
-          <span className="ml-2">{directory.name}</span>
+          <span className="ml-2">{rootDirectory.name}</span>
         </div>
       </div>
 
-      {isExpanded && directory.contents && (
+      {isExpanded && rootDirectory.contents && (
         <div className="pl-4">
-          {directory.contents.map((child, index) => (
+          {rootDirectory.contents.map((child, index) => (
             child.type === 'directory' ? (
               <DirectoryNode 
                 key={`dir-${child.name}-${index}`}
                 directory={child} 
-                fullPath={`${directory.name}/${child.name}`}
+                fullPath={`${rootDirectory.name}/${child.name}`}
               />
             ) : (
               <FileNode 
                 key={`file-${child.name}-${index}`}
-                file={child} 
-                fullPath={`${directory.name}/${child.name}`}
+                fileName={child.name} 
+                fullPath={`${rootDirectory.name}/${child.name}`}
               />
             )
           ))}

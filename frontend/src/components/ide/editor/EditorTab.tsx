@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FileIcon } from '../explorer/FileIcons';
 import { ConfirmCloseDialog } from './ConfirmCloseDialog';
-import { useEditor } from './context/EditorContext';
-import { FileTabStatus } from './context/EditorContext';
+import { useEditor } from './contexts/EditorContext';
+import { FileTabStatus } from './contexts/EditorContext';
 
 export const EditorTab: React.FC<{ index: number }> = ({ index }) => {
   const { tabs, activeTabIndex, closeFile, setActiveTab } = useEditor();

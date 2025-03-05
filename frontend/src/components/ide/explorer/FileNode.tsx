@@ -1,22 +1,20 @@
 import React from 'react';
 import { FileIcon } from './FileIcons';
-import { DirectoryItem } from '@/api/workspaces';
+import { useExplorer } from './contexts/ExplorerContext';
 
 interface FileNodeProps {
-  file: DirectoryItem;
+  fileName: string;
   fullPath: string;
 }
 
 export const FileNode: React.FC<FileNodeProps> = ({ 
-  file, 
+  fileName, 
   fullPath
 }) => {
+  const { selectFile } = useExplorer();
+
   const handleSelect = () => {
-    // 触发文件选择事件
-    const fileSelectedEvent = new CustomEvent('file-selected', { 
-      detail: fullPath 
-    });
-    window.dispatchEvent(fileSelectedEvent);
+    selectFile(fullPath);
   };
 
   return (
@@ -36,7 +34,7 @@ export const FileNode: React.FC<FileNodeProps> = ({
       `}
     >
       <FileIcon 
-        fileName={file.name}
+        fileName={fileName}
         className="mr-2"
       />
 
@@ -47,7 +45,7 @@ export const FileNode: React.FC<FileNodeProps> = ({
           max-w-[200px]
         `}
       >
-        {file.name}
+        {fileName}
       </span>
     </div>
   );

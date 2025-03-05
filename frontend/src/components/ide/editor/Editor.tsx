@@ -2,13 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import { EditorTabs } from './EditorTabs';
 import { CodeEditor } from './CodeEditor';
-import { useEditor } from './context/EditorContext';
+import { useEditor } from './contexts/EditorContext';
 
-interface EditorProps {
-  workspaceName: string;
-}
-
-export const Editor: React.FC<EditorProps> = ({ workspaceName }) => {
+export const Editor: React.FC = () => {
   const [pendingFilePath, setPendingFilePath] = useState<string | null>(null);
   const { tabs, activeTabIndex, openFile } = useEditor();
 
@@ -23,11 +19,11 @@ export const Editor: React.FC<EditorProps> = ({ workspaceName }) => {
     return () => {
       window.removeEventListener('file-selected', handleFileSelect as EventListener);
     };
-  }, [workspaceName]);
+  }, []);
 
   useEffect(() => {
     if (pendingFilePath) {
-      openFile(pendingFilePath, workspaceName);
+      openFile(pendingFilePath);
       setPendingFilePath(null);
     }
   }, [pendingFilePath]);
@@ -44,7 +40,7 @@ export const Editor: React.FC<EditorProps> = ({ workspaceName }) => {
     <div className="h-full w-full flex flex-col">
         <EditorTabs />
         <div className="flex-1 overflow-hidden">
-          <CodeEditor workspaceName={workspaceName} />
+          <CodeEditor />
         </div>
     </div>
   );

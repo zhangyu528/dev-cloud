@@ -1,6 +1,7 @@
 'use client'
 import { Ide } from '@/components/ide/Ide';
 import { useParams } from 'next/navigation';
+import { IdeProvider } from '@/components/ide/contexts/IdeContext';
 
 export default function Workspace_name() {
   const params = useParams();
@@ -8,9 +9,9 @@ export default function Workspace_name() {
 
   return (
     <div className="flex h-screen min-h-screen w-full">
-      <Ide
-        workspaceName={workspace_name}
-      />
+      <IdeProvider workspaceName={workspace_name}>
+        <Ide />
+      </IdeProvider>
     </div>
   );
 }

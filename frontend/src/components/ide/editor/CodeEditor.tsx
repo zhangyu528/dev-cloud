@@ -2,9 +2,9 @@ import React from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import { CodeSkeleton } from './CodeSkeleton';
 import { getLanguageFromExtension } from './editorUtils';
-import { useEditor } from './context/EditorContext';
+import { useEditor } from './contexts/EditorContext';
 
-export const CodeEditor: React.FC<{ workspaceName: string }> = ({ workspaceName }) => {
+export const CodeEditor: React.FC = () => {
   const { tabs, activeTabIndex, updateFileContent, isLoading } = useEditor();
 
   if (activeTabIndex === -1) return null;

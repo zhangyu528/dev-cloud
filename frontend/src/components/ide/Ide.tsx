@@ -2,9 +2,12 @@
 
 import React, { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
+
 import { Explorer } from './explorer/Explorer';
 import { Editor } from './editor/Editor';
-import { EditorProvider } from './editor/context/EditorContext';
+import { EditorProvider } from './editor/contexts/EditorContext';
+import { ExplorerProvider } from './explorer/contexts/ExplorerContext';
+import { useIdeContext } from './contexts/IdeContext';
 
 // 可拖动的分隔符组件
 const Resizer = styled.div`
@@ -53,16 +56,15 @@ const EditorContainer = styled.div`
   overflow: hidden;
 `;
 
-interface IdeProps {
-  workspaceName: string;
-}
 
-export const Ide: React.FC<IdeProps> = ({ workspaceName }) => {
+export const Ide: React.FC = () => {
   // 默认 Explorer 宽度
   const [explorerWidth, setExplorerWidth] = useState(200);
   const [isResizing, setIsResizing] = useState(false);
   const resizerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const { workspaceName } = useIdeContext();
 
   // 处理鼠标按下事件
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -101,17 +103,19 @@ export const Ide: React.FC<IdeProps> = ({ workspaceName }) => {
   return (
     <IdeContainer ref={containerRef}>
       <ExplorerContainer width={explorerWidth}>
-        <Explorer workspaceName={workspaceName} />
+        <ExplorerProvider workspaceName={workspaceName}>
+          <Explorer />
+        </ExplorerProvider>
       </ExplorerContainer>
       
       <Resizer 
-        ref={resizerRef} 
+        ref={resizerRef}                      
         onMouseDown={handleMouseDown}
       />
       
       <EditorContainer>
-        <EditorProvider>
-          <Editor workspaceName={workspaceName} />
+        <EditorProvider workspaceName={workspaceName}>
+          <Editor />
         </EditorProvider>
       </EditorContainer>
     </IdeContainer>

@@ -16,10 +16,11 @@ interface FileTab {
 }
 
 interface EditorContextType {
+    workspaceName: string;  // 新增工作空间名称
     tabs: FileTab[];
     activeTabIndex: number;
     isLoading: boolean;
-    openFile: (path: string, workspaceName: string) => Promise<void>;
+    openFile: (path: string) => Promise<void>;
     closeFile: (path: string) => void;
     setActiveTab: (index: number) => void;
     updateFileContent: (path: string, content: string) => void;
@@ -27,12 +28,12 @@ interface EditorContextType {
 
 const EditorContext = createContext<EditorContextType | undefined>(undefined);
 
-export const EditorProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const EditorProvider: React.FC<{ children: ReactNode, workspaceName: string }> = ({ children, workspaceName }) => {
     const [tabs, setTabs] = useState<FileTab[]>([]);
     const [activeTabIndex, setActiveTabIndex] = useState<number>(-1);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const openFile = useCallback(async (path: string, workspaceName: string) => {
+    const openFile = useCallback(async (path: string) => {
         // 检查文件是否已经打开
         const existingFileIndex = tabs.findIndex(tab => tab.path === path);
         
@@ -88,7 +89,7 @@ export const EditorProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         } finally {
             setIsLoading(false);
         }
-    }, [tabs]);
+    }, [tabs, workspaceName]);
 
     const closeFile = useCallback((path: string) => {
         setTabs(prev => {
@@ -123,6 +124,7 @@ export const EditorProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
     return (
         <EditorContext.Provider value={{
+            workspaceName,
             tabs,
             activeTabIndex,
             isLoading,
