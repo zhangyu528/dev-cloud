@@ -3,10 +3,9 @@
 import React, { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 
-import { Explorer } from './explorer/Explorer';
+import { SideBar } from './sideBar/SideBar';
 import { Editor } from './editor/Editor';
 import { EditorProvider } from './editor/contexts/EditorContext';
-import { ExplorerProvider } from './explorer/contexts/ExplorerContext';
 import { useIdeContext } from './contexts/IdeContext';
 
 // 可拖动的分隔符组件
@@ -40,7 +39,7 @@ const IdeContainer = styled.div`
 `;
 
 // Explorer 容器样式
-const ExplorerContainer = styled.div<{ width: number }>`
+const SideBarContainer = styled.div<{ width: number }>`
   width: ${props => props.width}px;
   height: 100%;
   overflow: hidden;
@@ -54,6 +53,7 @@ const EditorContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background-color: #1e1e1e;
 `;
 
 
@@ -102,11 +102,9 @@ export const Ide: React.FC = () => {
 
   return (
     <IdeContainer ref={containerRef}>
-      <ExplorerContainer width={explorerWidth}>
-        <ExplorerProvider workspaceName={workspaceName}>
-          <Explorer />
-        </ExplorerProvider>
-      </ExplorerContainer>
+      <SideBarContainer width={explorerWidth}>
+        <SideBar />
+      </SideBarContainer>
       
       <Resizer 
         ref={resizerRef}                      
