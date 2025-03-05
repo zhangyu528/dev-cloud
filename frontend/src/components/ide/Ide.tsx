@@ -1,61 +1,10 @@
 'use client';
 
-import React, { useState, useRef, useCallback } from 'react';
-import styled from 'styled-components';
-
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { SideBar } from './sideBar/SideBar';
 import { Editor } from './editor/Editor';
 import { EditorProvider } from './editor/contexts/EditorContext';
 import { useIdeContext } from './contexts/IdeContext';
-
-// 可拖动的分隔符组件
-const Resizer = styled.div`
-  width: 4px;
-  height: 100%;
-  background-color: #2c2c2c;
-  cursor: col-resize;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    background-color: #3a3a3a;
-  }
-
-  &::after {
-    content: '⋮';
-    color: #666;
-    font-size: 20px;
-    user-select: none;
-  }
-`;
-
-// IDE 容器样式，使用 flex 布局
-const IdeContainer = styled.div`
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-`;
-
-// Explorer 容器样式
-const SideBarContainer = styled.div<{ width: number }>`
-  width: ${props => props.width}px;
-  height: 100%;
-  overflow: hidden;
-  background-color: #1e1e1e;
-`;
-
-// 主编辑器容器样式
-const EditorContainer = styled.div`
-  flex-grow: 1;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: #1e1e1e;
-`;
-
 
 export const Ide: React.FC = () => {
   // 默认 Explorer 宽度
@@ -79,7 +28,11 @@ export const Ide: React.FC = () => {
     const containerRect = containerRef.current.getBoundingClientRect();
     const newWidth = e.clientX - containerRect.left;
 
-    setExplorerWidth(newWidth);
+    // 限制宽度范围
+    const minWidth = 100;
+    const maxWidth = containerRect.width * 0.5;
+
+    setExplorerWidth(Math.min(Math.max(newWidth, minWidth), maxWidth));
   }, [isResizing]);
 
   // 处理鼠标抬起事件
@@ -88,7 +41,7 @@ export const Ide: React.FC = () => {
   }, []);
 
   // 添加和移除全局事件监听器
-  React.useEffect(() => {
+  useEffect(() => {
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
@@ -101,21 +54,36 @@ export const Ide: React.FC = () => {
   }, [isResizing, handleMouseMove, handleMouseUp]);
 
   return (
-    <IdeContainer ref={containerRef}>
-      <SideBarContainer width={explorerWidth}>
+    <div 
+      ref={containerRef} 
+      className="flex h-full w-full overflow-hidden bg-[#1e1e1e]"
+    >
+      {/* SideBar Container */}
+      <div 
+        className="flex-shrink-0 overflow-hidden bg-[#1e1e1e]" 
+        style={{ 
+          width: `${explorerWidth}px`, 
+          height: '100%' 
+        }}
+      >
         <SideBar />
-      </SideBarContainer>
+      </div>
       
-      <Resizer 
-        ref={resizerRef}                      
+      {/* Resizer */}
+      <div 
+        ref={resizerRef}
         onMouseDown={handleMouseDown}
-      />
+        className="w-1 h-full bg-[#2c2c2c] cursor-col-resize flex-shrink-0 hover:bg-[#3a3a3a]"
+      >
+        <div className="text-[#666] text-5xl flex items-center justify-center">⋮</div>
+      </div>
       
-      <EditorContainer>
+      {/* Editor Container */}
+      <div className="flex-grow h-full flex flex-col overflow-hidden bg-[#1e1e1e]">
         <EditorProvider workspaceName={workspaceName}>
           <Editor />
         </EditorProvider>
-      </EditorContainer>
-    </IdeContainer>
+      </div>
+    </div>
   );
 };

@@ -6,7 +6,7 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <main className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+    <main className="h-screen">
       {children}
     </main>
   );

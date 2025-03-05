@@ -9,6 +9,7 @@ import { SidebarButton } from './SidebarButton';
 
 export const SideBar: React.FC = () => {
     const { workspaceName } = useIdeContext();
+    // 默认选中 explorer
     const [selectedButton, setSelectedButton] = useState<string>('explorer');
 
     const handleButtonClick = (buttonName: string) => {
@@ -40,16 +41,24 @@ export const SideBar: React.FC = () => {
                 {/* 可以添加更多按钮 */}
             </div>
             {/* 内容显示区域 */}
-            <div className="sidebar-content flex-grow">
-                {selectedButton === 'explorer' ? (
-                    <ExplorerProvider workspaceName={workspaceName}>
-                        <Explorer />
-                    </ExplorerProvider>
-                ) : selectedButton === 'search' ? (
-                    <div className="p-4 text-gray-500">Search content coming soon</div>
-                ) : selectedButton === 'git' ? (
-                    <div className="p-4 text-gray-500">Git management content coming soon</div>
-                ) : null}
+            <div className="sidebar-content flex-grow h-full">
+                <div 
+                    className={`h-full ${selectedButton === 'explorer' ? 'block' : 'hidden'}`}
+                >
+                     <ExplorerProvider workspaceName={workspaceName}>
+                         <Explorer />
+                     </ExplorerProvider>
+                </div>
+                <div 
+                    className={`h-full ${selectedButton === 'search' ? 'block' : 'hidden'}`}
+                >
+                    <div className="p-4 text-gray-500 h-full">搜索内容即将推出</div>
+                </div>
+                <div 
+                    className={`h-full ${selectedButton === 'git' ? 'block' : 'hidden'}`}
+                >
+                    <div className="p-4 text-gray-500 h-full">Git 管理内容即将推出</div>
+                </div>
             </div>
         </div>
     );
