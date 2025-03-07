@@ -25,7 +25,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8, ease: 'easeOut' }}
             className="text-5xl md:text-6xl font-extrabold 
               bg-clip-text text-transparent 
-              bg-gradient-to-r from-blue-600 to-purple-600 
+              bg-gradient-to-r
               dark:from-blue-400 dark:to-purple-400"
           >
             Turn Your Dev Ideas into Reality, Faster
@@ -35,7 +35,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
-            className="mt-6 text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
+            className="mt-6 text-xl dark:text-gray-400 max-w-2xl mx-auto"
           >
             Accelerate your development workflow with AI-powered tools and seamless collaboration
           </motion.p>
@@ -72,19 +72,19 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-24 bg-gray-50 dark:bg-gray-900">
+      <section id="features" className="py-24 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8">
+            <h2 className="text-3xl font-bold dark:text-gray-100 mb-8">
               Powerful Features for Modern Development
             </h2>
             
             <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
               <div className="space-y-4">
-                <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                <h3 className="text-2xl font-bold dark:text-gray-100">
                   Get to Work Quickly, Wherever You Are
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <p className="dark:text-gray-300 leading-relaxed">
                   DevCloud gets you into your dev workflow in no time, backed by robust security and scalability. 
                   Go from opening your browser to building an application in a matter of seconds, not days.
                 </p>
@@ -101,7 +101,7 @@ export default function LandingPage() {
                 </div>
               </div>
               <motion.div 
-                className="rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 aspect-video"
+                className="rounded-lg overflow-hidden border dark:border-gray-600 aspect-video"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ 
@@ -135,13 +135,13 @@ export default function LandingPage() {
       </section>
 
       {/* Benefits Section: Highlight key advantages */}
-      <section id="benefits" className="py-24 bg-white dark:bg-gray-800">
+      <section id="benefits" className="py-24 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+            <h2 className="text-3xl font-bold dark:text-gray-100">
               Why Choose DevCloud?
             </h2>
-            <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
+            <p className="mt-4 text-xl dark:text-gray-300">
               Unlock unprecedented productivity and collaboration
             </p>
           </div>
@@ -150,13 +150,13 @@ export default function LandingPage() {
       </section>
 
       {/* Social Proof Section: Testimonials and User Stats */}
-      <section id="social-proof" className="py-24 bg-gray-50 dark:bg-gray-900">
+      <section id="social-proof" className="py-24 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+            <h2 className="text-3xl font-bold dark:text-gray-100">
               Trusted by Developers Worldwide
             </h2>
-            <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
+            <p className="mt-4 text-xl dark:text-gray-300">
               Join thousands of developers who are transforming their workflow
             </p>
           </div>
@@ -186,13 +186,13 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ Section: Common Questions */}
-      <section id="faq" className="py-24 bg-white dark:bg-gray-800">
+      <section id="faq" className="py-24 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+            <h2 className="text-3xl font-bold dark:text-gray-100">
               Frequently Asked Questions
             </h2>
-            <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
+            <p className="mt-4 text-xl dark:text-gray-300">
               Got questions? We've got answers
             </p>
           </div>
