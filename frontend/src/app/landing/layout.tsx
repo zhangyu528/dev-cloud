@@ -8,7 +8,7 @@ export default function LandingLayout({ children }: { children: ReactNode }) {
   return (
     <MainLayout>
       <Header />
-      {children}
+        {children}
       <Footer />
     </MainLayout>
   );
