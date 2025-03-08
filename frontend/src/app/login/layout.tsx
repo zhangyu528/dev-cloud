@@ -1,7 +1,6 @@
 'use client'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import MainLayout from '@/components/layouts/MainLayout'
 
 export default function LoginLayout({
   children,
@@ -9,11 +8,11 @@ export default function LoginLayout({
   children: React.ReactNode
 }) {
   return (
-    <MainLayout>
+    <div className="bg-gray-50 dark:bg-gray-900">
       <Header />
       {children}
       <Footer />
-    </MainLayout>
+    </div>
   );
 }
 

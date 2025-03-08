@@ -8,10 +8,8 @@ export default function Workspace_name() {
   const workspace_name = params.workspace_name as string;
 
   return (
-    <div className="flex h-screen">
-      <IdeProvider workspaceName={workspace_name}>
-        <Ide />
-      </IdeProvider>
-    </div>
+    <IdeProvider workspaceName={workspace_name}>
+      <Ide />
+    </IdeProvider>
   );
 }

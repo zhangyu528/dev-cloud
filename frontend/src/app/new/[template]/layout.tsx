@@ -1,6 +1,5 @@
 'use client';
 
-import MainLayout from '@/components/layouts/MainLayout'
 
 export default function NewTemplateLayout({ 
   children 
@@ -8,8 +7,8 @@ export default function NewTemplateLayout({
   children: React.ReactNode 
 }) {
   return (
-    <MainLayout>
+    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
       {children}
-    </MainLayout>
+    </div>
   );
 }

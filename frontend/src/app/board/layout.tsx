@@ -4,7 +4,6 @@ import { UserProvider } from '@/contexts/UserContext';
 import { TemplatesProvider } from '@/contexts/TemplateContext';
 import { WorkspacesProvider } from '@/contexts/WorkspacesContext';
 import BoardNavigation from '@/components/BoardNavigation';
-import MainLayout from '@/components/layouts/MainLayout';
 
 export default function BoardLayout({
   children,
@@ -15,10 +14,8 @@ export default function BoardLayout({
     <UserProvider>
       <TemplatesProvider>
         <WorkspacesProvider>
-          <MainLayout>
-            <BoardNavigation />
-            {children}
-          </MainLayout>
+          <BoardNavigation />
+          {children}
         </WorkspacesProvider>
       </TemplatesProvider>
     </UserProvider>

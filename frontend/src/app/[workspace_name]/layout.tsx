@@ -1,6 +1,5 @@
 'use client';
 
-import MainLayout from '@/components/layouts/MainLayout'
 
 export default function Workspace_nameLayout({ 
   children 
@@ -8,8 +7,8 @@ export default function Workspace_nameLayout({
   children: React.ReactNode 
 }) {
   return (
-    <MainLayout>
+    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
       {children}
-    </MainLayout>
+    </div>
   );
 }
