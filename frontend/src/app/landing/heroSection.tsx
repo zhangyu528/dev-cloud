@@ -2,14 +2,17 @@ import { motion } from 'framer-motion';
 import { IoMdRocket, IoMdFlash } from 'react-icons/io';
 import Button from '@/components/buttons/Button';
 import { InteractiveGradientOverlay } from '@/components/InteractiveGradientOverlay';
+import BinaryFlow from '@/components/BinaryFlow';
 import { useRouter } from 'next/navigation';
 
 const HeroSection = () => {
   const router = useRouter();
   return (
-    <section id="hero" className="min-h-screen flex items-center justify-center pt-24">
+    <section id="hero" className="min-h-screen flex items-center justify-center pt-24 relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid-white/[0.05] [mask-image:linear-gradient(180deg,transparent,rgba(0,0,0,0.8))]"></div>
+      <BinaryFlow />
       <InteractiveGradientOverlay />
-      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+      <div className="relative z-20 max-w-4xl mx-auto px-4 text-center">
         <motion.h1
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
