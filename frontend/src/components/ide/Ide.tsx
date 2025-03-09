@@ -73,10 +73,17 @@ export const Ide: React.FC = () => {
       <div 
         ref={resizerRef}
         onMouseDown={handleMouseDown}
-        className="w-1 h-full bg-[#2c2c2c] cursor-col-resize flex-shrink-0 hover:bg-[#3a3a3a]"
+        className="w-[5px] h-full cursor-col-resize flex-shrink-0
+                 hover:bg-[#007acc33] relative z-20
+                 transition-colors duration-200 ease-out
+                 active:bg-[#007acc66] group/resizer"
       >
-        <div className="text-[#666] text-5xl flex items-center justify-center">⋮</div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                      w-[1px] h-8 bg-[#007acc] opacity-0 
+                      group-hover/resizer:opacity-100
+                      transition-opacity duration-200" />
       </div>
+
       
       {/* Editor Container */}
       <div className="flex-grow h-full flex flex-col overflow-hidden bg-[#1e1e1e]">

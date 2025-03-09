@@ -11,13 +11,15 @@ export default function BoardLayout({
   children: React.ReactNode
 }) {
   return (
-    <UserProvider>
-      <TemplatesProvider>
-        <WorkspacesProvider>
-          <BoardNavigation />
-          {children}
-        </WorkspacesProvider>
-      </TemplatesProvider>
-    </UserProvider>
+    <div className="h-screen bg-gray-50 dark:bg-gray-900">
+      <UserProvider>
+        <TemplatesProvider>
+          <WorkspacesProvider>
+            <BoardNavigation />
+            {children}
+          </WorkspacesProvider>
+        </TemplatesProvider>
+      </UserProvider>
+    </div>
   );
 }

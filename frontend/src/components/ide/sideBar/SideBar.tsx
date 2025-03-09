@@ -4,8 +4,10 @@ import React, { useState } from 'react';
 import { Explorer } from '../explorer/Explorer'; // 导入 Explorer 组件
 import { ExplorerProvider } from '../explorer/contexts/ExplorerContext';
 import { useIdeContext } from '../contexts/IdeContext';
-import { FaFolderOpen, FaSearch, FaGitAlt } from 'react-icons/fa'; // 假设使用 react-icons 库
+import { FaFolder, FaSearch, FaCodeBranch, FaHome } from 'react-icons/fa'; // 使用更合适的图标
 import { SidebarButton } from './SidebarButton';
+import Button from '@/components/buttons/Button';
+import Link from 'next/link';
 
 export const SideBar: React.FC = () => {
     const { workspaceName } = useIdeContext();
@@ -20,8 +22,11 @@ export const SideBar: React.FC = () => {
         <div className="sidebar bg-[#1A1A1A] flex flex-row h-full">
             {/* 按钮区域 */}
             <div className="sidebar-buttons flex flex-col p-2 space-y-3 border-r border-gray-700"> 
+                <Link href={`/home`} className='flex justify-center hover:bg-gray-700 rounded p-2'>
+                    <FaHome className="text-blue-600 dark:text-blue-400 w-5 h-5" />
+                </Link>
                 <SidebarButton 
-                    icon={FaFolderOpen}
+                    icon={FaFolder}
                     name="explorer"
                     isSelected={selectedButton === 'explorer'}
                     onClick={() => handleButtonClick('explorer')}
@@ -33,7 +38,7 @@ export const SideBar: React.FC = () => {
                     onClick={() => handleButtonClick('search')}
                 />
                 <SidebarButton 
-                    icon={FaGitAlt}
+                    icon={FaCodeBranch}
                     name="git"
                     isSelected={selectedButton === 'git'}
                     onClick={() => handleButtonClick('git')}
