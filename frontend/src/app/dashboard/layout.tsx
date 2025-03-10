@@ -3,7 +3,8 @@
 import { UserProvider } from '@/contexts/UserContext';
 import { TemplatesProvider } from '@/contexts/TemplateContext';
 import { WorkspacesProvider } from '@/contexts/WorkspacesContext';
-import BoardNavigation from '@/components/BoardNavigation';
+import DashboardHeader from '@/components/DashboardHeader';
+import DashboardSidebar from '@/components/DashboardSidebar';
 
 export default function BoardLayout({
   children,
@@ -15,8 +16,13 @@ export default function BoardLayout({
       <UserProvider>
         <TemplatesProvider>
           <WorkspacesProvider>
-            <BoardNavigation />
-            {children}
+            <DashboardHeader />
+            <div className="flex h-[calc(100vh-56px)]">
+              <DashboardSidebar />
+              <main className="flex-1 overflow-auto">
+                {children}
+              </main>
+            </div>
           </WorkspacesProvider>
         </TemplatesProvider>
       </UserProvider>

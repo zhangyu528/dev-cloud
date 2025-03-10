@@ -73,7 +73,7 @@ export default function UserMenu() {
         className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
       >
         {user.avatar_url ? (
-          <div className="relative h-8 w-8 rounded-full overflow-hidden">
+          <div className="relative h-6 w-6 rounded-full overflow-hidden">
             <Image
               src={user.avatar_url}
               alt="User avatar"
@@ -83,7 +83,7 @@ export default function UserMenu() {
           </div>
         ) : (
           <div 
-            className="h-8 w-8 rounded-full flex items-center justify-center"
+            className="h-6 w-6 rounded-full flex items-center justify-center"
             style={{ backgroundColor: getColorForInitial(initial) }}
           >
             <span className="text-white font-medium">
