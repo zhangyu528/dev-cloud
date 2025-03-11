@@ -46,6 +46,7 @@ list_workspace_resp_model = workspace_ns.model('Workspace', {
     'id': fields.String(required=True, description='工作区ID'),
     'name': fields.String(required=True, description='工作区名称'),
     'template': fields.String(required=True, description='工作区模板'),
+    'lastEdited': fields.String(required=True, description='最后编辑时间'),
 })
 @workspace_ns.route('/list')
 class WorkspaceList(Resource):

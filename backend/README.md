@@ -17,7 +17,7 @@ cd d:/work/dev-cloud/backend
 由于数据库文件不在代码库中，首次运行需要初始化数据库：
 
 ```bash
-./scripts/db/run_upgrade_db.sh
+./run_migrate_db.sh
 ```
 
 在以下情况也需要运行数据库升级：

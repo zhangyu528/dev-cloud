@@ -14,7 +14,7 @@ dependencies = [
     "flask-sqlalchemy (==2.5.1)",
     "sqlalchemy (==1.4.46)",
     "pymysql (==1.0.2)",
-    "flask-migrate (==4.1.0)",
+    "flask-migrate (<4.0.0)",
     "werkzeug (==2.1.2)",
     "pyjwt (==2.3.0)",
     "flask-jwt-extended (==4.4.4)",

@@ -13,7 +13,7 @@ flask-restx==0.5.1          # RESTful API 支持
 Flask-SQLAlchemy==2.5.1     # ORM 框架，用于操作数据库
 sqlalchemy==1.4.46          # SQL 框架，数据库底层支持
 PyMySQL==1.0.2              # MySQL 数据库驱动
-Flask-Migrate==4.1.0        # 数据库迁移工具
+Flask-Migrate<4.0.0        # 数据库迁移工具
 
 
 # 安全与认证

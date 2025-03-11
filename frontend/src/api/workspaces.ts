@@ -4,6 +4,7 @@ export interface Workspace {
     id: number
     name: string
     template: string
+    lastEdited: string
 }
 
 export interface DirectoryItem {
