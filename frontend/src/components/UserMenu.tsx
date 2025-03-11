@@ -73,7 +73,7 @@ export default function UserMenu() {
         className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
       >
         {user.avatar_url ? (
-          <div className="relative h-6 w-6 rounded-full overflow-hidden">
+          <div className="relative h-8 w-8 rounded-full overflow-hidden">
             <Image
               src={user.avatar_url}
               alt="User avatar"
@@ -83,7 +83,7 @@ export default function UserMenu() {
           </div>
         ) : (
           <div 
-            className="h-6 w-6 rounded-full flex items-center justify-center"
+            className="h-8 w-8 rounded-full flex items-center justify-center"
             style={{ backgroundColor: getColorForInitial(initial) }}
           >
             <span className="text-white font-medium">
@@ -94,7 +94,7 @@ export default function UserMenu() {
       </button>
 
       {isMenuOpen && (
-        <div className="absolute left-full bottom-0 mb-2 ml-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 z-50">
+        <div className="absolute right-0 top-full mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 z-50">
           <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-600">
             <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{user.email}</p>
           </div>

@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { IoMdRocket, IoMdFlash } from 'react-icons/io';
-import Button from '@/components/buttons/Button';
 import { InteractiveGradientOverlay } from '@/components/InteractiveGradientOverlay';
 import BinaryFlow from '@/components/BinaryFlow';
 import { useRouter } from 'next/navigation';
@@ -36,29 +35,25 @@ const HeroSection = () => {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
-          className="mt-8 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4"
+          className="mt-10 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6"
         >
-          <Button 
-            variant="primary" 
-            size="lg" 
-            className="w-full sm:w-auto flex items-center justify-center space-x-2 group"
+          <button 
+            className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-full shadow-lg hover:shadow-blue-500/30 flex items-center justify-center space-x-3 group transition-all duration-300 transform hover:translate-y-[-2px]"
             onClick={() => router.push("/login")}
           >
             <IoMdRocket className="w-6 h-6 group-hover:animate-bounce" />
-            <span>Start Building</span>
-          </Button>
-          <Button 
-            variant="secondary" 
-            size="lg" 
-            className="w-full sm:w-auto flex items-center justify-center space-x-2 group"
+            <span className="text-lg">Start Building</span>
+          </button>
+          <button 
+            className="w-full sm:w-auto px-8 py-3 bg-transparent border-2 border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 text-gray-800 dark:text-gray-200 font-medium rounded-full flex items-center justify-center space-x-3 group transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-800"
             onClick={() => {
               const featuresSection = document.getElementById('features');
               featuresSection?.scrollIntoView({ behavior: 'smooth' });
             }}
           >
-            <IoMdFlash className="w-6 h-6 group-hover:text-yellow-500" />
-            <span>See Features</span>
-          </Button>
+            <IoMdFlash className="w-6 h-6 text-yellow-500 group-hover:animate-pulse" />
+            <span className="text-lg">See Features</span>
+          </button>
         </motion.div>
       </div>
     </section>
