@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { VerificationInput } from '@/components/VerificationInput'
-import Button from '@/components/buttons/Button'
 import { verifyApi } from '@/api/verify'
 import { setAuthToken } from '@/utils/authToken'
+import { MdCheck, MdArrowBack, MdRefresh } from 'react-icons/md'
 
 interface VerificationStageProps {
   email: string
@@ -54,10 +54,15 @@ export function VerificationStage({
   }
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center justify-center space-y-6">
-      <form onSubmit={handleVerify} className="space-y-4">
-        <div className="text-center mb-4">
-          <p className="text-sm text-gray-600">验证码已发送至 {email}</p>
+    <div className="w-full min-h-screen flex flex-col items-center justify-center space-y-6 bg-gray-50 dark:bg-gray-900">
+      <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-2">
+        验证您的邮箱
+      </h2>
+      <form onSubmit={handleVerify} className="space-y-6 w-80">
+        <div className="text-center">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            验证码已发送至 <span className="font-medium text-gray-800 dark:text-gray-200">{email}</span>
+          </p>
         </div>
 
         <VerificationInput 
@@ -65,32 +70,42 @@ export function VerificationStage({
           onChange={setVerificationCode}
         />
         
-        <Button
+        <button
           type="submit"
-          variant="primary"
-          className="w-full flex items-center justify-center mt-4"
+          className="w-full flex items-center justify-center px-4 py-4 rounded-md
+                text-base text-white bg-blue-600 hover:bg-blue-700
+                border-2 border-blue-600 hover:border-blue-700
+                shadow-sm hover:shadow-md transition-all duration-200
+                group disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={verificationCode.length < 6 || isLoading}
         >
-          验证
-        </Button>
+          {isLoading ? (
+            <div className="w-5 h-5 mr-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <MdCheck className='w-5 h-5 mr-3 group-hover:animate-pulse'/>
+          )}
+          <span className="font-medium">验证</span>
+        </button>
 
-        <div className="flex justify-between items-center mt-4">
-          <Button 
+        <div className="flex justify-between items-center pt-2">
+          <button 
             type="button" 
-            variant="link" 
+            className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleBack}
             disabled={isLoading}
           >
+            <MdArrowBack className="w-4 h-4 mr-1" />
             返回
-          </Button>
-          <Button 
+          </button>
+          <button 
             type="button" 
-            variant="link" 
+            className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleResendCode}
             disabled={isLoading}
           >
+            <MdRefresh className="w-4 h-4 mr-1" />
             重新发送验证码
-          </Button>
+          </button>
         </div>
       </form>
     </div>
