@@ -1,16 +1,15 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { userApi } from '@/api/user';
-import { ThemeToggle } from '@/components/ThemeToggle';
 import Loading from '@/components/Loading';
-import { RiHomeLine } from "react-icons/ri";
-import { IoIosLogOut } from "react-icons/io";
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { IoIosLogOut, IoMdArrowDropdown } from "react-icons/io";
+import { MdOutlineBrightness4 } from "react-icons/md";
 import { useUser } from '@/contexts/UserContext';
-import { clearAuthToken, setAuthToken } from '@/utils/authToken';
+import { clearAuthToken } from '@/utils/authToken';
 
 const getColorForInitial = (initial?: string) => {
   if (!initial) return '#6b7280';
@@ -64,13 +63,15 @@ export default function UserMenu() {
   if (!user) return null;
 
   const initial = user.username ? user.username[0].toUpperCase() : user.email ? user.email[0].toUpperCase() : '';
+  const displayName = user.username || user.email?.split('@')[0] || 'User';
+  
   return (
     <div className="relative" ref={menuRef}>
       <Loading fullScreen isLoading={isLoggingOut} text="Logging out..." />
       
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+        className="flex items-center space-x-1 py-1 px-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       >
         {user.avatar_url ? (
           <div className="relative h-8 w-8 rounded-full overflow-hidden">
@@ -91,46 +92,61 @@ export default function UserMenu() {
             </span>
           </div>
         )}
+        <IoMdArrowDropdown className="text-gray-500 dark:text-gray-400" />
       </button>
 
       {isMenuOpen && (
-        <div className="absolute right-0 top-full mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 z-50">
-          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-600">
-            <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{user.email}</p>
+        <div className="absolute right-0 top-full mt-1 w-56 rounded-md shadow-xl bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-50 border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <div className="flex items-center space-x-3 mb-1">
+              {user.avatar_url ? (
+                <div className="relative h-10 w-10 rounded-full overflow-hidden shadow-sm">
+                  <Image
+                    src={user.avatar_url}
+                    alt="User avatar"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div 
+                  className="h-10 w-10 rounded-full flex items-center justify-center shadow-sm"
+                  style={{ backgroundColor: getColorForInitial(initial) }}
+                >
+                  <span className="text-white font-medium">
+                    {initial}
+                  </span>
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                  {displayName}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                  {user.email}
+                </p>
+              </div>
+            </div>
           </div>
-
-          <div className="py-1" role="menu">
-            <Link 
-              href="/dashboard"
-              className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
-            >
-              Dashboard
-            </Link>
-            <Link 
-              href="/account"
-              className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
-            >
-              Account Settings
-            </Link>
-            <div className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 dark:text-gray-200">
-              <span>Theme</span>
+          
+          <div className="py-1">
+            <div className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+              <div className="flex items-center">
+                <MdOutlineBrightness4 className="w-4 h-4 mr-2 text-gray-500 dark:text-gray-400" />
+                <span>Theme</span>
+              </div>
               <ThemeToggle />
             </div>
-            <Link 
-              href="/"
-              className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
-            >
-              <span>Home Page</span>
-              <RiHomeLine className="w-4 h-4" />
-            </Link>
-            <div className="border-t border-gray-200 dark:border-gray-600"></div>
+            
+            <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+            
             <button
-              className="w-full flex items-center justify-between px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600"
+              className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
               onClick={handleLogoutClick}
               disabled={isLoggingOut}
             >
-              <span>Log Out</span>
-              <IoIosLogOut className="w-4 h-4" />
+              <IoIosLogOut className="w-4 h-4 mr-2 text-gray-500 dark:text-gray-400" />
+              <span>Sign Out</span>
             </button>
           </div>
         </div>
