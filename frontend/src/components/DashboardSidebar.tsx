@@ -20,7 +20,7 @@ const DashboardSidebar = () => {
   const navItems = [
     { name: 'Dashboard', icon: IoGridOutline, path: '/dashboard' },
     { name: 'Repositories', icon: IoCodeSlashOutline, path: '/dashboard/repositories' },
-    { name: 'Projects', icon: IoFolderOutline, path: '/dashboard/projects' },
+    { name: 'Projects', icon: IoFolderOutline, path: `/dashboard/@${user?.username}/projects` },
     { name: 'Collections', icon: IoLayersOutline, path: '/dashboard/collections' },
     { name: 'Settings', icon: IoSettingsOutline, path: '/dashboard/settings' },
   ];

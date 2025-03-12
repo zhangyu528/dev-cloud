@@ -29,6 +29,7 @@ class WorkspaceCreate(Resource):
             workspace = Workspace()
             workspace.name = request.json['name']
             workspace.template = request.json['template']
+            workspace.description = TEMPLATES[request.json['template']]['description']
             workspace.owner_id = get_jwt_identity()
             db.session.add(workspace)
         

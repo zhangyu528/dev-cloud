@@ -1,58 +1,42 @@
-TEMPLATES = [
-    {
-        "id": "1",
-        "name": "Angular",
+TEMPLATES = {
+    "Angular": {
         "icon": "icons/templates/angular.svg",
-        "description": "description",
-        "dockerFile": "Dockerfile.angular",
+        "description": "A default Angular project with components, modules, and routing. Built with TypeScript, it's perfect for learning and starting Angular apps.",
+        "language": "TypeScript",
     },
-    {
-        "id": "2",
-        "name": "NextJS",
+    "NextJS": {
         "icon": "icons/templates/nextjs.svg",
-        "description": "description",
-        "dockerFile": "Dockerfile.nextjs",
+        "description": "A default Next.js project with components, pages, and routing. Built with TypeScript, it's perfect for learning and starting Next.js apps.",
+        "language": "TypeScript",
     },
-    {
-        "id": "3",
-        "name": "Flutter",
+    "Flutter": {
         "icon": "icons/templates/flutter.svg",
-        "description": "description",
-        "dockerFile": "Dockerfile.flutter",
+        "description": "Flutter",
+        "language": "Dart",
     },
-    {
-        "id": "4",
-        "name": "Vue",
+    "Vue": {
         "icon": "icons/templates/vue.svg",
-        "description": "description",
-        "dockerFile": "Dockerfile.vue",
+        "description": "Vue.js",
+        "language": "JavaScript",
     },
-    {
-        "id": "5",
-        "name": "Astro",
+    "Astro": {
         "icon": "icons/templates/astro.svg",
-        "description": "description",
-        "dockerFile": "Dockerfile.astro",
+        "description": "Astro",
+        "language": "JavaScript",
     },
-    {
-        "id": "6",
-        "name": "Go",
+    "Go": {
         "icon": "icons/templates/go.svg",
-        "description": "description",
-        "dockerFile": "Dockerfile.go",
+        "description": "Go",
+        "language": "Go",
     },
-    {
-        "id": "7",
-        "name": "Flask",
+    "Flask": {
         "icon": "icons/templates/flask.svg",
-        "description": "description",
-        "dockerFile": "Dockerfile.flask",
+        "description": "Flask",
+        "language": "Python",
     },
-    {
-        "id": "8",
-        "name": "Express",
+    "Express": {
         "icon": "icons/templates/express.svg",
-        "description": "description",
-        "dockerFile": "Dockerfile.express",
+        "description": "Express.js",
+        "language": "JavaScript",
     },
-]
+}
