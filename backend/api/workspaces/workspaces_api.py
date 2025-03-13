@@ -1,3 +1,4 @@
+from backend.api.templates import templates
 from flask import request
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -28,8 +29,8 @@ class WorkspaceCreate(Resource):
             # workspace数据结构应与workspace_model完全匹配
             workspace = Workspace()
             workspace.name = request.json['name']
-            workspace.template = request.json['template']
-            workspace.description = TEMPLATES[request.json['template']]['description']
+            workspace.template = templates.find(lambda item: item['id'] == request.json['template'])['name']
+            workspace.description = templates.find(lambda item: item['id'] == request.json['template'])['description']
             workspace.owner_id = get_jwt_identity()
             db.session.add(workspace)
         

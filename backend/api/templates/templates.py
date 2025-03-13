@@ -1,42 +1,58 @@
-TEMPLATES = {
-    "Angular": {
+TEMPLATES = [
+    {
+        "id": "angular",
+        "name": "Angular",
         "icon": "icons/templates/angular.svg",
-        "description": "A default Angular project with components, modules, and routing. Built with TypeScript, it's perfect for learning and starting Angular apps.",
+        "description": "A powerful front-end framework for building dynamic single-page applications.",
         "language": "TypeScript",
     },
-    "NextJS": {
+    {
+        "id": "next",
+        "name": "Next.js",
         "icon": "icons/templates/nextjs.svg",
-        "description": "A default Next.js project with components, pages, and routing. Built with TypeScript, it's perfect for learning and starting Next.js apps.",
+        "description": "A React framework for server-rendered applications and static sites.",
         "language": "TypeScript",
     },
-    "Flutter": {
+    {
+        "id": "flutter",
+        "name": "Flutter",
         "icon": "icons/templates/flutter.svg",
-        "description": "Flutter",
+        "description": "A UI toolkit for building natively compiled applications for mobile, web, and desktop.",
         "language": "Dart",
     },
-    "Vue": {
+    {
+        "id": "vue",
+        "name": "Vue.js",
         "icon": "icons/templates/vue.svg",
-        "description": "Vue.js",
+        "description": "A progressive JavaScript framework for building user interfaces.",
         "language": "JavaScript",
     },
-    "Astro": {
+    {
+        "id": "astro",
+        "name": "Astro",
         "icon": "icons/templates/astro.svg",
-        "description": "Astro",
+        "description": "A modern static site builder with fast performance and minimal JavaScript.",
         "language": "JavaScript",
     },
-    "Go": {
+    {
+        "id": "go",
+        "name": "Go",
         "icon": "icons/templates/go.svg",
-        "description": "Go",
+        "description": "A fast and efficient programming language for building scalable applications.",
         "language": "Go",
     },
-    "Flask": {
+    {
+        "id": "flask",
+        "name": "Flask",
         "icon": "icons/templates/flask.svg",
-        "description": "Flask",
+        "description": "A lightweight Python web framework for building web applications and APIs.",
         "language": "Python",
     },
-    "Express": {
+    {
+        "id": "express",
+        "name": "Express.js",
         "icon": "icons/templates/express.svg",
-        "description": "Express.js",
+        "description": "A minimal and flexible Node.js web application framework.",
         "language": "JavaScript",
     },
-}
+];

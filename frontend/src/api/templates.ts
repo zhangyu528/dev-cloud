@@ -5,6 +5,7 @@ export interface TemplateResponse {
   name: string
   description: string
   icon: string
+  language: string
 }
 
 export class TemplatesApi {
