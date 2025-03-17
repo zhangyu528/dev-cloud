@@ -2,7 +2,7 @@
 
 # 检查 Docker 是否已安装
 if command -v docker &> /dev/null; then
-    echo "Docker is already installed."
+    echo "✅ Docker is already installed."
     docker --version
     exit 0
 fi
@@ -17,43 +17,43 @@ case $OS in
         
         case $DISTRO in
             ubuntu)
-                echo "Detected Ubuntu. Installing Docker..."
+                echo "🚀 Detected Ubuntu. Installing Docker..."
                 sudo apt-get update
                 sudo apt-get install -y docker.io
                 ;;
             centos)
-                echo "Detected CentOS. Installing Docker..."
+                echo "🚀 Detected CentOS. Installing Docker..."
                 sudo yum install -y docker
                 ;;
             fedora)
-                echo "Detected Fedora. Installing Docker..."
+                echo "🚀 Detected Fedora. Installing Docker..."
                 sudo dnf install -y docker
                 ;;
             debian)
-                echo "Detected Debian. Installing Docker..."
+                echo "🚀 Detected Debian. Installing Docker..."
                 sudo apt-get update
                 sudo apt-get install -y docker.io
                 ;;
             *)
-                echo "Unsupported Linux distribution: $DISTRO"
-                echo "Please install Docker manually."
+                echo "❌ Unsupported Linux distribution: $DISTRO"
+                echo "❌ Please install Docker manually."
                 exit 1
                 ;;
         esac
         ;;
     Darwin)
-        echo "Detected macOS. Please download Docker Desktop from:"
+        echo "🚀 Detected macOS. Please download Docker Desktop from:"
         echo "https://www.docker.com/products/docker-desktop"
         echo "Follow the installation instructions on the website."
         ;;
     *Microsoft*)
-        echo "Detected Windows. Please download Docker Desktop from:"
+        echo "🚀 Detected Windows. Please download Docker Desktop from:"
         echo "https://www.docker.com/products/docker-desktop"
         echo "Follow the installation instructions on the website."
         ;;
     *)
-        echo "Unsupported OS: $OS"
-        echo "Please install Docker manually."
+        echo "❌ Unsupported OS: $OS"
+        echo "❌ Please install Docker manually."
         exit 1
         ;;
 esac
@@ -62,6 +62,6 @@ esac
 if [ "$OS" == "Linux" ]; then
     sudo systemctl start docker
     sudo systemctl enable docker
-    echo "Docker installed and started successfully."
+    echo "✅ Docker installed and started successfully."
     docker --version
 fi

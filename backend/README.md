@@ -6,15 +6,20 @@
 ```bash
 cd d:/work/dev-cloud/backend
 ```
+### 0.1 安装docker环境
+```bash
+./install_docker_env.sh
+```
 
-### 1. 安装Python环境（如未安装）
+### 1. 安装Python环境
 ```bash
 ./install_python_env.sh
 ```
-
-### 2. 数据库初始化与升级
-
-由于数据库文件不在代码库中，首次运行需要初始化数据库：
+### 1.1 安装poetry
+```bash
+./install_poetry.sh
+```
+### 2. 数据库初始化
 
 ```bash
 ./run_migrate_db.sh

@@ -6,7 +6,7 @@ OS=$(uname -s)
 # 检查并安装 Python3
 if ! command -v python &> /dev/null
 then
-    echo "Python not found. Installing Python..."
+    echo "🚀 Python not found. Installing Python..."
     
     if [[ "$OS" == "Linux"* ]]; then
         # Linux (Ubuntu/Debian)
@@ -20,32 +20,19 @@ then
         # Windows (使用 Chocolatey)
         #curl -o python-installer.exe https://www.python.org/ftp/python/3.11.0/python-3.11.0-amd64.exe
         # 执行安装程序
-        echo "Installing Python..."
         #./python-installer.exe /quiet PrependPath=1
 
          # 检查安装是否成功
         if command -v python &> /dev/null; then
-            echo "Python installed successfully."
+            echo "✅ Python installed successfully."
         else
-            echo "Python installation failed."
+            echo "❌ Python installation failed."
             exit 1
         fi
     else
-        echo "Unsupported OS. Please install Python manually."
+        echo "❌ Unsupported OS. Please install Python manually."
         exit 1
     fi
 else
-    echo "Python is already installed."
+    echo "✅ Python is already installed."
 fi
-
-# 检查并安装 Poetry
-if ! command -v poetry &> /dev/null
-then
-    echo "Poetry not found. Installing..."
-    curl -sSL https://install.python-poetry.org | python -
-else
-    echo "Poetry is already installed."
-fi
-
-# 提示用户
-echo "Python and Poetry have been installed."
