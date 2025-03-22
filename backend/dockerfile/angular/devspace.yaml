@@ -1,0 +1,50 @@
+version: v2beta1
+name: angular-dev
+
+vars:
+  USER_ID: "1001"
+  PROJECT_NAME: "my-angular-app"  
+
+deployments:
+  angular-dev:
+    kubectl:
+      inlineManifest: |-
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: angular-dev
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: angular-dev
+          template:
+            metadata:
+              labels:
+                app: angular-dev
+            spec:
+              containers:
+              - name: angular-container
+                image: angular-image
+                imagePullPolicy: Never
+                ports:
+                - containerPort: 4200
+                env:
+                - name: USER_ID
+                  value: "${USER_ID}"
+                - name: PROJECT_NAME
+                  value: "${PROJECT_NAME}"
+
+dev:
+  angular-dev:
+    imageSelector: angular-image
+    namespace: default
+    ports:
+      - port: 4200:4200
+    sync:
+      - path: ./user_projects/${USER_ID}/${PROJECT_NAME}:/app/user_${USER_ID}/${PROJECT_NAME}
+        excludePaths:
+          - node_modules/
+          - dist/
+        waitInitialSync: true
+    command: ["sh", "-c", "USER_DIR=/app/user_${USER_ID} && mkdir -p $USER_DIR && cd $USER_DIR && if [ ! -d $PROJECT_NAME ]; then ng new $PROJECT_NAME --defaults; fi && cd $PROJECT_NAME && ng serve --host 0.0.0.0"]

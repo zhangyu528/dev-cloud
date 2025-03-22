@@ -26,8 +26,14 @@ elif [[ "$OS" == "CYGWIN"* || "$OS" == "MINGW"* || "$OS" == "MSYS"* ]]; then
     if ! command -v scoop &> /dev/null; then
         echo "❌ Scoop 未安装，正在安装 Scoop..."
         powershell.exe -Command "& {Set-ExecutionPolicy RemoteSigned -Scope CurrentUser; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; irm get.scoop.sh | iex}"
-        export SCOOP_HOME="$HOME/scoop"
-export PATH="$SCOOP_HOME/shims:$SCOOP_HOME/apps/scoop/current/bin:$PATH"
+        # 获取当前用户的 Path
+CURRENT_PATH=$(powershell.exe -Command "[System.Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::User)")
+        # 将 $HOME 转换为 Windows 风格的路径
+        WINDOWS_HOME=$(cygpath -w "$HOME")
+        export SCOOP_HOME="$WINDOWS_HOME/scoop"
+        # 添加 Scoop 的路径到用户环境变量
+        NEW_PATH="$CURRENT_PATH;$SCOOP_HOME/shims;$SCOOP_HOME/apps/scoop/current/bin"
+        powershell.exe -Command "[System.Environment]::SetEnvironmentVariable('Path', '$NEW_PATH', [System.EnvironmentVariableTarget]::User)"
     else
         echo "✅ Scoop 已安装"
     fi
